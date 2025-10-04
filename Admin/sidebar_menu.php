@@ -26,7 +26,7 @@
 
           <li class="nav-item">
             <a href="index.php" class="nav-link">
-              <i class="nav-icon far fa-calendar-alt"></i>
+              <i class="nav-icon far fa-address-book"></i>
               <p>
                 หน้าหลัก
               </p>
@@ -34,8 +34,17 @@
           </li>
 
           <li class="nav-item">
+            <a href="index.php" class="nav-link">
+              <i class="nav-icon far fa-square-poll-vertical"></i>
+              <p>
+                Dashboard
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="form.php" class="nav-link">
-              <i class="nav-icon far fa-edit"></i>
+              <i class="nav-icon far fa-window-maximize"></i>
               <p>
                 ฟอร์ม
               </p>
@@ -44,7 +53,7 @@
 
           <li class="nav-item">
             <a href="datatable.php" class="nav-link">
-              <i class="nav-icon fas fa-list"></i>
+              <i class="nav-icon fas fa-table"></i>
               <p>
                 ตาราง
               </p>
