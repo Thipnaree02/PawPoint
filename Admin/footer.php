@@ -19,7 +19,15 @@
 <!-- Bootstrap 4 -->
 <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Summernote -->
-<script src="assets/plugins/summernote/summernote-bs4.min.js"></script>>
+<script src="assets/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- Page specific script -->
+<script>
+  $(function () {
+    // Summernote
+    $('#summernote').summernote()
+    });
+</script>
+
 <!-- AdminLTE App -->
 <script src="assets/dist/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->
