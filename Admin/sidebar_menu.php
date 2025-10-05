@@ -35,7 +35,7 @@
 
           <li class="nav-item">
             <a href="index.php" class="nav-link">
-              <i class="nav-icon far fa-square-poll-vertical"></i>
+              <i class="nav-icon far fa-image"></i>
               <p>
                 Dashboard
               </p>
