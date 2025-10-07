@@ -1,3 +1,7 @@
+<?php
+    //ไฟล์เชื่อมต่อฐานข้อมูล
+    require_once '../config/connextdb.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

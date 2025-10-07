@@ -52,12 +52,22 @@
 
           <li class="nav-item">
             <a href="admin.php" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
+              <i class="nav-icon fas fa-user"></i>
               <p>
                 จัดการข้อมูล Admin
               </p>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="member.php" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                จัดการข้อมูลสมาชิก
+              </p>
+            </a>
+          </li>
+
 
         </ul>
       </nav>

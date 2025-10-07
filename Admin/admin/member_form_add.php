@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>ฟอร์มเพิ่มข้อมูล Admin </h1>
+                    <h1>ฟอร์มเพิ่มข้อมูลสมาชิก </h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -23,29 +23,35 @@
                                 <div class="card-body">
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2">Username</label>
+                                        <label class="col-sm-1">ชื่อ-สกุล</label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" required placeholder="Username">
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-2">Password</label>
-                                        <div class="col-sm-4">
-                                            <input type="password" class="form-control" required placeholder="password">
+                                            <input type="text" name="name" class="form-control" required placeholder="ชื่อ-สกุล">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2">ชื่อ Admin</label>
+                                        <label class="col-sm-1">แผนก</label>
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" required placeholder="ชื่อ Admin">
+                                            <input type="text" name="specialty" class="form-control" required placeholder="แผนก">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2">ภาพ Profile</label>
+                                        <label class="col-sm-1">เบอร์โทร</label>
+                                        <div class="col-sm-4">
+                                            <input type="tel" name="phone"  class="form-control" required placeholder="เบอร์โทร">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-1">E-mail</label>
+                                        <div class="col-sm-4">
+                                            <input type="email" name="email" class="form-control" required placeholder="E-mail">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-1">ภาพ Profile</label>
                                         
                                         <div class="col-sm-4">
 
@@ -68,13 +74,20 @@
                                         <label class="col-sm-2"></label>
                                         <div class="col-sm-4">
                                             <button type="submit" class="btn btn-primary">เพิ่มข้อมูล</button>
-                                            <a href="" class="btn btn-danger">ยกเลิก</a>
+                                            <a href="member.php" class="btn btn-danger">ยกเลิก</a>
                                         </div>
                                     </div>
                                     
 
                                 </div><!-- /.card-body -->
                             </form>
+
+                            <?php
+                            //เช็ค input ที่ส่งมาจากฟอร์ม
+                            echo '<pre>';
+                            print_r($_POST);
+                            ?>
+
                         </div>
                     </div>
                 </div>
@@ -86,3 +99,4 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
