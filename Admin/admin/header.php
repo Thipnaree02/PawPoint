@@ -20,11 +20,16 @@
   <!-- summernote -->
   <link rel="stylesheet" href="../assets/plugins/summernote/summernote-bs4.min.css">
 
-    <!-- DataTables -->
+  <!-- DataTables -->
   <link rel="stylesheet" href="../assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="../assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   
+  <!-- Sweet alert -->
+  <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">';
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper"></div>

@@ -23,52 +23,20 @@
                                 <div class="card-body">
 
                                     <div class="form-group row">
-                                        <label class="col-sm-1">ชื่อ-สกุล</label>
+                                        <label class="col-sm-1">ชื่อ</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="name" class="form-control" required placeholder="ชื่อ-สกุล">
+                                            <input type="text" name="name" class="form-control" required
+                                                placeholder="ชื่อ">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-1">แผนก</label>
+                                        <label class="col-sm-1">นามสกุล</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="specialty" class="form-control" required placeholder="แผนก">
+                                            <input type="text" name="surname" class="form-control" required
+                                                placeholder="นามสกุล">
                                         </div>
                                     </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-1">เบอร์โทร</label>
-                                        <div class="col-sm-4">
-                                            <input type="tel" name="phone"  class="form-control" required placeholder="เบอร์โทร">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-1">E-mail</label>
-                                        <div class="col-sm-4">
-                                            <input type="email" name="email" class="form-control" required placeholder="E-mail">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-1">ภาพ Profile</label>
-                                        
-                                        <div class="col-sm-4">
-
-                                        <div class="input-group">
-                                            
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="exampleInputFile">
-                                                <label class="custom-file-label" for="exampleInputFile">เลือก file ภาพ</label>
-                                            </div>
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">Upload</span>
-                                            </div>
-                                        </div>   <!-- ./ input-group -->
-                                        </div>   <!-- ./ col-sm-4 -->
-
-                                    </div>
-
 
                                     <div class="form-group row">
                                         <label class="col-sm-2"></label>
@@ -77,16 +45,17 @@
                                             <a href="member.php" class="btn btn-danger">ยกเลิก</a>
                                         </div>
                                     </div>
-                                    
+
 
                                 </div><!-- /.card-body -->
                             </form>
 
-                            <?php
-                            //เช็ค input ที่ส่งมาจากฟอร์ม
-                            echo '<pre>';
-                            print_r($_POST);
-                            ?>
+                           
+
+
+                            
+
+                            
 
                         </div>
                     </div>
@@ -100,3 +69,62 @@
 </div>
 <!-- /.content-wrapper -->
 
+ <?php
+                            //เช็ค input ที่ส่งมาจากฟอร์ม
+                            // echo '<pre>';
+                            // print_r($_POST);
+                            // exit;
+                            
+                            if (isset($_POST['name']) && isset($_POST['surname'])) {
+                                //echo 'ถูกเงื่อนไข ส่งข้อมูลมาได้';
+
+                                //ประกาศตัวแปรรับค่าจากฟอร์ม
+                                $name = $_POST['name'];
+                                $surname = $_POST['surname'];
+
+                                //sql insert
+                                $stmtInserMember = $connextdb->prepare("INSERT INTO member 
+                                (
+                                    name, 
+                                    surname
+                                )
+                                VALUES 
+                                (
+                                    :name, 
+                                    :surname
+                                )
+                                ");
+
+                                //bindParam
+                                $stmtInserMember->bindParam(':name', $name, PDO::PARAM_STR);
+                                $stmtInserMember->bindParam(':surname', $surname, PDO::PARAM_STR);
+                                $result = $stmtInserMember->execute();
+
+                                $connextdb = null; //close connect  db
+
+                                if($result){
+                                        echo '<script>
+                                            setTimeout(function() {
+                                            swal({
+                                                title: "เพิ่มข้อมูลสำเร็จ",
+                                                type: "success"
+                                            }, function() {
+                                                window.location = "member.php"; //หน้าที่ต้องการให้กระโดดไป
+                                            });
+                                            }, 1000);
+                                        </script>';
+                                    }else{
+                                    echo '<script>
+                                            setTimeout(function() {
+                                            swal({
+                                                title: "เกิดข้อผิดพลาด",
+                                                type: "error"
+                                            }, function() {
+                                                window.location = "member.php"; //หน้าที่ต้องการให้กระโดดไป
+                                            });
+                                            }, 1000);
+                                        </script>';
+                                    }
+
+                            } //isset
+?>
