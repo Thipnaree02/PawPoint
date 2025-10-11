@@ -50,8 +50,14 @@
                   <tr>
                     <td align = "center"><?=$row['id'];?></td>
                     <td><?=$row['name'].' '.$row['surname'];?></td>
-                    <td align = "center"><a href = "" class="btn btn-warning btn-sm">แก้ไข</a></td>
-                    <td align = "center"><a href = "" class="btn btn-danger btn-sm">ลบ</a></td>
+
+                    <td align = "center">
+                      <a href = "member.php?id=<?=$row['id'];?>&act=edit" class="btn btn-warning btn-sm">แก้ไข</a>
+                    </td>
+
+                    <td align = "center">
+                      <a href = "member.php?id=<?=$row['id'];?>&act=delete" class="btn btn-danger btn-sm" onclick="return confirm('ยืนยันการลยข้อมูล?')">ลบ</a>
+                    </td>
                   </tr>
                 <?php } ?>
                   </tbody>
