@@ -1,5 +1,5 @@
 <?php
-    if(isset($_GET['id']) && $_GET['act'] == 'edit'){
+    if(isset($_GET['id']) && $_GET['act'] == 'editPwd'){
 
     // single row query แสดงแค่ 1 รายการ
       $stmtMemberDetail = $connextdb->prepare("SELECT* FROM member WHERE id=?");
@@ -27,7 +27,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>ฟอร์มแก้ไขข้อมูลสมาชิก </h1>
+                    <h1>ฟอร์มแก้ไขรหัสผ่าน </h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -52,39 +52,33 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2">คำนำหน้า</label>
-                                        <div class="col-sm-2">
-                                            <select name="title_name" class="form-control" required>
-                                                <option value="<?php echo $row['title_name'];?>">-- <?php echo $row['title_name'];?> --</option>
-                                                <option disabled>-- เลือกข้อมูลใหม่ --</option>
-                                                <option value="นาย">-- นาย --</option>
-                                                <option value="นาง">-- นาง --</option>
-                                                <option value="นางสาว">-- นางสาว --</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-2">ชื่อ</label>
+                                        <label class="col-sm-2">ชื่อ - สกุล</label>
                                         <div class="col-sm-4">
                                             <input type="text" name="name" class="form-control" required
-                                                placeholder="ชื่อ" value="<?php echo $row['name'];?>">
+                                                placeholder="ชื่อ" value="<?php echo $row['title_name'].$row['name']. ' '.$row['surname'];?>" disabled>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2">นามสกุล</label>
+                                        <label class="col-sm-2">New Password</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="surname" class="form-control" required
-                                                placeholder="นามสกุล" value="<?php echo $row['surname'];?>">
+                                            <input type="password" name="NewPassword" class="form-control" required placeholder="รหัสผ่านใหม่">
                                         </div>
                                     </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2">Confirm Password</label>
+                                        <div class="col-sm-4">
+                                            <input type="password" name="ConfirmPassword" class="form-control" required placeholder="ยืนยันรหัสผ่าน">
+                                        </div>
+                                    </div>
+
 
                                     <div class="form-group row">
                                         <label class="col-sm-2"></label>
                                         <div class="col-sm-4">
                                             <input type="hidden" name="id" value="<?php echo $row['id'];?>">
-                                            <button type="submit" class="btn btn-primary">บันทึก</button>
+                                            <button type="submit" class="btn btn-primary">แก้ไขรหัสผ่าน</button>
                                             <a href="member.php" class="btn btn-danger">ยกเลิก</a>
                                         </div>
                                     </div>
@@ -111,31 +105,44 @@
                         //    print_r($_POST);
                         //    //exit;
 
-                           if(isset($_POST['id']) && isset($_POST['name']) && isset($_POST['surname'])){
+                           if(isset($_POST['id']) && isset($_POST['NewPassword']) && isset($_POST['ConfirmPassword'])){
                         
                             // echo 'เข้ามาในเงื่อนไขได้';
                             // exit;
 
                             // ประกาศตัวแปรรับค่าจากฟอร์ม
                             $id = $_POST['id'];
-                            $title_name = $_POST['title_name'];
-                            $name = $_POST['name'];
-                            $surname = $_POST['surname'];
+                            $NewPassword = $_POST['NewPassword'];
+                            $ConfirmPassword = $_POST['ConfirmPassword'];
 
+                            //สร้างเงื่อนไขตรวจสอบรหัสผ่านว่าตรงกันไหม
+                            if($NewPassword != $ConfirmPassword){
+                                //echo 'รหัสผ่านไม่ตรงกัน';
+                                echo '<script>
+                                    setTimeout(function() {
+                                    swal({
+                                        title: "รหัสผ่านไม่ตรงกัน !!",
+                                        text: "กรุณากรอกรหัสผ่านใหม่อีกครั้ง",
+                                        type: "error"
+                                    }, function() {
+                                        window.location = "member.php?id='.$id.'&act=editPwd"; //หน้าที่ต้องการให้กระโดดไป
+                                    });
+                                    }, 1000);
+                                </script>';
 
+                            }else{
+                                //echo 'รหัสผ่านตรงกัน';
+                                $password = sha1($_POST['NewPassword']);
                             //sql update
                             $stmtUpdate = $connextdb->prepare("UPDATE  member SET 
-                            title_name=:title_name,
-                            name=:name, 
-                            surname=:surname 
+                            password='$password' 
                             WHERE id=:id
                             ");
                             //bindParam
                             $stmtUpdate->bindParam(':id', $id , PDO::PARAM_INT);
-                            $stmtUpdate->bindParam(':title_name', $title_name , PDO::PARAM_STR);
-                            $stmtUpdate->bindParam(':name', $name , PDO::PARAM_STR);
-                            $stmtUpdate->bindParam(':surname', $surname , PDO::PARAM_STR);
-                            $stmtUpdate->execute();
+                            
+
+                            $result = $stmtUpdate->execute();
 
                             $connextdb = null; //close connect  db
 
@@ -143,7 +150,7 @@
                                 echo '<script>
                                     setTimeout(function() {
                                     swal({
-                                        title: "แก้ไขข้อมูลสำเร็จ",
+                                        title: "แก้ไขรหัสผ่านสำเร็จ",
                                         type: "success"
                                     }, function() {
                                         window.location = "member.php"; //หน้าที่ต้องการให้กระโดดไป
@@ -161,10 +168,9 @@
                                     });
                                     }, 1000);
                                 </script>';
-                            }
-
-
-                           } //isset
+                            } //sweetalert
+                        } //check password
+                    } //isset
 
                            //window.location = "member.php?id='.id.'&act=edit"; //ถ้าอยากแก้ไขแล้วไม่อยากให้เปลี่ยนหน้า
                         ?>
