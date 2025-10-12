@@ -38,17 +38,19 @@
                 <table id="example1" class="table table-bordered table-striped table-sm">
                   <thead>
                   <tr class="table-primary">
-                    <th width = "10%" class = "text-center">ID.</th>
-                    <th width = "70%" class = "text-center">ชื่อ - นามสกุล</th>
+                    <th width = "10%" class = "text-center">No.</th>
+                    <th width = "70%">ชื่อ - นามสกุล</th>
                     <th width = "10%" class = "text-center">แก้ไขข้อมูล</th>
                     <th width = "10%" class = "text-center">ลบ</th>
                   </tr>
                   </thead>
                   <tbody>
-                <?php foreach($rsmember as $row){
+                <?php 
+                $i = 1; //start number
+                foreach($rsmember as $row){
                 ?>
                   <tr>
-                    <td align = "center"><?=$row['id'];?></td>
+                    <td align = "center"> <?php echo $i++ ?> </td>
                     <td><?=$row['title_name'].$row['name'].' '.$row['surname'];?></td>
 
                     <td align = "center">
