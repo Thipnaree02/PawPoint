@@ -49,7 +49,7 @@
                 ?>
                   <tr>
                     <td align = "center"><?=$row['id'];?></td>
-                    <td><?=$row['name'].' '.$row['surname'];?></td>
+                    <td><?=$row['title_name'].$row['name'].' '.$row['surname'];?></td>
 
                     <td align = "center">
                       <a href = "member.php?id=<?=$row['id'];?>&act=edit" class="btn btn-warning btn-sm">แก้ไข</a>

@@ -45,6 +45,19 @@
                                 <div class="card-body">
 
                                     <div class="form-group row">
+                                        <label class="col-sm-1">คำนำหน้า</label>
+                                        <div class="col-sm-4">
+                                            <select name="title_name" class="form-control" required>
+                                                <option value="<?php echo $row['title_name'];?>">-- <?php echo $row['title_name'];?> --</option>
+                                                <option disabled>-- เลือกข้อมูลใหม่ --</option>
+                                                <option value="นาย">-- นาย --</option>
+                                                <option value="นาง">-- นาง --</option>
+                                                <option value="นางสาว">-- นางสาว --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
                                         <label class="col-sm-1">ชื่อ</label>
                                         <div class="col-sm-4">
                                             <input type="text" name="name" class="form-control" required
@@ -98,18 +111,21 @@
 
                             // ประกาศตัวแปรรับค่าจากฟอร์ม
                             $id = $_POST['id'];
+                            $title_name = $_POST['title_name'];
                             $name = $_POST['name'];
                             $surname = $_POST['surname'];
 
 
                             //sql update
                             $stmtUpdate = $connextdb->prepare("UPDATE  member SET 
+                            title_name=:title_name,
                             name=:name, 
                             surname=:surname 
                             WHERE id=:id
                             ");
                             //bindParam
                             $stmtUpdate->bindParam(':id', $id , PDO::PARAM_INT);
+                            $stmtUpdate->bindParam(':title_name', $title_name , PDO::PARAM_STR);
                             $stmtUpdate->bindParam(':name', $name , PDO::PARAM_STR);
                             $stmtUpdate->bindParam(':surname', $surname , PDO::PARAM_STR);
                             $stmtUpdate->execute();

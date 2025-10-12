@@ -23,6 +23,18 @@
                                 <div class="card-body">
 
                                     <div class="form-group row">
+                                        <label class="col-sm-1">คำนำหน้า</label>
+                                        <div class="col-sm-4">
+                                            <select name="title_name" class="form-control" required>
+                                                <option value="">-- เลือกข้อมูล --</option>
+                                                <option value="นาย">-- นาย --</option>
+                                                <option value="นาง">-- นาง --</option>
+                                                <option value="นางสาว">-- นางสาว --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
                                         <label class="col-sm-1">ชื่อ</label>
                                         <div class="col-sm-4">
                                             <input type="text" name="name" class="form-control" required
@@ -79,23 +91,27 @@
                                 //echo 'ถูกเงื่อนไข ส่งข้อมูลมาได้';
 
                                 //ประกาศตัวแปรรับค่าจากฟอร์ม
+                                $title_name = $_POST['title_name'];
                                 $name = $_POST['name'];
                                 $surname = $_POST['surname'];
 
                                 //sql insert
                                 $stmtInserMember = $connextdb->prepare("INSERT INTO member 
                                 (
+                                    title_name,
                                     name, 
                                     surname
                                 )
                                 VALUES 
                                 (
+                                    :title_name,
                                     :name, 
                                     :surname
                                 )
                                 ");
 
                                 //bindParam
+                                $stmtInserMember->bindParam(':title_name', $title_name, PDO::PARAM_STR);
                                 $stmtInserMember->bindParam(':name', $name, PDO::PARAM_STR);
                                 $stmtInserMember->bindParam(':surname', $surname, PDO::PARAM_STR);
                                 $result = $stmtInserMember->execute();
