@@ -128,7 +128,7 @@
                     <li class="nav-item"><a class="nav-link" href="index.php#section_2">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="index.php#section_3">Causes</a></li>
                     <li class="nav-item"><a class="nav-link" href="index.php#section_4">แพ็กเกจ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#section_5">สัตวแพทย์</a></li>
+                    <li class="nav-item"><a class="nav-link" href="member.php">สัตวแพทย์</a></li>
                     <li class="nav-item"><a class="nav-link" href="index.php#section_6">ติดต่อ</a></li>
                     
                     <li class="nav-item ms-3">

@@ -60,6 +60,15 @@
           </li>
 
           <li class="nav-item">
+            <a href="vet.php" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
+                จัดการข้อมูลสัตวแพทย์
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="member.php" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p>

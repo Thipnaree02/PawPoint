@@ -116,7 +116,7 @@ https://templatemo.com/tm-581-kind-heart-charity
                     </li>
 
                    <li class="nav-item dropdown">
-                            <a class="nav-link click-scroll" href="index.php#section_5">สัตวแพทย์</a>
+                            <a class="nav-link click-scroll" href="member.php">สัตวแพทย์</a>
                     </li>
 
                     <li class="nav-item">
@@ -124,11 +124,11 @@ https://templatemo.com/tm-581-kind-heart-charity
                     </li>
 
                     <li class="nav-item ms-3">
-                        <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
+                        <a class="nav-link btn btn-info text-dark rounded-pill px-3" href="signin.php">Sign In</a>
                     </li>
 
                     <li class="nav-item ms-3">
-                        <a class="nav-link custom-btn custom-border-btn btn" href="signup.php">Sign Up</a>
+                        <a class="nav-link btn btn-warning text-dark rounded-pill px-3" href="signup.php">Sign Up</a>
                     </li>
                 </ul>
             </div>
