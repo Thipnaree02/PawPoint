@@ -112,27 +112,23 @@ https://templatemo.com/tm-581-kind-heart-charity
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_4">Volunteer</a>
+                        <a class="nav-link click-scroll" href="#section_4">แพ็กเกจ</a>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link click-scroll dropdown-toggle" href="#section_5"
-                            id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">News</a>
-
-                        <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                            <li><a class="dropdown-item" href="news.php">News Listing</a></li>
-
-                            <li><a class="dropdown-item" href="news-detail.php">News Detail</a></li>
-                        </ul>
+                   <li class="nav-item dropdown">
+                            <a class="nav-link click-scroll" href="index.php#section_5">สัตวแพทย์</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link click-scroll" href="#section_6">Contact</a>
+                        <a class="nav-link click-scroll" href="#section_6">ติดต่อ</a>
                     </li>
 
                     <li class="nav-item ms-3">
-                        <a class="nav-link custom-btn custom-border-btn btn" href="donate.php">Donate</a>
+                        <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
+                    </li>
+
+                    <li class="nav-item ms-3">
+                        <a class="nav-link custom-btn custom-border-btn btn" href="signup.php">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -318,7 +314,7 @@ https://templatemo.com/tm-581-kind-heart-charity
                                 class="social-icon-link bi-instagram"></a>
                         </li>
 
-                                <a href="number-doctor.php" class="custom-btn btn smoothscroll">👉 คลิกเพื่อดูทีมสัตวแพทย์ทั้งหมด</a>
+                                <a href="mumber-doctor.php" class="custom-btn btn smoothscroll">👉 คลิกเพื่อดูทีมสัตวแพทย์ทั้งหมด</a>
 
                             </ul>
                         </div>

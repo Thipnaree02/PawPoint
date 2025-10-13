@@ -7,7 +7,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Kind Heart Charity - Donation</title>
+        <title>Kind Heart Charity - News Detail</title>
 
         <!-- CSS FILES -->        
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -23,64 +23,63 @@ https://templatemo.com/tm-581-kind-heart-charity
 
 -->
     </head>
-    
-    <body>
 
-        <header class="site-header">
-            <div class="container">
-                <div class="row">
-                    
-                    <div class="col-lg-8 col-12 d-flex flex-wrap">
-                        <p class="d-flex me-4 mb-0">
-                            <i class="bi-geo-alt me-2"></i>
-                            Akershusstranda 20, 0150 Oslo, Norway
-                        </p>
+<body id="section_1">
 
-                        <p class="d-flex mb-0">
-                            <i class="bi-envelope me-2"></i>
+    <header class="site-header">
+        <div class="container">
+            <div class="row">
 
-                            <a href="mailto:info@company.com">
-                                info@company.com
-                            </a>
-                        </p>
-                    </div>
+                <div class="col-lg-8 col-12 d-flex flex-wrap">
+                    <p class="d-flex me-4 mb-0">
+                        <i class="bi-geo-alt me-2"></i>
+                        มหาวิทยาลัยมหาสารคาม
+                    </p>
 
-                    <div class="col-lg-3 col-12 ms-auto d-lg-block d-none">
-                        <ul class="social-icon">
-                            <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-twitter"></a>
-                            </li>
+                    <p class="d-flex mb-0">
+                        <i class="bi-envelope me-2"></i>
 
-                            <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-facebook"></a>
-                            </li>
-
-                            <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-instagram"></a>
-                            </li>
-
-                            <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-youtube"></a>
-                            </li>
-
-                            <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-whatsapp"></a>
-                            </li>
-                        </ul>
-                    </div>
-
+                        <a href="mailto:65010914602@msu.ac.th">
+                            65010914602@msu.ac.th
+                        </a>
+                    </p>
                 </div>
+
+                <div class="col-lg-3 col-12 ms-auto d-lg-block d-none">
+                    <ul class="social-icon">
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-twitter"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="https://www.facebook.com/yong.thipnaree?locale=th_TH"
+                                class="social-icon-link bi-facebook"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="https://www.instagram.com/thipnaree.ng?igsh=bWVpejEyd2toNWh2&utm_source=qr"
+                                class="social-icon-link bi-instagram"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="https://www.youtube.com/@happythipnaree" class="social-icon-link bi-youtube"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-whatsapp"></a>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
-        </header>
+        </div>
+    </header>
 
         <nav class="navbar navbar-expand-lg bg-light shadow-lg">
             <div class="container">
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" href="index.php">
                     <img src="images/logo.png" class="logo img-fluid" alt="">
-                    <span>
-                        Kind Heart Charity
-                        <small>Non-profit Organization</small>
-                    </span>
+                    <span>PawPoint</span>
                 </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,37 +89,31 @@ https://templatemo.com/tm-581-kind-heart-charity
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="index.html#section_1">Home</a>
+                            <a class="nav-link click-scroll" href="index.php#section_1">Home</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="index.html#section_2">About</a>
+                            <a class="nav-link smoothscroll" href="index.php#section_2">About</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="index.html#section_3">Causes</a>
+                            <a class="nav-link click-scroll" href="index.php#section_3">Causes</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="index.html#section_4">Volunteer</a>
+                            <a class="nav-link click-scroll" href="index.php#section_4">แพ็กเกจ</a>
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link click-scroll dropdown-toggle" href="index.html#section_5" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">News</a>
-
-                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                                <li><a class="dropdown-item" href="news.html">News Listing</a></li>
-
-                                <li><a class="dropdown-item" href="news-detail.html">News Detail</a></li>
-                            </ul>
+                            <a class="nav-link click-scroll" href="index.php#section_5">สัตวแพทย์</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="index.html#section_6">Contact</a>
+                            <a class="nav-link click-scroll" href="index.php#section_6">ติดต่อ</a>
                         </li>
 
                         <li class="nav-item ms-3">
-                            <a class="nav-link custom-btn custom-border-btn btn" href="donate.html">Donate</a>
+                            <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
                         </li>
                     </ul>
                 </div>
