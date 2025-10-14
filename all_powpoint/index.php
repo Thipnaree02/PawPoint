@@ -116,7 +116,7 @@ https://templatemo.com/tm-581-kind-heart-charity
                     </li>
 
                    <li class="nav-item dropdown">
-                            <a class="nav-link click-scroll" href="member.php">สัตวแพทย์</a>
+                            <a class="nav-link click-scroll" href="member-doctor.php">สัตวแพทย์</a>
                     </li>
 
                     <li class="nav-item">
