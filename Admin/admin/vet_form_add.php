@@ -1,3 +1,12 @@
+<?php
+// คิวรี่ข้อมูลแผนกสัตวแพทย์
+    $queryType = $connextdb->prepare("SELECT* FROM tbl_type");
+    $queryType ->execute();
+    $rsvet= $queryType->fetchAll();
+
+
+?>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -27,6 +36,13 @@
                                         <div class="col-sm-2">
                                             <select name="specialty" class="form-control" required>
                                                 <option value="">-- เลือกข้อมูล --</option>
+
+                                                <?php foreach($rsvet as $row){ ?>
+
+                                                <option value="<?php echo $row['type_id']; ?>">-- <?php echo $row['type_name']; ?> --</option>
+                                                
+                                                <?php } ?>
+
                                             </select>
                                         </div>
                                     </div>
@@ -36,6 +52,13 @@
                                         <div class="col-sm-4">
                                             <input type="text" name="vet_name" class="form-control" required
                                                 placeholder="ชื่อสัตวแพทย์">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2">รายละเอียดเกี่ยวกับสัตวแพทย์</label>
+                                        <div class="col-sm-10">
+                                            <textarea name="vet_detail" id="summernote"></textarea>
                                         </div>
                                     </div>
 
@@ -82,7 +105,15 @@
 
                                 </div><!-- /.card-body -->
                             </form>
-
+                            
+                            <?php
+                                // echo '<pre>';
+                                // print_r($_POST);
+                                // echo '<hr>';
+                                // print_r($_FILES);
+                                // exit;
+                                                        
+                            ?>
 
 
 
@@ -103,102 +134,118 @@
 <!-- /.content-wrapper -->
 
 <?php
-//เช็ค input ที่ส่งมาจากฟอร์ม
-// echo '<pre>';
-// print_r($_POST);
-exit;
+            //เช็ค input ที่ส่งมาจากฟอร์ม
+            // echo '<pre>';
+            // print_r($_POST);
+            // exit;
 
-if (isset($_POST['username']) && isset($_POST['name']) && isset($_POST['surname'])) {
+if (isset($_POST['vet_name']) && isset($_POST['specialty']) && isset($_POST['phone'])) {
     //echo 'ถูกเงื่อนไข ส่งข้อมูลมาได้';
 
     //ประกาศตัวแปรรับค่าจากฟอร์ม
-    $username = $_POST['username'];
-    $password = sha1($_POST['password']);
-    // echo $password;
-    // exit;
-    $title_name = $_POST['title_name'];
-    $name = $_POST['name'];
-    $surname = $_POST['surname'];
+    $specialty = $_POST['specialty'];
+    $vet_name = $_POST['vet_name'];
+    $vet_detail = $_POST['vet_detail'];
+    $phone = $_POST['phone'];
+    $email = $_POST['email'];
 
-    //เช็ค Username ซ้ำ
-    // single row query แสดงแค่ 1 รายการ
-    $stmtMemberDetail = $connextdb->prepare("SELECT username FROM member 
-                                    WHERE username=:username
-                                    ");
-    //bindParam
-    $stmtMemberDetail->bindParam(':username', $username, PDO::PARAM_STR);
-    $stmtMemberDetail->execute();
-    $row = $stmtMemberDetail->fetch(PDO::FETCH_ASSOC);
 
-    //นับจำนวนการคิวรี่ ถ้าได้ 1 คือ username ซ้ำ
-    // echo $stmtMemberDetail->rowCount();
-    // echo '<hr>';
-    if ($stmtMemberDetail->rowCount() == 1) {
-        // echo '๊Username ซ้ำ';
-        echo '<script>
-                                            setTimeout(function() {
-                                            swal({
-                                                title: "Username ซ้ำ !!",
-                                                text: "กรุณาเพิ่มข้อมูลใหม่อีกครั้ง",
-                                                type: "error"
-                                            }, function() {
-                                                window.location = "member.php?act=add"; //หน้าที่ต้องการให้กระโดดไป
-                                            });
-                                            }, 1000);
-                                        </script>';
-    } else {
-        // echo 'ไม่มี username ซ้ำ';
+    //สร้างตัวแปรวันที่เพื่อเอาไปตั้งชื่อไฟล์ใหม่
+    $date1 = date("Ymd_His");
+    //สร้างตัวแปรสุ่มตัวเลขเพื่อเอาไปตั้งชื่อไฟล์ที่อัพโหลดไม่ให้ชื่อไฟล์ซ้ำกัน
+    $numrand = (mt_rand());
+    $vet_image = (isset($_POST['vet_image']) ? $_POST['vet_image'] : '');
+    $upload=$_FILES['vet_image']['name'];
+ 
+    //มีการอัพโหลดไฟล์
+    if($upload !='') {
+    //ตัดขื่อเอาเฉพาะนามสกุล
+    $typefile = strrchr($_FILES['vet_image']['name'],".");
+ 
+    //สร้างเงื่อนไขตรวจสอบนามสกุลของไฟล์ที่อัพโหลดเข้ามา
+    if($typefile =='.jpg' || $typefile  =='.jpeg' || $typefile  =='.png'){
+ 
+    //โฟลเดอร์ที่เก็บไฟล์
+    $path="..assets/vet_img/";
+    //ตั้งชื่อไฟล์ใหม่เป็น สุ่มตัวเลข+วันที่
+    $newname = $numrand.$date1.$typefile;
+    $path_copy=$path.$newname;
+    //คัดลอกไฟล์ไปยังโฟลเดอร์
+    move_uploaded_file($_FILES['vet_image']['tmp_name'],$path_copy); 
+
+        
         //sql insert
-        $stmtInserMember = $connextdb->prepare("INSERT INTO member 
+        $stmtInsertVet = $connextdb->prepare("INSERT INTO tbl_vet 
                                 (
-                                    username,
-                                    password,
-                                    title_name,
-                                    name, 
-                                    surname
+                                    vet_name,
+                                    vet_detail,
+                                    specialty,
+                                    phone,
+                                    email,
+                                    vet_image
                                 )
                                 VALUES 
                                 (
-                                    :username,
-                                    '$password',
-                                    :title_name,
-                                    :name, 
-                                    :surname
+                                    :vet_name,
+                                    :vet_detail,
+                                    :specialty,
+                                    :phone,
+                                    :email,
+                                    '$newname'
                                 )
                                 ");
 
         //bindParam
-        $stmtInserMember->bindParam(':username', $username, PDO::PARAM_STR);
-        $stmtInserMember->bindParam(':title_name', $title_name, PDO::PARAM_STR);
-        $stmtInserMember->bindParam(':name', $name, PDO::PARAM_STR);
-        $stmtInserMember->bindParam(':surname', $surname, PDO::PARAM_STR);
-        $result = $stmtInserMember->execute();
+        $stmtInsertVet->bindParam(':specialty', $specialty, PDO::PARAM_STR);
+        $stmtInsertVet->bindParam(':vet_name', $vet_name, PDO::PARAM_STR);
+        $stmtInsertVet->bindParam(':vet_detail', $vet_detail, PDO::PARAM_STR);
+        $stmtInsertVet->bindParam(':phone', $phone, PDO::PARAM_STR);
+        $stmtInsertVet->bindParam(':email', $email, PDO::PARAM_STR);
+        $result = $stmtInsertVet->execute();
 
         $connextdb = null; //close connect  db
 
-        if ($result) {
-            echo '<script>
-                                            setTimeout(function() {
-                                            swal({
-                                                title: "เพิ่มข้อมูลสำเร็จ",
-                                                type: "success"
-                                            }, function() {
-                                                window.location = "member.php"; //หน้าที่ต้องการให้กระโดดไป
-                                            });
-                                            }, 1000);
-                                        </script>';
-        } else {
-            echo '<script>
-                                            setTimeout(function() {
-                                            swal({
-                                                title: "เกิดข้อผิดพลาด",
-                                                type: "error"
-                                            }, function() {
-                                                window.location = "member.php"; //หน้าที่ต้องการให้กระโดดไป
-                                            });
-                                            }, 1000);
-                                        </script>';
-        } //else if result
-    } //เช็คข้อมูลซ้ำ
+        //เงื่อนไขตรวจสอบการเพิ่มข้อมูล
+          if($result){
+                echo '<script>
+                     setTimeout(function() {
+                      swal({
+                          title: "เพิ่มข้อมูลสำเร็จ",
+                          type: "success"
+                      }, function() {
+                          window.location = "vet.php"; //หน้าที่ต้องการให้กระโดดไป
+                      });
+                    }, 1000);
+                </script>';
+            }else{
+               echo '<script>
+                     setTimeout(function() {
+                      swal({
+                          title: "เกิดข้อผิดพลาด",
+                          type: "error"
+                      }, function() {
+                          window.location = "vet.php"; //หน้าที่ต้องการให้กระโดดไป
+                      });
+                    }, 1000);
+                </script>';
+            } //else ของ if result
+ 
+        
+            }else{ //ถ้าไฟล์ที่อัพโหลดไม่ตรงตามที่กำหนด
+                echo '<script>
+                            setTimeout(function() {
+                            swal({
+                                title: "คุณอัพโหลดไฟล์ไม่ถูกต้อง",
+                                type: "error"
+                            }, function() {
+                                window.location = "vet.php"; //หน้าที่ต้องการให้กระโดดไป
+                            });
+                            }, 1000);
+                        </script>';
+            } //else ของเช็คนามสกุลไฟล์
+   
+        } // if($upload !='') {
+
+        
 } //isset
 ?>
