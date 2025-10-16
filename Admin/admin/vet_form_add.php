@@ -166,7 +166,7 @@ if (isset($_POST['vet_name']) && isset($_POST['specialty']) && isset($_POST['pho
     if($typefile =='.jpg' || $typefile  =='.jpeg' || $typefile  =='.png'){
  
     //โฟลเดอร์ที่เก็บไฟล์
-    $path="..assets/vet_img/";
+    $path="../assets/vet_img/";
     //ตั้งชื่อไฟล์ใหม่เป็น สุ่มตัวเลข+วันที่
     $newname = $numrand.$date1.$typefile;
     $path_copy=$path.$newname;
