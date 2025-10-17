@@ -4,7 +4,7 @@
     t.type_name 
     FROM tbl_vet as p 
     INNER JOIN tbl_type as t ON p.specialty =t.type_id
-    GROUP BY p.id;");
+    GROUP BY p.id");
     $queryvet->execute();
     $rsvet= $queryvet->fetchAll();
 
@@ -48,7 +48,8 @@
                     <th width = "31%" class = "text-center">ชื่อ - สกุล</th>
                     <th width = "10%" class = "text-center">เบอร์โทร</th>
                     <th width = "20%" class = "text-center">Email</th>
-                    <th width = "10%" class = "text-center">แก้ข้อมูล</th>
+                    <th width = "5%" class = "text-center">+ภาพ</th>
+                    <th width = "5%" class = "text-center">แก้ไข</th>
                     <th width = "5%" class = "text-center">ลบ</th>
                   </tr>
                   </thead>
@@ -66,6 +67,10 @@
                     <td><?=$row['vet_name'];?></td>
                     <td align = "center"><?=$row['phone'];?></td>
                     <td align = "center"><?=$row['email'];?></td>
+
+                    <td align = "center">
+                      <a href = "vet.php?id=<?=$row['id'];?>&act=image" class="btn btn-success btn-sm">+ภาพ</a>
+                    </td>
 
                     <td align = "center">
                       <a href = "vet.php?id=<?=$row['id'];?>&act=edit" class="btn btn-warning btn-sm">แก้ไข</a>

@@ -12,6 +12,8 @@
       include 'vet_delete.php';
   }else if ($act == 'edit'){
       include 'vet_form_edit.php';
+  }else if ($act == 'image'){
+      include 'vet_form_upload_image.php';
   }else{
      include 'vet_list.php';
   }
