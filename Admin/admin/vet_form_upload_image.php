@@ -1,3 +1,78 @@
+<?php
+
+//สร้างเงื่อนไขตรวจสอบการส่ง param
+if (isset($_GET['id']) && isset($_GET['act']) && $_GET['act'] == 'image') {
+
+    $queryvetImg = $connextdb->prepare("SELECT * FROM tbl_vet_image WHERE spe_p_id=:id");
+    //bindParam
+    $queryvetImg->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
+    $queryvetImg->execute();
+    $rsImg = $queryvetImg->fetchAll();
+
+    //print_r($rsImg);
+
+    //สร้างเงื่อนไขการตรวจสอบคิวรี่
+
+    // if ($queryvetImg->rowCount() == 0) {    //คิวรี่ผิดพลาด
+    //     echo '<script>
+    //                     setTimeout(function() {
+    //                     swal({
+    //                         title: "เกิดข้อผิดพลาด",
+    //                         type: "error"
+    //                     }, function() {
+    //                         window.location = "vet.php"; //หน้าที่ต้องการให้กระโดดไป
+    //                     });
+    //                     }, 1000);
+    //                 </script>';
+    //     exit;
+
+    // }
+
+}
+?>
+
+<!-- js check file type -->
+<script type="text/javascript">
+    var _validFileExtensions = [".jpg", ".jpeg", ".png"];     //กำหนดนามสกุลไฟล์ที่สามรถอัพโหลดได้
+    function ValidateTypeFile(oForm) {
+        var arrInputs = oForm.getElementsByTagName("input");
+        for (var i = 0; i < arrInputs.length; i++) {
+            var oInput = arrInputs[i];
+            if (oInput.type == "file") {
+                var sFileName = oInput.value;
+                if (sFileName.length > 0) {
+                    var blnValid = false;
+                    for (var j = 0; j < _validFileExtensions.length; j++) {
+                        var sCurExtension = _validFileExtensions[j];
+                        if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                            blnValid = true;
+                            break;
+                        } // if (sFileName.substr(sFileName.length....
+                    } // for (var j = 0; j < _validFileExtensions.length; j++) {
+
+                    //ถ้าเลือกไฟล์ไม่ถุูกต้องจะมี Alert แจ้งเตือน   
+                    if (!blnValid) {
+                        // alert("คำเตือน , " + sFileName + "\n ระบบรองรับเฉพาะไฟล์นามสกุล   : " + _validFileExtensions.join(", "));
+                        setTimeout(function () {
+                            swal({
+                                title: "อัพโหลดไฟล์ไม่ถูกต้อง ",
+                                text: "รองรับ .jpg, .jpeg, .png เท่านั้น !!",
+                                type: "error"
+                            }, function () {
+                                //window.location.reload();
+                                //window.location = "product.php?act=add"; //หน้าที่ต้องการให้กระโดดไป
+                            });
+                        }, 1000);
+                        return false;
+                    } //if (!blnValid) {
+                } //if (sFileName.length > 0) {
+            } // if (oInput.type == "file") {
+        } //for
+
+        return true;
+    } //function ValidateTypeFile(oForm) {
+</script>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -19,15 +94,16 @@
                     <div class="card-body">
                         <div class="card card-primary">
                             <!-- form start -->
-                            <form action="" method="post" enctype="multipart/form-data">
+                            <form action="" method="post" onsubmit="return ValidateTypeFile(this);"
+                                enctype="multipart/form-data">
                                 <div class="card-body">
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2">ภาพ</label>
+                                        <label class="col-sm-2">ภาพบุคลากร</label>
                                         <div class="col-sm-4">
                                             <div class="input-group">
                                                 <div class="custom-file">
-                                                    <input type="file" name="vet_image[]" class="custom-file-input"
+                                                    <input type="file" name="upload[]" class="custom-file-input"
                                                         id="exampleInputFile" accept="image/*" multiple="multiple">
                                                     <label class="custom-file-label" for="exampleInputFile">Choose
                                                         file</label>
@@ -42,8 +118,9 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2"></label>
                                         <div class="col-sm-4">
-                                            <input type="hidden" name="p_id" value="<?=$_GET['id'];?>">
-                                            <button type="submit" class="btn btn-primary">เพิ่มข้อมูล</button>
+                                            <input type="hidden" name="p_id" value="<?= $_GET['id']; ?>">
+                                            <button type="submit" name="btn" value="upload"
+                                                class="btn btn-primary">upload file ภาพ</button>
                                             <a href="vet.php" class="btn btn-danger">ยกเลิก</a>
                                         </div>
                                     </div>
@@ -51,6 +128,7 @@
 
                                 </div><!-- /.card-body -->
                             </form>
+                            <!-- end fprm -->
 
                             <?php
                             // echo '<pre>';
@@ -60,6 +138,42 @@
                             // exit;
                             
                             ?>
+
+                            <hr>
+                            <h3>ภาพประกอบบุคลากรของคลินิก</h3>
+                            <table class="table table-bordered table-hover table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th>ภาพ</th>
+                                        <th>โฟลเดอร์ที่เก็บไฟล์ภาพ</th>
+                                        <th>ลบ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $i = 1;
+                                    foreach ($rsImg as $row) { ?>
+                                        <tr>
+                                            <td align="center"><?= $i++; ?></td>
+                                            <td><img src="../assets/vet_gallery/<?= $row['vet_image']; ?>" width="100px"></td>
+                                            <td>../assets/vet_gallery/<?= $row['vet_image']; ?></td>
+
+                                            <td>
+
+                                                <form action="" method="POST">
+                                                    <input type="hidden" name="id" value="<?= $_GET['id']; ?>">
+                                                    <input type="hidden" name="no" value="<?= $row['no']; ?>">
+                                                    <input type="hidden" name="vet_image" value="<?= $row['vet_image']; ?>">
+                                                    <button type="submit" name="act" value="deleteImg"
+                                                        class="btn btn-danger"> ลบข้อมูล</button>
+                                                </form>
+
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+
+                            </table>
 
 
 
@@ -88,148 +202,156 @@
 // exit;
 
 
-if (isset($_POST['p_id'])) {
+if (isset($_POST['p_id']) && isset($_POST['btn']) && $_POST['btn'] == 'upload') {
 
-    //$files = array_filter($_FILES['upload']['name']); //something like that to be used before processing files.
+    //trigger exception in a "try" block
+    try {
 
-    // Count # of uploaded files in array
-    $total = count($_FILES['vet_image']['name']);
-    // echo $total;
-    // exit;
+        // Count # of uploaded files in array
+        $total = count($_FILES['upload']['name']);
+        //echo $total;
+//exit();
+// Loop through each file
+        for ($i = 0; $i < $total; $i++) {
+            //สร้างตัวแปรวันที่เพื่อเอาไปตั้งชื่อไฟล์ใหม่
+            $date1 = date("YmdHis");
+            //สร้างตัวแปรสุ่มตัวเลขเพื่อเอาไปตั้งชื่อไฟล์ที่อัพโหลดไม่ให้ชื่อไฟล์ซ้ำกัน
+            $numrand = (mt_rand());
+            $typefile = strrchr($_FILES['upload']['name'][$i], ".");
+            //Get the temp file path
+            $tmpFilePath = $_FILES['upload']['tmp_name'][$i];
 
-    // Loop through each file
-    for ($i = 0; $i < $total; $i++) {
+            //Make sure we have a file path
+            if ($tmpFilePath != "") {
 
-        //Get the temp file path
-        $tmpFilePath = $_FILES['vet_image']['tmp_name'][$i];
+                //โฟลเดอร์ที่เก็บไฟล์
+                $path = "../assets/vet_gallery/";
+                //ตั้งชื่อไฟล์ใหม่เป็น สุ่มตัวเลข+วันที่
+                $newname = $numrand . '_' . $date1 . $typefile;
+                $path_copy = $path . $newname;
 
-        //Make sure we have a file path
-        if ($tmpFilePath != "") {
-            //Setup our new file path
-            $newFilePath = "../assets/vet_gallery/" . $_FILES['vet_image']['name'][$i];
+                //คัดลอกไฟล์ไปยังโฟลเดอร์
+                //Upload the file into the temp dir
+                if (move_uploaded_file($_FILES['upload']['tmp_name'][$i], $path_copy)) {
 
-            //Upload the file into the temp dir
-            if (move_uploaded_file($tmpFilePath, $newFilePath)) {
+                    $stmtUpload = $connextdb->prepare("INSERT INTO tbl_vet_image
+                    (
+                      spe_p_id,
+                      vet_image
+                    )
+                    VALUES 
+                    (
+                      :spe_p_id,
+                      '$newname'
+                    )
+                    ");
+                    //bindParam
+                    $stmtUpload->bindParam(':spe_p_id', $_POST['p_id'], PDO::PARAM_STR);
+                    $stmtUpload->execute();
+                    //$condb = null; //close connect db
 
-                //Handle other code here
+                    //echo '<pre>';
+                    //$stmtUpload->debugDumpParams();
 
-            }
-        }
-    }
- 
-}   //if isset
+                    //Handle other code here
+                    //echo '<pre>';
+                    //print_r($newFilePath);
 
+                } //if move
+            } // ! impty
+        } //for 
 
-
-exit;
-
-if (isset($_POST['vet_name']) && isset($_POST['specialty']) && isset($_POST['phone'])) {
-    //echo 'ถูกเงื่อนไข ส่งข้อมูลมาได้';
-
-    //ประกาศตัวแปรรับค่าจากฟอร์ม
-    $specialty = $_POST['specialty'];
-    $vet_name = $_POST['vet_name'];
-    $vet_detail = $_POST['vet_detail'];
-    $phone = $_POST['phone'];
-    $email = $_POST['email'];
-
-
-    //สร้างตัวแปรวันที่เพื่อเอาไปตั้งชื่อไฟล์ใหม่
-    $date1 = date("Ymd_His");
-    //สร้างตัวแปรสุ่มตัวเลขเพื่อเอาไปตั้งชื่อไฟล์ที่อัพโหลดไม่ให้ชื่อไฟล์ซ้ำกัน
-    $numrand = (mt_rand());
-    $vet_image = (isset($_POST['vet_image']) ? $_POST['vet_image'] : '');
-    $upload = $_FILES['vet_image']['name'];
-
-    //มีการอัพโหลดไฟล์
-    if ($upload != '') {
-        //ตัดขื่อเอาเฉพาะนามสกุล
-        $typefile = strrchr($_FILES['vet_image']['name'], ".");
-
-        //สร้างเงื่อนไขตรวจสอบนามสกุลของไฟล์ที่อัพโหลดเข้ามา
-        if ($typefile == '.jpg' || $typefile == '.jpeg' || $typefile == '.png') {
-
-            //โฟลเดอร์ที่เก็บไฟล์
-            $path = "../assets/vet_img/";
-            //ตั้งชื่อไฟล์ใหม่เป็น สุ่มตัวเลข+วันที่
-            $newname = $numrand . $date1 . $typefile;
-            $path_copy = $path . $newname;
-            //คัดลอกไฟล์ไปยังโฟลเดอร์
-            move_uploaded_file($_FILES['vet_image']['tmp_name'], $path_copy);
-
-
-            //sql insert
-            $stmtInsertVet = $connextdb->prepare("INSERT INTO tbl_vet 
-                                (
-                                    vet_name,
-                                    vet_detail,
-                                    specialty,
-                                    phone,
-                                    email,
-                                    vet_image
-                                )
-                                VALUES 
-                                (
-                                    :vet_name,
-                                    :vet_detail,
-                                    :specialty,
-                                    :phone,
-                                    :email,
-                                    '$newname'
-                                )
-                                ");
-
-            //bindParam
-            $stmtInsertVet->bindParam(':specialty', $specialty, PDO::PARAM_STR);
-            $stmtInsertVet->bindParam(':vet_name', $vet_name, PDO::PARAM_STR);
-            $stmtInsertVet->bindParam(':vet_detail', $vet_detail, PDO::PARAM_STR);
-            $stmtInsertVet->bindParam(':phone', $phone, PDO::PARAM_STR);
-            $stmtInsertVet->bindParam(':email', $email, PDO::PARAM_STR);
-            $result = $stmtInsertVet->execute();
-
-            $connextdb = null; //close connect  db
-
-            //เงื่อนไขตรวจสอบการเพิ่มข้อมูล
-            if ($result) {
-                echo '<script>
-                     setTimeout(function() {
-                      swal({
-                          title: "เพิ่มข้อมูลสำเร็จ",
-                          type: "success"
-                      }, function() {
-                          window.location = "vet.php"; //หน้าที่ต้องการให้กระโดดไป
-                      });
-                    }, 1000);
-                </script>';
-            } else {
-                echo '<script>
-                     setTimeout(function() {
-                      swal({
-                          title: "เกิดข้อผิดพลาด",
-                          type: "error"
-                      }, function() {
-                          window.location = "vet.php"; //หน้าที่ต้องการให้กระโดดไป
-                      });
-                    }, 1000);
-                </script>';
-            } //else ของ if result
-
-
-        } else { //ถ้าไฟล์ที่อัพโหลดไม่ตรงตามที่กำหนด
+        if ($stmtUpload->rowCount() > 0) {
             echo '<script>
-                            setTimeout(function() {
-                            swal({
-                                title: "คุณอัพโหลดไฟล์ไม่ถูกต้อง",
-                                type: "error"
-                            }, function() {
-                                window.location = "vet.php"; //หน้าที่ต้องการให้กระโดดไป
-                            });
-                            }, 1000);
-                        </script>';
-        } //else ของเช็คนามสกุลไฟล์
+             setTimeout(function() {
+              swal({
+                  title: "อัพโหลดภาพสำเร็จ",
+                  text: "ไฟล์ที่ถูกอัพโหลด ' . $total . ' files",
+                  type: "success"
+              }, function() {
+                  window.location = "vet.php"; //หน้าที่ต้องการให้กระโดดไป
+              });
+            }, 1000);
+        </script>';
+        }//if
 
-    } // if($upload !='') {
-
+        //catch exception
+    } catch (Exception $e) {
+        //echo 'Message: ' .$e->getMessage();
+        echo '<script>
+             setTimeout(function() {
+              swal({
+                  title: "เกิดข้อผิดพลาด",
+                  text: "กรุณาติดต่อผู้ดูแลระบบ",
+                  type: "warning"
+              }, function() {
+                  window.location = "vet.php"; //หน้าที่ต้องการให้กระโดดไป
+              });
+            }, 1000);
+        </script>';
+    }
 
 } //isset
+
+//delete image file and date in table
+
+
+if (isset($_POST['id']) && isset($_POST['no']) && isset($_POST['vet_image']) && isset($_POST['act']) && $_POST['act'] == 'deleteImg') {
+
+    // echo '<pre>';
+    // print_r($_POST);
+    // ประกาศตัวแปรรับค่าจากฟอร์ม
+    $id = $_POST['id'];
+    $no = $_POST['no'];
+    $vet_image = $_POST['vet_image'];
+
+     
+
+    // sql delete
+    $stmtDelVetImg = $connextdb->prepare('DELETE FROM tbl_vet_image WHERE no=:no AND spe_p_id=:id');
+    $stmtDelVetImg->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmtDelVetImg->bindParam(':no', $no, PDO::PARAM_INT);
+    $stmtDelVetImg->execute();
+
+    $connextdb = null; //close connect  db
+    //echo 'จำนวน row ที่ลบได้' .$stmtDelVet->rowCount();
+
+    if ($stmtDelVetImg->rowCount() == 1) {
+
+       // ลบไฟล์ภาพ
+        unlink('../assets/vet_gallery/' . $vet_image);
+
+        echo '<script>
+             setTimeout(function() {
+              swal({
+                  title: "ลบข้อมูลสำเร็จ",
+                  type: "success"
+              }, function() {
+                  window.location = "vet.php?id='.$id.'&act=image"; //หน้าที่ต้องการให้กระโดดไป
+              });
+            }, 1000);
+        </script>';
+        exit();
+    } else {
+        echo '<script>
+             setTimeout(function() {
+              swal({
+                  title: "เกิดข้อผิดพลาด",
+                  type: "error"
+              }, function() {
+                  window.location = "vet.php?id='.$id.'&act=image"; //หน้าที่ต้องการให้กระโดดไป
+              });
+            }, 1000);
+        </script>';
+    } // sweet alert
+
+
+}   //issest delete image
+
+
+
+
+
+
+
 ?>
