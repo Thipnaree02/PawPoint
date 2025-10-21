@@ -243,7 +243,7 @@
                                     </div>
                                 </div>
 
-                                <a href="donate.php" class="custom-btn btn">👉 จองเลย</a>
+                                <a href="condo.php" class="custom-btn btn">👉 จองเลย</a>
                             </div>
                         </div>
                     </div>
@@ -277,7 +277,7 @@
                                     </div>
                                 </div>
 
-                                <a href="donate.php" class="custom-btn btn">👉 จองเลย</a>
+                                <a href="condo.php" class="custom-btn btn">👉 จองเลย</a>
                             </div>
                         </div>
                     </div>
@@ -311,7 +311,7 @@
                                     </div>
                                 </div>
 
-                                <a href="donate.php" class="custom-btn btn">👉 จองเลย</a>
+                                <a href="condo.php" class="custom-btn btn">👉 จองเลย</a>
                             </div>
                         </div>
                     </div>

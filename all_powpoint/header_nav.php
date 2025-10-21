@@ -1,11 +1,3 @@
-<!-- เช็คไฟล์โปรไฟล์สมาชิกว่าเข้าระบบไหม -->
-<!-- <?php
-if (!file_exists('images/thipnaree.jpg')) {
-    echo "<script>alert('ไม่พบไฟล์รูปภาพ!');</script>";
-}
-?> -->
-
-
 <?php
 session_start();
 ?>
@@ -15,7 +7,7 @@ session_start();
         <div class="container">
             <a class="navbar-brand" href="index.php">
                 <img src="images/logo.png" class="logo img-fluid" alt="Logo">
-                <span>PawPoint</span>
+                <span>PowPoint</span>
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -35,150 +27,156 @@ session_start();
                     <?php if (isset($_SESSION['user_id'])): ?>
 
                         <style>
-                            /* 🌿 สไตล์กล่องโปรไฟล์แบบยาว */
-                            .dropdown-menu.profile-menu {
-                                width: 340px;
-                                /* ✅ ไม่กว้างเกินไป */
-                                min-height: 480px;
-                                /* ✅ เพิ่มความสูงให้ยาวลง */
-                                border: none;
-                                border-radius: 28px;
-                                box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
-                                padding: 0;
-                                overflow: hidden;
-                                backdrop-filter: blur(10px);
-                                background: rgba(255, 255, 255, 0.92);
-                                transition: all 0.3s ease;
+                            .profile-wrapper {
+                                position: relative;
+                                display: inline-block;
                             }
 
-                            /* ✅ ส่วนหัวรูปและชื่อ */
-                            .profile-menu .profile-header {
-                                background: linear-gradient(135deg, #6ee7b7 0%, #3b82f6 100%);
-                                color: #fff;
-                                text-align: center;
-                                padding: 60px 25px 50px 25px;
-                                /* ✅ เพิ่ม padding บน–ล่าง ให้ยาวลง */
+                            .profile-toggle {
+                                display: flex;
+                                align-items: center;
+                                cursor: pointer;
                             }
 
-                            /* ✅ รูปโปรไฟล์ใหญ่ และมีช่องว่างรอบ ๆ */
-                            .profile-menu .profile-header img {
+                            .profile-toggle img {
+                                width: 35px;
+                                height: 35px;
                                 border-radius: 50%;
-                                border: 5px solid #fff;
-                                box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+                                object-fit: cover;
+                                margin-right: 8px;
+                            }
+
+                            .profile-dropdown {
+                                position: absolute;
+                                top: 55px;
+                                right: 0;
+                                width: 320px;
+                                background: linear-gradient(180deg, #6dd5fa, #2980b9);
+                                border-radius: 25px;
+                                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+                                overflow: hidden;
+                                transition: all 0.3s ease, opacity 0.3s ease;
+                                z-index: 1000;
+                                opacity: 0;
+                                visibility: hidden;
+                            }
+
+                            .profile-wrapper:hover .profile-dropdown {
+                                opacity: 1;
+                                visibility: visible;
+                                transform: translateY(6px);
+                            }
+
+                            .profile-info {
+                                text-align: center;
+                                padding: 25px 25px 20px 25px;
+                            }
+
+                            .profile-info img {
                                 width: 110px;
                                 height: 110px;
+                                border-radius: 50%;
+                                border: 4px solid #fff;
                                 object-fit: cover;
-                                margin-bottom: 20px;
+                                margin-bottom: 12px;
+                                background-color: #fff;
                             }
 
-                            /* ✅ ชื่อ + อีเมล ใหญ่ขึ้นนิด ดูบาลานซ์ */
-                            .profile-menu .profile-header h6 {
-                                font-size: 1.3rem;
+                            .profile-info h3 {
                                 font-weight: 700;
-                                margin-bottom: 8px;
+                                color: #000;
+                                font-size: 19px;
+                                margin-bottom: 5px;
                             }
 
-                            .profile-menu .profile-header small {
-                                font-size: 1rem;
-                                opacity: 0.9;
+                            .profile-info p {
+                                color: #fff;
+                                font-size: 14px;
+                                margin: 0;
                             }
 
-                            /* ✅ ส่วนล่างของกล่อง (รายการ) */
-                            .profile-menu .dropdown-item {
-                                text-align: left;
-                                font-weight: 500;
-                                color: #333;
-                                padding: 18px 30px;
-                                /* ✅ เพิ่ม padding แนวตั้ง ให้ยาวขึ้น */
-                                font-size: 17px;
+                            .profile-actions {
+                                background: #fff;
+                                padding: 15px 25px;
+                                border-top: 1px solid #eee;
+                                border-radius: 0 0 25px 25px;
+                            }
+
+                            .profile-actions a {
                                 display: flex;
                                 align-items: center;
                                 gap: 10px;
-                                transition: background 0.2s ease;
+                                color: #333;
+                                text-decoration: none;
+                                font-size: 15px;
+                                margin: 8px 0;
+                                transition: color 0.2s ease;
                             }
 
-                            .profile-menu .dropdown-item:hover {
-                                background-color: #f8f9fa;
+                            .profile-actions a:hover {
+                                color: #2980b9;
                             }
 
-                            .profile-menu .dropdown-item.text-danger:hover {
-                                background-color: #ffe6e6;
-                                color: #c82333;
+                            .profile-actions a.logout {
+                                color: #e74c3c;
                             }
 
-                            /* ✅ เอฟเฟกต์ตอนเปิดเมนู */
-                            .dropdown-menu.show {
-                                transform: translateY(12px);
-                                transition: all 0.25s ease-out;
+                            .profile-actions a.logout:hover {
+                                color: #c0392b;
                             }
 
-                            /* 🌸 เส้นแบ่งบาง ๆ ระหว่างเมนู */
-                            .profile-menu .divider-line {
-                                height: 1px;
-                                background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.15), transparent);
-                                margin: 8px 25px;
-                                border-radius: 1px;
-                                opacity: 0.7;
-                            }
+                            @media (min-width: 992px) {
+                                .profile-dropdown {
+                                    width: 360px;
+                                    border-radius: 28px;
+                                }
 
-                            /* 🌿 ปรับความนุ่มโดยรวมอีกนิด */
-                            .dropdown-menu.profile-menu {
-                                width: 340px;
-                                min-height: 480px;
-                                border-radius: 28px;
-                                background: rgba(255, 255, 255, 0.92);
-                                backdrop-filter: blur(12px);
-                                box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
-                                overflow: hidden;
-                                transition: all 0.3s ease;
-                            }
+                                .profile-info img {
+                                    width: 120px;
+                                    height: 120px;
+                                }
 
-                            /* ✅ เอฟเฟกต์ตอนเปิดเมนู */
-                            .dropdown-menu.show {
-                                transform: translateY(12px);
-                                opacity: 1;
-                                transition: all 0.3s ease-out;
+                                .profile-info h3 {
+                                    font-size: 20px;
+                                }
                             }
-                            
                         </style>
 
+                        <!-- ✅ เมนูโปรไฟล์ -->
+                        <li class="nav-item">
+                            <div class="profile-wrapper">
+                                <?php
+                                // ✅ ใช้ avatar จาก session ที่อัปเดตล่าสุด
+                                $defaultImg = "images/avatar/users.png";
+                                if (!empty($_SESSION['avatar']) && file_exists(__DIR__ . '/' . $_SESSION['avatar'])) {
+                                    $profileImg = $_SESSION['avatar'];
+                                } else {
+                                    $profileImg = $defaultImg;
+                                }
+                                ?>
 
-                        <!-- ✅ เมนูโปรไฟล์แบบมีรูป -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="images/avatar/thipnaree.jpg" class="rounded-circle me-2" width="35" height="35"
-                                    alt="Profile">
-                                <span class="fw-semibold"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
-                            </a>
+                                <div class="profile-toggle">
+                                    <img src="<?php echo htmlspecialchars($profileImg); ?>" alt="Profile Picture">
+                                    <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                                    <i class="bi bi-caret-down-fill ms-1"></i>
+                                </div>
 
-                            <ul class="dropdown-menu dropdown-menu-end profile-menu" aria-labelledby="userMenu">
-                                <li class="profile-header">
-                                    <img src="images/avatar/thipnaree.jpg" alt="Profile">
-                                    <h6><?php echo htmlspecialchars($_SESSION['username']); ?></h6>
-                                    <small><?php echo htmlspecialchars($_SESSION['email']); ?></small>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="profile.php">
-                                        <i class="bi bi-person-circle"></i> โปรไฟล์ของฉัน
-                                    </a>
-                                </li>
-
-                                <!-- 🔹 Divider แบบบางโปร่งใส -->
-                                <li class="divider-line"></li>
-
-                                <li>
-                                    <a class="dropdown-item text-danger" href="logout.php">
-                                        <i class="bi bi-box-arrow-right"></i> ออกจากระบบ
-                                    </a>
-                                </li>
-                            </ul>
-
+                                <div class="profile-dropdown">
+                                    <div class="profile-info">
+                                        <img src="<?php echo htmlspecialchars($profileImg); ?>" alt="Profile Picture">
+                                        <h3><?php echo htmlspecialchars($_SESSION['username']); ?></h3>
+                                        <p><?php echo htmlspecialchars($_SESSION['email']); ?></p>
+                                    </div>
+                                    <div class="profile-actions">
+                                        <a href="profile.php"><i class="bi bi-person-circle"></i> โปรไฟล์ของฉัน</a>
+                                        <a href="logout.php" class="logout"><i class="bi bi-box-arrow-right"></i>
+                                            ออกจากระบบ</a>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
 
                     <?php else: ?>
-                        <!-- ❌ ยังไม่ล็อกอิน -->
                         <li class="nav-item ms-3">
                             <a class="nav-link btn btn-info text-dark rounded-pill px-3" href="signin.php">Sign In</a>
                         </li>
@@ -186,6 +184,7 @@ session_start();
                             <a class="nav-link btn btn-warning text-dark rounded-pill px-3" href="signup.php">Sign Up</a>
                         </li>
                     <?php endif; ?>
+
                 </ul>
             </div>
         </div>

@@ -1,3 +1,54 @@
+<body id="section_1"></body>
+
+    <header class="site-header">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-8 col-12 d-flex flex-wrap">
+                    <p class="d-flex me-4 mb-0">
+                        <i class="bi-geo-alt me-2"></i>
+                        มหาวิทยาลัยมหาสารคาม
+                    </p>
+
+                    <p class="d-flex mb-0">
+                        <i class="bi-envelope me-2"></i>
+
+                        <a href="mailto:65010914602@msu.ac.th">
+                            65010914602@msu.ac.th
+                        </a>
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-12 ms-auto d-lg-block d-none">
+                    <ul class="social-icon">
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-twitter"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="https://www.facebook.com/yong.thipnaree?locale=th_TH"
+                                class="social-icon-link bi-facebook"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="https://www.instagram.com/thipnaree.ng?igsh=bWVpejEyd2toNWh2&utm_source=qr"
+                                class="social-icon-link bi-instagram"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="https://www.youtube.com/@happythipnaree" class="social-icon-link bi-youtube"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-whatsapp"></a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </header>
+    
     <nav class="navbar navbar-expand-lg bg-light shadow-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">
@@ -13,7 +64,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link click-scroll" href="#top">Home</a>
