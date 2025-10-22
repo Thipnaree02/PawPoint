@@ -1,6 +1,9 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
+
 
 <header>
     <nav class="navbar navbar-expand-lg bg-light shadow-lg fixed-top">
@@ -17,11 +20,10 @@ session_start();
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.php#top">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#section_2">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#section_3">Causes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php#top">หน้าหลัก</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php#section_2">เมนูบริการ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php#section_3">บุคคลากร</a></li>
                     <li class="nav-item"><a class="nav-link" href="index.php#section_4">แพ็กเกจ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="member-doctor.php">สัตวแพทย์</a></li>
                     <li class="nav-item"><a class="nav-link" href="index.php#section_6">ติดต่อ</a></li>
 
                     <?php if (isset($_SESSION['user_id'])): ?>
@@ -178,10 +180,11 @@ session_start();
 
                     <?php else: ?>
                         <li class="nav-item ms-3">
-                            <a class="nav-link btn btn-info text-dark rounded-pill px-3" href="signin.php">Sign In</a>
+                            <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
                         </li>
+
                         <li class="nav-item ms-3">
-                            <a class="nav-link btn btn-warning text-dark rounded-pill px-3" href="signup.php">Sign Up</a>
+                            <a class="nav-link custom-btn custom-border-btn btn" href="signup.php">Sign Up</a>
                         </li>
                     <?php endif; ?>
 

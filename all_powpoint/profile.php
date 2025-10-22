@@ -21,7 +21,7 @@ $stmtProfile->execute();
 $user = $stmtProfile->fetch(PDO::FETCH_ASSOC);
 
 // ✅ path โฟลเดอร์เก็บรูป (อยู่ใน all_powpoint)
-$avatarDir = "images/avatar/";
+$avatarDir = "../images/avatar/";
 $defaultAvatar = $avatarDir . "users.png";
 
 $updateSuccess = false; // ตัวแปรสำหรับ SweetAlert
@@ -60,14 +60,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $connextdb->prepare($update);
     $stmt->execute([$username, $email, $phone, $address, $avatarPath, $user_id]);
 
-    // ✅ อัปเดต session
+    // ✅ อัปเดต session ให้รูปใหม่โชว์ทันที
     $_SESSION['username'] = $username;
     $_SESSION['email'] = $email;
-    $_SESSION['avatar'] = $avatarPath; // ✅ เพิ่มบรรทัดนี้ เพื่อให้ header_nav ใช้รูปใหม่ได้ทันที
-    session_write_close(); // ✅ เพิ่มบรรทัดนี้ เพื่อให้ session ปิดและข้อมูลใหม่โหลดได้เลย
+    $_SESSION['avatar'] = $avatarPath;
+    session_write_close();
 
     $updateSuccess = true;
-
 }
 ?>
 
@@ -136,13 +135,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <form method="POST" enctype="multipart/form-data">
                 <?php
+                // ✅ ตรวจสอบพาธรูปก่อนแสดงผล
                 $avatarPath = (!empty($user['avatar']) && file_exists(__DIR__ . '/' . $user['avatar']))
                     ? htmlspecialchars($user['avatar'])
                     : htmlspecialchars($defaultAvatar);
                 ?>
-                <img id="avatarPreview" src="<?php echo $avatarPath; ?>" alt="Avatar">
+                <!-- เพิ่ม ?v=time() เพื่อไม่ให้เบราว์เซอร์ใช้รูปเก่าจาก cache -->
+                <img id="avatarPreview" src="<?php echo $avatarPath . '?v=' . time(); ?>" alt="Avatar">
 
-                <!-- ✅ preview รูปใหม่ -->
                 <div class="mt-2">
                     <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*"
                         onchange="previewImage(event)">

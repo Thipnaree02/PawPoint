@@ -1,0 +1,26 @@
+
+:root{
+  --brand:#8bdc65;
+  --brand-2:#a5f08d;
+  --dark:#1b1f24;
+}
+*{font-family:'Noto Sans Thai', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;}
+body{background:#f7f9fb;}
+.sidebar{
+  width:280px; min-height:100vh; background:#fff; position:sticky; top:0;
+}
+.sidebar .brand-badge{width:38px; height:38px; border-radius:12px; display:grid; place-items:center; background:var(--brand); color:#114d16; font-size:18px;}
+.sidebar .nav-link{color:#506070; border-radius:10px; padding:.5rem .75rem;}
+.sidebar .nav-link:hover{background:#f0f5f3;}
+.sidebar .nav-link.active{background:linear-gradient(90deg, var(--brand), var(--brand-2)); color:#123910; font-weight:600;}
+.help-box{background:#f3fff0; border:1px dashed #b7e9b0;}
+.navbar{height:64px;}
+.kpi .kpi-badge{width:52px; height:52px; display:grid; place-items:center; border-radius:14px; font-size:24px; color:#0b3411;}
+.bg-kpi-1{background:#d5f7c8;}
+.bg-kpi-2{background:#cbe9ff;}
+.bg-kpi-3{background:#ffe9c6;}
+.bg-kpi-4{background:#ffd6e8;}
+@media (max-width: 991.98px){
+  .sidebar{position:fixed; left:-320px; z-index:1040; transition:all .25s;}
+  .sidebar.show{left:0;}
+}

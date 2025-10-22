@@ -1,12 +1,50 @@
 <?php
-include '../Admin/config/connextdb.php'; // ไฟล์เชื่อมต่อฐานข้อมูล
+session_start();
+include '../Admin/config/connextdb.php'; // เชื่อมฐานข้อมูลแบบ PDO
 
-// ดึงข้อมูลห้องพักจากฐานข้อมูล (หรือกำหนดเองก็ได้)
-$query = "SELECT * FROM room_type"; // ตาราง room_type ต้องมี: id, name, description, price_night, price_week
+// ✅ ตรวจสอบว่าผู้ใช้ล็อกอินแล้วหรือยัง
+if (!isset($_SESSION['user_id'])) {
+    echo "
+    <!DOCTYPE html>
+    <html lang='th'>
+    <head>
+        <meta charset='UTF-8'>
+        <title>กรุณาเข้าสู่ระบบ</title>
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        <style>
+            body {
+                background-color: #f8f9fa;
+                font-family: 'Prompt', sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'warning',
+                title: 'กรุณาเข้าสู่ระบบก่อนจอง',
+                text: 'คุณต้องเข้าสู่ระบบก่อนจองห้องพักสัตว์เลี้ยง',
+                confirmButtonText: 'เข้าสู่ระบบ',
+                confirmButtonColor: '#3c91e6',
+                backdrop: 'rgba(0,0,0,0.4)',
+                allowOutsideClick: false
+            }).then(() => {
+                window.location.href = 'signin.php';
+            });
+        });
+        </script>
+    </body>
+    </html>
+    ";
+    exit(); // ❌ หยุดไม่ให้โหลดหน้าจอง
+}
+
+// ✅ ถ้าล็อกอินแล้ว ดึงข้อมูลห้องพักจากฐานข้อมูล
+$query = "SELECT * FROM room_type";
 $stmtCondo = $connextdb->prepare($query);
 $stmtCondo->execute();
 $result = $stmtCondo->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -90,98 +128,92 @@ $result = $stmtCondo->fetchAll(PDO::FETCH_ASSOC);
           <input type="text" class="form-control" id="totalPrice" readonly>
         </div>
 
-        
-
         <div class="text-center">
-  <button type="button" id="btnConfirm" class="btn btn-book px-4 me-2">ยืนยันการจอง</button>
-  <button type="button" id="btnCancel" class="btn btn-danger px-4">ยกเลิก</button>
-</div>
-</form>
-</div>
-</div>
+          <button type="button" id="btnConfirm" class="btn btn-book px-4 me-2">ยืนยันการจอง</button>
+          <button type="button" id="btnCancel" class="btn btn-danger px-4">ยกเลิก</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-<!-- โหลด SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-  const roomSelect = document.getElementById('roomSelect');
-  const daysInput = document.getElementById('days');
-  const totalPrice = document.getElementById('totalPrice');
+  <script>
+    const roomSelect = document.getElementById('roomSelect');
+    const daysInput = document.getElementById('days');
+    const totalPrice = document.getElementById('totalPrice');
 
-  function calculatePrice() {
-    const selectedOption = roomSelect.options[roomSelect.selectedIndex];
-    const pricePerNight = selectedOption.getAttribute('data-price');
-    const days = daysInput.value;
-    if (pricePerNight && days) {
-      const total = pricePerNight * days;
-      totalPrice.value = total.toLocaleString() + ' บาท';
-    } else {
-      totalPrice.value = '';
+    function calculatePrice() {
+      const selectedOption = roomSelect.options[roomSelect.selectedIndex];
+      const pricePerNight = selectedOption.getAttribute('data-price');
+      const days = daysInput.value;
+      if (pricePerNight && days) {
+        const total = pricePerNight * days;
+        totalPrice.value = total.toLocaleString() + ' บาท';
+      } else {
+        totalPrice.value = '';
+      }
     }
-  }
 
-  roomSelect.addEventListener('change', calculatePrice);
-  daysInput.addEventListener('input', calculatePrice);
+    roomSelect.addEventListener('change', calculatePrice);
+    daysInput.addEventListener('input', calculatePrice);
 
-  // ✅ ปุ่มยืนยันการจอง
-  document.getElementById('btnConfirm').addEventListener('click', function() {
-    Swal.fire({
-      title: 'ยืนยันการจอง?',
-      text: "ตรวจสอบข้อมูลให้ถูกต้องก่อนยืนยัน",
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'ยืนยัน',
-      cancelButtonText: 'ตรวจสอบอีกครั้ง',
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      backdrop: true,
-      allowOutsideClick: false
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // เมื่อกดยืนยัน ให้ submit ฟอร์ม
-        Swal.fire({
-          title: 'กำลังดำเนินการ...',
-          text: 'กรุณารอสักครู่',
-          icon: 'info',
-          showConfirmButton: false,
-          timer: 1200,
-          didOpen: () => {
-            document.querySelector('form').submit();
-          }
-        });
-      }
+    // ✅ ปุ่มยืนยันการจอง
+    document.getElementById('btnConfirm').addEventListener('click', function() {
+      Swal.fire({
+        title: 'ยืนยันการจอง?',
+        text: "ตรวจสอบข้อมูลให้ถูกต้องก่อนยืนยัน",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'ยืนยัน',
+        cancelButtonText: 'ตรวจสอบอีกครั้ง',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        backdrop: true,
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'กำลังดำเนินการ...',
+            text: 'กรุณารอสักครู่',
+            icon: 'info',
+            showConfirmButton: false,
+            timer: 1200,
+            didOpen: () => {
+              document.querySelector('form').submit();
+            }
+          });
+        }
+      });
     });
-  });
 
-  // ❌ ปุ่มยกเลิก
-  document.getElementById('btnCancel').addEventListener('click', function() {
-    Swal.fire({
-      title: 'ต้องการยกเลิกการจอง?',
-      text: "หากยืนยัน ระบบจะกลับไปหน้าแรก",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'ใช่',
-      cancelButtonText: 'ไม่',
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: 'กำลังกลับหน้าแรก...',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        setTimeout(() => {
-          window.location.href = 'index.php';
-        }, 1000);
-      }
+    // ❌ ปุ่มยกเลิก
+    document.getElementById('btnCancel').addEventListener('click', function() {
+      Swal.fire({
+        title: 'ต้องการยกเลิกการจอง?',
+        text: "หากยืนยัน ระบบจะกลับไปหน้าแรก",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ใช่',
+        cancelButtonText: 'ไม่',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'กำลังกลับหน้าแรก...',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          setTimeout(() => {
+            window.location.href = 'index.php';
+          }, 1000);
+        }
+      });
     });
-  });
-</script>
-
-
-
+  </script>
 
 </body>
 </html>

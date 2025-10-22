@@ -1661,3 +1661,51 @@ blockquote::before {
   }
 }
 
+
+
+
+/* === Make Navbar Always Visible on Scroll === */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+body {
+  padding-top: 90px; /* เว้นพื้นที่ให้เนื้อหาด้านบนไม่โดนเมนูทับ */
+}
+
+/* === Make Navbar Always Visible on Scroll === */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+body {
+  padding-top: 90px; /* เว้นพื้นที่ให้เนื้อหาด้านบนไม่โดนเมนูทับ */
+}
+
+/* ================================
+   ปุ่มสีส้ม (ใช้สำหรับเข้าสู่ระบบ / ปุ่มหลัก)
+   ================================ */
+.btn-orange {
+  background-color: #ff914d; /* สีส้มหลัก */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-orange:hover {
+  background-color: #ff7b1a; /* ส้มเข้มตอน hover */
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(255, 145, 77, 0.3);
+}
+

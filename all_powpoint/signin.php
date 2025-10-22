@@ -2,10 +2,10 @@
 session_start();
 include '../Admin/config/connextdb.php';
 
-if (isset($_SESSION['user_id'])) {
-    header("Location: profile.php");
-    exit();
-}
+// if (isset($_SESSION['user_id'])) {
+//     header("Location: profile.php");
+//     exit();
+// }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
@@ -18,7 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role']; // เก็บ role ไว้ใน session ด้วย
+        $_SESSION['role'] = $user['role'];
+        $_SESSION['email'] = $user['email']; // ✅ เพิ่มบรรทัดนี้
+
 
         // ถ้าเป็นแอดมินไปหลังบ้าน, ถ้าเป็น staff ไปหน้า profile
         if ($user['role'] === 'admin') {
@@ -128,94 +130,103 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body id="section_1">
 
-    <!-- Header -->
     <header class="site-header">
         <div class="container">
             <div class="row">
+
                 <div class="col-lg-8 col-12 d-flex flex-wrap">
                     <p class="d-flex me-4 mb-0">
-                        <i class="bi-geo-alt me-2"></i> มหาวิทยาลัยมหาสารคาม
+                        <i class="bi-geo-alt me-2"></i>
+                        มหาวิทยาลัยมหาสารคาม
                     </p>
+
                     <p class="d-flex mb-0">
                         <i class="bi-envelope me-2"></i>
-                        <a href="mailto:65010914602@msu.ac.th">65010914602@msu.ac.th</a>
+
+                        <a href="mailto:65010914602@msu.ac.th">
+                            65010914602@msu.ac.th
+                        </a>
                     </p>
                 </div>
+
+                <div class="col-lg-3 col-12 ms-auto d-lg-block d-none">
+                    <ul class="social-icon">
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-twitter"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="https://www.facebook.com/yong.thipnaree?locale=th_TH"
+                                class="social-icon-link bi-facebook"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="https://www.instagram.com/thipnaree.ng?igsh=bWVpejEyd2toNWh2&utm_source=qr"
+                                class="social-icon-link bi-instagram"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="https://www.youtube.com/@happythipnaree" class="social-icon-link bi-youtube"></a>
+                        </li>
+
+                        <li class="social-icon-item">
+                            <a href="#" class="social-icon-link bi-whatsapp"></a>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
         </div>
     </header>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-light shadow-lg">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <img src="images/logo.png" class="logo img-fluid" alt="">
-                <span>PawPoint</span>
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.php#section_1">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#section_2">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#section_3">Causes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#section_4">แพ็กเกจ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="member.php">สัตวแพทย์</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.php#section_6">ติดต่อ</a></li>
-
-                    <li class="nav-item ms-3">
-                        <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
-                    </li>
-
-                    <li class="nav-item ms-3">
-                        <a class="nav-link custom-btn custom-border-btn btn" href="signup.php">Sign Up</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php include 'header_nav.php'; ?>
 
     <!-- ✅ Sign In Section -->
     <main>
-    <section class="login-section">
-        <div class="container">
-            <div class="login-card">
-                <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Pet Icon">
-                <h4>เข้าสู่ระบบคลินิกสัตวแพทย์</h4>
+        <section class="login-section">
+            <div class="container">
+                <div class="login-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Pet Icon">
+                    <h4>เข้าสู่ระบบคลินิกสัตวแพทย์</h4>
 
-                <!-- ✅ เริ่มต้นฟอร์มที่นี่ -->
-                <form action="login_process.php" method="POST">
-                    <div class="mb-3 text-start">
-                        <label class="form-label">อีเมลหรือชื่อผู้ใช้</label>
-                        <input type="text" name="username" class="form-control"
-                            placeholder="กรอกอีเมลหรือชื่อผู้ใช้" required>
-                    </div>
-
-                    <div class="mb-3 text-start">
-                        <label class="form-label">รหัสผ่าน</label>
-                        <input type="password" name="password" class="form-control"
-                            placeholder="กรอกรหัสผ่าน" required>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                            <input type="checkbox" id="remember" name="remember">
-                            <label for="remember" class="small">จดจำฉันไว้</label>
+                    <!-- ✅ เริ่มต้นฟอร์มที่นี่ -->
+                    <form action="login_process.php" method="POST">
+                        <div class="mb-3 text-start">
+                            <label class="form-label">อีเมลหรือชื่อผู้ใช้</label>
+                            <input type="text" name="username" class="form-control"
+                                placeholder="กรอกอีเมลหรือชื่อผู้ใช้" required>
                         </div>
-                        <a href="#" class="small text-primary">ลืมรหัสผ่าน?</a>
-                    </div>
 
-                    <button type="submit" class="btn btn-login w-100">เข้าสู่ระบบ</button>
-                </form>
-                <!-- ✅ ปิดฟอร์มที่นี่ -->
+                        <div class="mb-3 text-start">
+                            <label class="form-label">รหัสผ่าน</label>
+                            <input type="password" name="password" class="form-control" placeholder="กรอกรหัสผ่าน"
+                                required>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <input type="checkbox" id="remember" name="remember">
+                                <label for="remember" class="small">จดจำฉันไว้</label>
+                            </div>
+                            <a href="#" class="small text-primary">ลืมรหัสผ่าน?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-orange w-100 py-2 mb-3">เข้าสู่ระบบ</button>
+
+                        <!-- <button type="submit" class="btn btn-success w-100 py-2 mb-3">
+                            <i class="bi bi-person-plus me-2"></i> เข้าสู่ระบบ
+                        </button> -->
+
+                        <p class="text-center mb-0">
+                            ยังไม่มีบัญชีแล้ว? <a href="signup.php">สมัครสมาชิก</a>
+                        </p>
+
+                    </form>
+                    <!-- ✅ ปิดฟอร์มที่นี่ -->
+                </div>
             </div>
-        </div>
-    </section>
-</main>
+        </section>
+    </main>
 
 
     <!-- Footer -->

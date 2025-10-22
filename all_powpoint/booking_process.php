@@ -1,3 +1,13 @@
+<?php
+// ✅ เริ่มต้น session ก่อนทำงานใด ๆ
+session_start();
+
+// ✅ ถ้ายังไม่ได้ล็อกอิน ให้เด้งกลับหน้า signin.php
+if (!isset($_SESSION['user_id'])) {
+    header("Location: signin.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="th">
 

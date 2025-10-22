@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="th">
 
@@ -5,6 +8,8 @@
     <meta charset="UTF-8">
     <title>บริการอาบน้ำ / ตัดขนสัตว์เลี้ยง</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- ✅ ต้องมี SweetAlert ตรงนี้ -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         body {
@@ -55,40 +60,47 @@
             color: #fff;
         }
 
-        .btn-main {
-  background-color: #66b8a6; /* เขียวมินต์ */
-  color: #fff;
-  border-radius: 25px;
-  padding: 10px 25px;
-  font-weight: 500;
-  transition: 0.3s;
-}
+        /* ปุ่มกลับสู่หน้าหลัก */
+        .btn-secondary-main {
+            background-color: #7bd8f1ff;
+            color: #2f4f4f;
+            border-radius: 25px;
+            padding: 10px 25px;
+            font-weight: 500;
+            margin-left: 10px;
+            transition: 0.3s;
+        }
 
-.btn-main:hover {
-  background-color: #57a190;
-  color: #fff;
-}
-
-/* ปุ่มกลับสู่หน้าหลัก */
-.btn-secondary-main {
-  background-color: #7bd8f1ff; /* เทาอ่อนฟ้า */
-  color: #2f4f4f;
-  border-radius: 25px;
-  padding: 10px 25px;
-  font-weight: 500;
-  margin-left: 10px;
-  transition: 0.3s;
-}
-
-.btn-secondary-main:hover {
-  background-color: #c0d4d8;
-  color: #000;
-}
-
+        .btn-secondary-main:hover {
+            background-color: #c0d4d8;
+            color: #000;
+        }
     </style>
 </head>
 
 <body>
+    <?php
+    // ✅ ตรวจสอบว่าล็อกอินหรือยัง
+    if (!isset($_SESSION['user_id'])) {
+        echo "
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'warning',
+                title: 'กรุณาเข้าสู่ระบบก่อนใช้งาน',
+                text: 'คุณต้องล็อกอินก่อนจองบริการอาบน้ำ / ตัดขนสัตว์เลี้ยง',
+                confirmButtonText: 'เข้าสู่ระบบ',
+                confirmButtonColor: '#3085d6'
+            }).then(() => {
+                window.location.href = 'signin.php';
+            });
+        });
+        </script>
+        ";
+        return; // ✅ ใช้ return แทน exit
+    }
+    ?>
+
     <section class="section-padding text-center py-5">
         <div class="container">
             <h2 class="mb-4">บริการอาบน้ำ / ตัดขนสัตว์เลี้ยง</h2>
@@ -99,7 +111,6 @@
                 <a href="booking.php?service=grooming" class="btn btn-main">🧼 จองบริการอาบน้ำ / ตัดขน</a>
                 <a href="index.php" class="btn btn-secondary-main">กลับสู่หน้าหลัก</a>
             </div>
-
 
             <!-- เลือกแพ็กเกจ -->
             <h4 class="mb-3">เลือกแพ็กเกจ</h4>
@@ -150,7 +161,6 @@
                 </div>
 
             </div>
-
 
             <!-- ตารางราคา -->
             <h4 class="mb-3">ตารางราคา</h4>
@@ -211,16 +221,13 @@
                 </div>
             </div>
 
-            <!-- รูปก่อน-หลัง (อัปโหลดได้ภายหลัง) -->
             <div class="mt-5">
                 <h4>📸 รูปก่อน-หลังอาบน้ำ</h4>
                 <p class="text-muted">ระบบจะแสดงรูปก่อน-หลังอัตโนมัติเมื่ออัปโหลด</p>
-                <img src="images/grooming_before_after.png" alt="before-after" class="img-fluid rounded-3 shadow"
-                    style="max-width: 600px;">
+                <img src="images/grooming_before_after.png" alt="before-after" class="img-fluid rounded-3 shadow" style="max-width: 600px;">
             </div>
 
         </div>
     </section>
 </body>
-
 </html>
