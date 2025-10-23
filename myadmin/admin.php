@@ -18,7 +18,7 @@ if (isset($_POST['add_user'])) {
 
     $stmtAdmin = $conn->prepare("INSERT INTO admins (fullname, username, password, email, phone, role, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmtAdmin->execute([$fullname, $username, $password, $email, $phone, $role, $photo]);
-    header("Location: admin.php");
+    header("Location: admin.php?action=added");
     exit;
 }
 
@@ -27,7 +27,7 @@ if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $stmtAdmin = $conn->prepare("DELETE FROM admins WHERE admin_id=?");
     $stmtAdmin->execute([$id]);
-    header("Location: admin.php");
+    header("Location: admin.php?action=deleted");
     exit;
 }
 
@@ -48,7 +48,7 @@ if (isset($_POST['edit_user'])) {
         $stmtAdmin = $conn->prepare("UPDATE admins SET fullname=?, email=?, phone=?, role=? WHERE admin_id=?");
         $stmtAdmin->execute([$fullname, $email, $phone, $role, $id]);
     }
-    header("Location: admin.php");
+    header("Location: admin.php?action=edited");
     exit;
 }
 
@@ -77,67 +77,35 @@ $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        * {
-            font-family: 'Noto Sans Thai', sans-serif;
-        }
-
-        body {
-            background: #f7f9fb;
-        }
-
+        * { font-family: 'Noto Sans Thai', sans-serif; }
+        body { background: #f7f9fb; }
         .sidebar {
-            width: 260px;
-            background: #fff;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            border-right: 1px solid #eaeaea;
-            padding: 1rem;
+            width: 260px; background: #fff; height: 100vh;
+            position: fixed; top: 0; left: 0;
+            border-right: 1px solid #eaeaea; padding: 1rem;
         }
-
         .sidebar .brand {
-            display: flex;
-            align-items: center;
-            font-weight: 600;
-            font-size: 20px;
-            color: #2c7a3d;
-            margin-bottom: 2rem;
+            display: flex; align-items: center;
+            font-weight: 600; font-size: 20px;
+            color: #2c7a3d; margin-bottom: 2rem;
         }
-
         .sidebar .brand i {
-            background: #8bdc65;
-            padding: 8px;
-            border-radius: 10px;
-            color: #1c461a;
-            margin-right: 8px;
+            background: #8bdc65; padding: 8px;
+            border-radius: 10px; color: #1c461a; margin-right: 8px;
         }
-
         .sidebar a {
-            display: block;
-            color: #444;
-            text-decoration: none;
-            padding: .6rem .9rem;
-            border-radius: 8px;
-            margin-bottom: 4px;
-            font-weight: 500;
+            display: block; color: #444; text-decoration: none;
+            padding: .6rem .9rem; border-radius: 8px;
+            margin-bottom: 4px; font-weight: 500;
         }
-
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: #e9f8ea;
-            color: #1d5e28;
+        .sidebar a:hover, .sidebar a.active {
+            background: #e9f8ea; color: #1d5e28;
         }
-
-        .main {
-            margin-left: 260px;
-            padding: 2rem;
-        }
-
+        .main { margin-left: 260px; padding: 2rem; }
         .navbar-custom {
-            background: #fff;
-            border-bottom: 1px solid #eee;
+            background: #fff; border-bottom: 1px solid #eee;
             padding: .8rem 1.2rem;
         }
     </style>
@@ -169,13 +137,10 @@ $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="card shadow-sm">
             <div class="card-body">
-                <?php if ($search !== ""): ?>
-                    <p class="text-muted mb-2">ผลการค้นหาสำหรับ "<b><?= htmlspecialchars($search) ?></b>"</p>
-                <?php endif; ?>
                 <table class="table table-bordered table-hover align-middle">
                     <thead class="table-success text-center">
                         <tr>
-                            <th width="70">No.</th>
+                            <th>No.</th>
                             <th>รูปภาพ</th>
                             <th>ชื่อ-นามสกุล</th>
                             <th>ชื่อผู้ใช้</th>
@@ -187,80 +152,34 @@ $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (empty($admins)): ?>
-                            <tr>
-                                <td colspan="8" class="text-center text-muted py-3">ไม่พบข้อมูล</td>
-                            </tr>
+                        <?php 
+                        if (empty($admins)): ?>
+                            <tr><td colspan="9" class="text-center text-muted py-3">ไม่พบข้อมูล</td></tr>
                         <?php else:
-                           $i = 1;
-                            foreach ($admins as $ad):  ?>
-                                <tr>
-                                    <td class="text-center"><img src="uploads/<?= $ad['profile_image'] ?>" width="50"
-                                            class="rounded-circle"></td>
-                                    <td><?= $ad['fullname'] ?></td>
-                                    <td><?= $ad['username'] ?></td>
-                                    <td><?= $ad['email'] ?></td>
-                                    <td><?= $ad['phone'] ?></td>
-                                    <td><?= $ad['role'] ?></td>
-                                    <td><?= $ad['created_at'] ?></td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                            data-bs-target="#editModal<?= $ad['admin_id'] ?>"><i
-                                                class="bi bi-pencil"></i></button>
-                                        <a href="?delete=<?= $ad['admin_id'] ?>" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('ลบผู้ใช้นี้หรือไม่?')"><i class="bi bi-trash"></i></a>
-                                    </td>
-                                </tr>
-
-                                <!-- Modal แก้ไข -->
-                                <div class="modal fade" id="editModal<?= $ad['admin_id'] ?>" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <form method="post" enctype="multipart/form-data">
-                                                <div class="modal-header bg-warning-subtle">
-                                                    <h5 class="modal-title">แก้ไขข้อมูลผู้ใช้</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="admin_id" value="<?= $ad['admin_id'] ?>">
-                                                    <div class="mb-3"><label>ชื่อ-นามสกุล</label><input type="text"
-                                                            name="fullname" value="<?= $ad['fullname'] ?>" class="form-control">
-                                                    </div>
-                                                    <div class="mb-3"><label>อีเมล</label><input type="email" name="email"
-                                                            value="<?= $ad['email'] ?>" class="form-control"></div>
-                                                    <div class="mb-3"><label>เบอร์โทร</label><input type="text" name="phone"
-                                                            value="<?= $ad['phone'] ?>" class="form-control"></div>
-                                                    <div class="mb-3"><label>สิทธิ์</label>
-                                                        <select name="role" class="form-select">
-                                                            <option value="Manager" <?= ($ad['role'] == 'Manager' ? 'selected' : '') ?>>
-                                                                Manager</option>
-                                                            <option value="Staff" <?= ($ad['role'] == 'Staff' ? 'selected' : '') ?>>
-                                                                Staff</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3"><label>เปลี่ยนรูปโปรไฟล์ (ถ้ามี)</label>
-                                                        <input type="file" name="profile_image" class="form-control">
-                                                        <div class="mt-2"><img src="uploads/<?= $ad['profile_image'] ?>"
-                                                                width="60" class="rounded-circle"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" name="edit_user"
-                                                        class="btn btn-warning">บันทึก</button>
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">ยกเลิก</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; endif; ?>
+                        $i = 1;
+                        foreach ($admins as $ad): ?>
+                        <tr>
+                            <td class="text-center"><?= $i++ ?></td>
+                            <td class="text-center"><img src="uploads/<?= $ad['profile_image'] ?>" width="50" class="rounded-circle"></td>
+                            <td><?= $ad['fullname'] ?></td>
+                            <td><?= $ad['username'] ?></td>
+                            <td><?= $ad['email'] ?></td>
+                            <td><?= $ad['phone'] ?></td>
+                            <td><?= $ad['role'] ?></td>
+                            <td><?= $ad['created_at'] ?></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                    data-bs-target="#editModal<?= $ad['admin_id'] ?>"><i class="bi bi-pencil"></i></button>
+                                <a href="?delete=<?= $ad['admin_id'] ?>" class="btn btn-sm btn-danger delete-btn"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        <?php endforeach; endif; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
-
+    
     <!-- Modal เพิ่มผู้ใช้ (เวอร์ชันใหม่ สวยกว่าเดิม) -->
 <div class="modal fade" id="addModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -330,21 +249,45 @@ $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
   </div>
 </div>
 
-<!-- สคริปต์แสดงตัวอย่างรูปโปรไฟล์ -->
 <script>
-document.getElementById('profileInput').addEventListener('change', function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(event) {
-    document.getElementById('profilePreview').src = event.target.result;
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const action = params.get("action");
+
+  // ✅ แจ้งเตือนผลลัพธ์
+  if (action === "added") {
+    Swal.fire({ icon: "success", title: "เพิ่มผู้ใช้สำเร็จ!", text: "ข้อมูลถูกบันทึกเรียบร้อยแล้ว", confirmButtonColor: "#4ca771" });
+  } 
+  if (action === "edited") {
+    Swal.fire({ icon: "success", title: "แก้ไขข้อมูลสำเร็จ!", text: "บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว", confirmButtonColor: "#4ca771" });
   }
-  reader.readAsDataURL(file);
+  if (action === "deleted") {
+    Swal.fire({ icon: "success", title: "ลบข้อมูลสำเร็จ!", text: "ผู้ใช้ถูกลบออกจากระบบแล้ว", confirmButtonColor: "#4ca771" });
+  }
+
+  // 🗑️ ยืนยันก่อนลบ
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.preventDefault();
+      Swal.fire({
+        title: "ต้องการลบผู้ใช้นี้หรือไม่?",
+        text: "เมื่อลบแล้วจะไม่สามารถกู้คืนได้!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#e74c3c",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "ลบเลย",
+        cancelButtonText: "ยกเลิก"
+      }).then(result => {
+        if (result.isConfirmed) {
+          window.location.href = btn.href;
+        }
+      });
+    });
+  });
 });
 </script>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
