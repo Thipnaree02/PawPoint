@@ -1,219 +1,172 @@
 <?php
 session_start();
-include '../Admin/config/connextdb.php'; // เชื่อมฐานข้อมูลแบบ PDO
+include '../myadmin/config/db.php';
 
-// ✅ ตรวจสอบว่าผู้ใช้ล็อกอินแล้วหรือยัง
-if (!isset($_SESSION['user_id'])) {
-    echo "
-    <!DOCTYPE html>
-    <html lang='th'>
-    <head>
-        <meta charset='UTF-8'>
-        <title>กรุณาเข้าสู่ระบบ</title>
-        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-        <style>
-            body {
-                background-color: #f8f9fa;
-                font-family: 'Prompt', sans-serif;
-            }
-        </style>
-    </head>
-    <body>
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                icon: 'warning',
-                title: 'กรุณาเข้าสู่ระบบก่อนจอง',
-                text: 'คุณต้องเข้าสู่ระบบก่อนจองห้องพักสัตว์เลี้ยง',
-                confirmButtonText: 'เข้าสู่ระบบ',
-                confirmButtonColor: '#3c91e6',
-                backdrop: 'rgba(0,0,0,0.4)',
-                allowOutsideClick: false
-            }).then(() => {
-                window.location.href = 'signin.php';
-            });
-        });
-        </script>
-    </body>
-    </html>
-    ";
-    exit(); // ❌ หยุดไม่ให้โหลดหน้าจอง
-}
-
-// ✅ ถ้าล็อกอินแล้ว ดึงข้อมูลห้องพักจากฐานข้อมูล
-$query = "SELECT * FROM room_type";
-$stmtCondo = $connextdb->prepare($query);
-$stmtCondo->execute();
-$result = $stmtCondo->fetchAll(PDO::FETCH_ASSOC);
+// ดึงข้อมูลห้องพักทั้งหมด
+$stmt = $conn->query("SELECT * FROM room_type ORDER BY id ASC");
+$rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
-  <title>PowPoint Condo | จองห้องพักสัตว์เลี้ยง</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PawPoint Condo | จองห้องพักสัตว์เลี้ยง</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     body {
-      background-color: #e9f2f7;
-      font-family: 'Prompt', sans-serif;
+      background-color: #f5f9fc;
+      font-family: "Noto Sans Thai", sans-serif;
     }
-    .container {
-      max-width: 900px;
-      margin-top: 50px;
+
+    .room-card {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
     }
-    .card {
-      border-radius: 15px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+
+    .room-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
+
+    .room-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
     .btn-book {
-      background-color: #3c91e6;
-      color: white;
+      background-color: #4aa9d9;
+      color: #fff;
+      border: none;
+      transition: 0.2s;
     }
+
     .btn-book:hover {
-      background-color: #2a6db4;
+      background-color: #0078b5;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="text-center mb-4">
-      <h2 class="fw-bold text-primary">จองห้องพักสัตว์เลี้ยง</h2>
-      <p>เลือกประเภทห้องและกรอกรายละเอียดการเข้าพัก</p>
+
+  <div class="container py-5">
+    <div class="text-center mb-5">
+      <h1 class="fw-bold text-success">🏡 PawPoint Condo</h1>
+      <p class="text-muted">เลือกห้องพักสำหรับเพื่อนสี่ขาของคุณ 🐾</p>
     </div>
 
-    <div class="card p-4">
-      <form action="condo_save.php" method="POST">
-        <div class="mb-3">
-          <label class="form-label">ชื่อเจ้าของสัตว์เลี้ยง</label>
-          <input type="text" class="form-control" name="owner_name" required>
-        </div>
+    <div class="row g-4">
+      <?php foreach ($rooms as $room): ?>
+        <div class="col-md-4">
+          <div class="card room-card">
+            <img src="images/causes/<?php echo strtolower(str_replace(' ', '-', $room['name'])); ?>.jpg"
+              onerror="this.src='images/causes/default-room.jpg'" class="room-img" alt="<?php echo $room['name']; ?>">
 
-        <div class="mb-3">
-          <label class="form-label">ชื่อสัตว์เลี้ยง</label>
-          <input type="text" class="form-control" name="pet_name" required>
-        </div>
+            <div class="card-body text-center">
+              <h4 class="card-title text-success"><?php echo htmlspecialchars($room['name']); ?></h4>
+              <p class="text-muted small"><?php echo htmlspecialchars($room['description']); ?></p>
+              <p class="mb-1"><strong>฿<?php echo number_format($room['price_night'], 2); ?></strong> / คืน</p>
+              <p><strong>฿<?php echo number_format($room['price_week'], 2); ?></strong> / สัปดาห์</p>
 
-        <div class="mb-3">
-          <label class="form-label">เลือกประเภทห้องพัก</label>
-          <select class="form-select" name="room_id" id="roomSelect" required>
-            <option value="">-- กรุณาเลือกห้องพัก --</option>
-            <?php foreach ($result as $row) { ?>
-              <option value="<?= $row['id'] ?>" data-price="<?= $row['price_night'] ?>" data-week="<?= $row['price_week'] ?>">
-                <?= $row['name'] ?> (คืนละ <?= number_format($row['price_night']) ?> บาท)
-              </option>
-            <?php } ?>
-          </select>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">วันที่เช็คอิน</label>
-            <input type="date" class="form-control" name="checkin" required>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">วันที่เช็คเอาท์</label>
-            <input type="date" class="form-control" name="checkout" required>
+              <!-- ปุ่มเปิด Modal -->
+              <button class="btn btn-book w-100" data-bs-toggle="modal"
+                data-bs-target="#bookModal<?php echo $room['id']; ?>">
+                <i class="bi bi-calendar-check"></i> จองห้องนี้
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label">จำนวนวันเข้าพัก</label>
-          <input type="number" class="form-control" id="days" name="days" min="1" required>
+        <!-- Modal จองห้อง -->
+        <div class="modal fade" id="bookModal<?php echo $room['id']; ?>" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <form action="condo_save.php" method="POST">
+                <div class="modal-header">
+                  <h5 class="modal-title">จองห้อง: <?php echo $room['name']; ?></h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                  <input type="hidden" name="room_type_id" value="<?php echo $room['id']; ?>">
+                  <input type="hidden" id="pricePerNight<?php echo $room['id']; ?>"
+                    value="<?php echo $room['price_night']; ?>">
+
+                  <div class="mb-3">
+                    <label class="form-label">ชื่อสัตว์เลี้ยง</label>
+                    <input type="text" name="pet_name" class="form-control" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">วันที่เช็คอิน</label>
+                    <input type="date" name="checkin_date" id="checkin<?php echo $room['id']; ?>" class="form-control"
+                      required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">วันที่เช็คเอาท์</label>
+                    <input type="date" name="checkout_date" id="checkout<?php echo $room['id']; ?>" class="form-control"
+                      required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">ราคารวมทั้งหมด (บาท)</label>
+                    <input type="text" name="total_price" id="total<?php echo $room['id']; ?>" class="form-control"
+                      readonly>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">ยืนยันการจอง</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label fw-bold text-success">ราคารวมโดยประมาณ:</label>
-          <input type="text" class="form-control" id="totalPrice" readonly>
-        </div>
 
-        <div class="text-center">
-          <button type="button" id="btnConfirm" class="btn btn-book px-4 me-2">ยืนยันการจอง</button>
-          <button type="button" id="btnCancel" class="btn btn-danger px-4">ยกเลิก</button>
-        </div>
-      </form>
+      <?php endforeach; ?>
     </div>
   </div>
 
-  <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    const roomSelect = document.getElementById('roomSelect');
-    const daysInput = document.getElementById('days');
-    const totalPrice = document.getElementById('totalPrice');
+    document.addEventListener("DOMContentLoaded", function () {
+      <?php foreach ($rooms as $room): ?>
+        const checkin<?php echo $room['id']; ?> = document.getElementById('checkin<?php echo $room['id']; ?>');
+        const checkout<?php echo $room['id']; ?> = document.getElementById('checkout<?php echo $room['id']; ?>');
+        const total<?php echo $room['id']; ?> = document.getElementById('total<?php echo $room['id']; ?>');
+        const price<?php echo $room['id']; ?> = parseFloat(document.getElementById('pricePerNight<?php echo $room['id']; ?>').value);
 
-    function calculatePrice() {
-      const selectedOption = roomSelect.options[roomSelect.selectedIndex];
-      const pricePerNight = selectedOption.getAttribute('data-price');
-      const days = daysInput.value;
-      if (pricePerNight && days) {
-        const total = pricePerNight * days;
-        totalPrice.value = total.toLocaleString() + ' บาท';
-      } else {
-        totalPrice.value = '';
-      }
-    }
+        function calculate<?php echo $room['id']; ?>() {
+          const checkinDate = new Date(checkin<?php echo $room['id']; ?>.value);
+          const checkoutDate = new Date(checkout<?php echo $room['id']; ?>.value);
 
-    roomSelect.addEventListener('change', calculatePrice);
-    daysInput.addEventListener('input', calculatePrice);
-
-    // ✅ ปุ่มยืนยันการจอง
-    document.getElementById('btnConfirm').addEventListener('click', function() {
-      Swal.fire({
-        title: 'ยืนยันการจอง?',
-        text: "ตรวจสอบข้อมูลให้ถูกต้องก่อนยืนยัน",
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'ยืนยัน',
-        cancelButtonText: 'ตรวจสอบอีกครั้ง',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        backdrop: true,
-        allowOutsideClick: false
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: 'กำลังดำเนินการ...',
-            text: 'กรุณารอสักครู่',
-            icon: 'info',
-            showConfirmButton: false,
-            timer: 1200,
-            didOpen: () => {
-              document.querySelector('form').submit();
-            }
-          });
+          if (checkinDate && checkoutDate && checkoutDate > checkinDate) {
+            const timeDiff = checkoutDate - checkinDate;
+            const days = timeDiff / (1000 * 3600 * 24);
+            const totalPrice = days * price<?php echo $room['id']; ?>;
+            total<?php echo $room['id']; ?>.value = totalPrice.toFixed(2);
+          } else {
+            total<?php echo $room['id']; ?>.value = "";
+          }
         }
-      });
-    });
 
-    // ❌ ปุ่มยกเลิก
-    document.getElementById('btnCancel').addEventListener('click', function() {
-      Swal.fire({
-        title: 'ต้องการยกเลิกการจอง?',
-        text: "หากยืนยัน ระบบจะกลับไปหน้าแรก",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'ใช่',
-        cancelButtonText: 'ไม่',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: 'กำลังกลับหน้าแรก...',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          setTimeout(() => {
-            window.location.href = 'index.php';
-          }, 1000);
-        }
-      });
+        checkin<?php echo $room['id']; ?>.addEventListener('change', calculate<?php echo $room['id']; ?>);
+        checkout<?php echo $room['id']; ?>.addEventListener('change', calculate<?php echo $room['id']; ?>);
+      <?php endforeach; ?>
     });
   </script>
 
+
 </body>
+
 </html>

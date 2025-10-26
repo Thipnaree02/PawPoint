@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Kind Heart Charity - News Detail</title>
+    <title>PowPoint</title>
 
     <!-- CSS FILES -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -273,8 +273,8 @@ https://templatemo.com/tm-581-kind-heart-charity
                                         class="social-icon-link bi-instagram"></a>
                                 </li>
 
-                                <a href="member-doctor.php" class="custom-btn btn smoothscroll">👉
-                                    คลิกเพื่อดูทีมสัตวแพทย์ทั้งหมด</a>
+                                <!-- <a href="member-doctor.php" class="custom-btn btn smoothscroll">👉
+                                    คลิกเพื่อดูทีมสัตวแพทย์ทั้งหมด</a> -->
 
                             </ul>
                         </div>

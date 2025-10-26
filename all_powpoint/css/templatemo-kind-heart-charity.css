@@ -1709,3 +1709,11 @@ body {
   box-shadow: 0 4px 10px rgba(255, 145, 77, 0.3);
 }
 
+.news-detail-header-section {
+  position: relative;
+  background-image: url('../images/news/medium-shot-volunteers-with-clothing-donations.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 150px 0;
+}
+

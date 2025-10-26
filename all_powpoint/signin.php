@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../Admin/config/connextdb.php';
+include '../myadmin/config/db.php';
 
 // if (isset($_SESSION['user_id'])) {
 //     header("Location: profile.php");
@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
-    $stmt = $connextdb->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt = $db->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->execute([$username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

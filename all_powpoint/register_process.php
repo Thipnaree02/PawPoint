@@ -1,12 +1,31 @@
 <?php
 session_start();
-include '../Admin/config/connextdb.php'; // เชื่อมฐานข้อมูลแบบ PDO
+include '../myadmin/config/db.php'; // ✅ เชื่อมฐานข้อมูลแบบ PDO
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // ✅ รับค่าจากฟอร์ม และล้างช่องว่าง
     $username = trim($_POST['username']);
-    $email = trim($_POST['email']); // ✅ รับค่าอีเมลจากฟอร์ม
+    $email = trim($_POST['email']);
     $password = trim($_POST['password']);
     $confirm_password = trim($_POST['confirm_password']);
+
+    // ✅ ตรวจสอบช่องว่าง
+    if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
+        echo "<script>
+            alert('กรุณากรอกข้อมูลให้ครบทุกช่อง');
+            window.location.href = 'signup.php';
+        </script>";
+        exit();
+    }
+
+    // ✅ ตรวจสอบรูปแบบอีเมล
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "<script>
+            alert('รูปแบบอีเมลไม่ถูกต้อง!');
+            window.location.href = 'signup.php';
+        </script>";
+        exit();
+    }
 
     // ✅ ตรวจสอบว่ารหัสผ่านตรงกันหรือไม่
     if ($password !== $confirm_password) {
@@ -18,8 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // ✅ ตรวจสอบว่ามีชื่อผู้ใช้หรืออีเมลนี้ในระบบหรือยัง
-        $check = $connextdb->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+        // ✅ ตรวจสอบว่าชื่อผู้ใช้หรืออีเมลมีในระบบแล้วหรือยัง
+        $check = $conn->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
         $check->execute([$username, $email]);
 
         if ($check->rowCount() > 0) {
@@ -30,13 +49,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        // ✅ เข้ารหัสรหัสผ่านก่อนบันทึก (ปลอดภัยกว่า)
+        // ✅ เข้ารหัสรหัสผ่าน (เพื่อความปลอดภัย)
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // ✅ บันทึกข้อมูลลงฐานข้อมูล
-        $stmt = $connextdb->prepare("
-            INSERT INTO users (username, password, email, role)
-            VALUES (?, ?, ?, 'staff')
+        // ✅ บันทึกข้อมูลลูกค้า (ไม่มี avatar, เก็บ role เป็น 'user')
+        $stmt = $conn->prepare("
+            INSERT INTO users (username, password, email, role, created_at)
+            VALUES (?, ?, ?, 'user', NOW())
         ");
 
         if ($stmt->execute([$username, $hashedPassword, $email])) {
@@ -47,15 +66,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             echo "<script>
-                alert('เกิดข้อผิดพลาดในการสมัครสมาชิก');
+                alert('เกิดข้อผิดพลาดในการสมัครสมาชิก กรุณาลองใหม่อีกครั้ง');
                 window.location.href = 'signup.php';
             </script>";
         }
 
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        echo "<script>alert('เกิดข้อผิดพลาดจากระบบฐานข้อมูล: " . $e->getMessage() . "');</script>";
     }
 } else {
+    // ถ้าไม่ใช่การส่งแบบ POST กลับไปหน้าสมัคร
     header("Location: signup.php");
     exit();
 }

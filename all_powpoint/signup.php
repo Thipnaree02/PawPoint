@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../Admin/config/connextdb.php';
+include '../myadmin/config/db.php';
 
 
 if (isset($_SESSION['user_id'])) {
@@ -13,14 +13,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['password']);
 
     // ตรวจว่ามีชื่อผู้ใช้นี้อยู่แล้วหรือยัง
-    $check = $connextdb->prepare("SELECT user_id FROM users WHERE username = ?");
+    $check = $db->prepare("SELECT user_id FROM users WHERE username = ?");
     $check->execute([$username]);
 
     if ($check->rowCount() > 0) {
         $error = "ชื่อผู้ใช้นี้มีอยู่แล้ว";
     } else {
         // สมัครสมาชิกใหม่
-        $stmt = $connextdb->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        $stmt = $db->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
         if ($stmt->execute([$username, $password])) {
             header("Location: signin.php");
             exit();
