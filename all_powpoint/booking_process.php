@@ -1,13 +1,62 @@
 <?php
-// ✅ เริ่มต้น session ก่อนทำงานใด ๆ
 session_start();
 
 // ✅ ถ้ายังไม่ได้ล็อกอิน ให้เด้งกลับหน้า signin.php
 if (!isset($_SESSION['user_id'])) {
-    header("Location: signin.php");
+  header("Location: signin.php");
+  exit();
+}
+
+// ✅ เชื่อมต่อฐานข้อมูล
+require_once '../myadmin/config/db.php'; // ตรวจให้ path ถูก
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $user_id = $_SESSION['user_id'];
+  $pet_name = $_POST['pet_name'] ?? '';
+  $service_type = $_POST['service_type'] ?? '';
+  $date = $_POST['date'] ?? '';
+  $time = $_POST['time'] ?? '';
+  $vet_id = !empty($_POST['vet_id']) ? $_POST['vet_id'] : null;
+  $note = $_POST['symptom'] ?? '';
+
+  try {
+    if (!isset($conn)) {
+      throw new Exception('Database connection ($conn) not found.');
+    }
+
+    // ✅ ใช้ pet_name แทน pet_id
+    $stmt = $conn->prepare("
+      INSERT INTO appointments (user_id, pet_name, vet_id, service_type, date, time, status, note)
+      VALUES (:user_id, :pet_name, :vet_id, :service_type, :date, :time, 'pending', :note)
+    ");
+
+    $stmt->execute([
+      ':user_id' => $user_id,
+      ':pet_name' => $pet_name,
+      ':vet_id' => $vet_id,
+      ':service_type' => $service_type,
+      ':date' => $date,
+      ':time' => $time,
+      ':note' => $note
+    ]);
+
+    echo "<script>
+      alert('✅ จองคิวสำเร็จแล้ว!');
+      window.location.href = 'index.php';
+    </script>";
     exit();
+
+  } catch (Exception $e) {
+    echo "<script>
+      alert('❌ เกิดข้อผิดพลาด: " . addslashes($e->getMessage()) . "');
+      window.history.back();
+    </script>";
+    exit();
+  }
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="th">
 
@@ -17,7 +66,6 @@ if (!isset($_SESSION['user_id'])) {
   <title>ฟอร์มจองคิวตรวจสุขภาพสัตว์เลี้ยง</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600&display=swap" rel="stylesheet">
-
   <style>
     body {
       background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
@@ -108,20 +156,15 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 
 <body>
-
   <div class="booking-card">
-    <!-- 🔹 โลโก้ร้าน -->
     <div class="logo-box">
       <img src="images/logo.png" alt="โลโก้ร้าน" id="clinicLogo">
     </div>
-
-    <!-- 🔹 หัวข้อ -->
     <h3 class="text-center">จองคิวตรวจสุขภาพสัตว์เลี้ยง</h3>
     <div class="header-line"></div>
 
-    <form action="booking_process.php" method="POST">
+    <form method="POST">
 
-      <!-- เลือกประเภทบริการ -->
       <div class="mb-4">
         <label for="service_type" class="form-label">เลือกประเภทบริการ</label>
         <select id="service_type" name="service_type" class="form-select text-center" required>
@@ -129,18 +172,16 @@ if (!isset($_SESSION['user_id'])) {
           <option value="health">ตรวจสุขภาพ</option>
           <option value="vaccine">ฉีดวัคซีน</option>
           <option value="surgery">ผ่าตัด / ทำหมัน</option>
-          <option value="grooming">อาบน้ำ / ตัดขน</option>
         </select>
       </div>
 
-      <!-- เลือกสัตว์เลี้ยง -->
       <div class="mb-3">
-        <label for="pet_name" class="form-label">สัตว์เลี้ยงของคุณ</label>
+        <label for="pet_name" class="form-label">ชื่อสัตว์เลี้ยงของคุณ</label>
         <input type="text" class="form-control" id="pet_name" name="pet_name"
-          placeholder="เช่น หมาชื่อโบโบ้ / แมวชื่อเหมียวจัง" required>
+          placeholder="เช่น หมาชื่อโบโบ้ / แมวชื่อมะลิ" required>
       </div>
 
-      <!-- วันที่ / เวลา -->
+
       <div class="mb-3">
         <label for="date" class="form-label">วันที่จอง</label>
         <input type="date" class="form-control" id="date" name="date" required>
@@ -151,25 +192,24 @@ if (!isset($_SESSION['user_id'])) {
         <input type="time" class="form-control" id="time" name="time" required>
       </div>
 
-      <!-- เลือกหมอ -->
       <div class="mb-3">
         <label for="vet" class="form-label">เลือกสัตวแพทย์ (ไม่บังคับ)</label>
         <select class="form-select" id="vet" name="vet_id">
           <option value="">-- ไม่เลือกหมอเฉพาะ --</option>
-          <option value="1">น.สพ. วิชัย ใจดี</option>
-          <option value="2">น.สพ. พิชญา รักสัตว์</option>
-          <option value="3">น.สพ. ธนกร หัวใจอ่อนโยน</option>
+          <option value="1">น.สพ. ปริญญา ศรีมงคล</option>
+          <option value="2">น.สพ. ธนพร ใจดี</option>
+          <option value="3">น.สพ. ภูวเดช คำทอง</option>
+          <option value="4">น.สพ. วิภาดา พรหมแก้ว</option>
+          <option value="5">น.สพ. ธีรพงศ์ ศรีสวัสดิ์</option>
         </select>
       </div>
 
-      <!-- อาการเบื้องต้น -->
       <div class="mb-4">
         <label for="symptom" class="form-label">อาการเบื้องต้น</label>
         <textarea class="form-control" id="symptom" name="symptom" rows="3"
           placeholder="ระบุอาการ เช่น ซึม ไม่กินอาหาร เดินกะเผลก..."></textarea>
       </div>
 
-      <!-- ปุ่ม -->
       <div class="text-center">
         <button type="submit" class="btn btn-confirm">ยืนยันการจอง</button>
         <a href="index.php" class="btn btn-cancel">ยกเลิก</a>
@@ -177,6 +217,6 @@ if (!isset($_SESSION['user_id'])) {
 
     </form>
   </div>
-
 </body>
+
 </html>

@@ -36,8 +36,8 @@
           </li>
           <li class="nav-item"><a class="nav-link " href="admin.php"><i class="bi bi-people-fill me-2"></i>Admin</a></li>
           <li class="nav-item"><a class="nav-link " href="vet_list.php"><i class="bi bi-people-fill me-2"></i>ตารางสัตวแพทย์</a></li>
-          <li class="nav-item"><a class="nav-link" href="customer_list.php"><i class="bi bi-people me-2"></i>ลูกค้า/สัตว์เลี้ยง</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-calendar-week me-2"></i>ปฏิทินนัดหมาย</a>
+          <li class="nav-item"><a class="nav-link" href="customer_list.php"><i class="bi bi-people me-2"></i>ลูกค้า</a></li>
+          <li class="nav-item"><a class="nav-link" href="appointments.php"><i class="bi bi-calendar-week me-2"></i>ปฏิทินนัดหมาย</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="room_booking.php"><i class="bi bi-bandaid me-2"></i>บริการ & แพ็คเกจ</a></li>
           <li class="nav-item"><a class="nav-link" href="#"><i
