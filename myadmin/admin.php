@@ -16,7 +16,10 @@ if (isset($_POST['add_user'])) {
     move_uploaded_file($_FILES["profile_image"]["tmp_name"], "uploads/" . $photo);
   }
 
-  $stmtAdmin = $conn->prepare("INSERT INTO admins (fullname, username, password, email, phone, role, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?)");
+  $stmtAdmin = $conn->prepare("
+    INSERT INTO admins (fullname, username, password, email, phone, role, profile_image)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  ");
   $stmtAdmin->execute([$fullname, $username, $password, $email, $phone, $role, $photo]);
   header("Location: admin.php?action=added");
   exit;
@@ -42,26 +45,47 @@ if (isset($_POST['edit_user'])) {
   if (!empty($_FILES['profile_image']['name'])) {
     $photo = time() . "_" . basename($_FILES["profile_image"]["name"]);
     move_uploaded_file($_FILES["profile_image"]["tmp_name"], "uploads/" . $photo);
-    $stmtAdmin = $conn->prepare("UPDATE admins SET fullname=?, email=?, phone=?, role=?, profile_image=? WHERE admin_id=?");
+    $stmtAdmin = $conn->prepare("
+      UPDATE admins SET fullname=?, email=?, phone=?, role=?, profile_image=? WHERE admin_id=?
+    ");
     $stmtAdmin->execute([$fullname, $email, $phone, $role, $photo, $id]);
   } else {
-    $stmtAdmin = $conn->prepare("UPDATE admins SET fullname=?, email=?, phone=?, role=? WHERE admin_id=?");
+    $stmtAdmin = $conn->prepare("
+      UPDATE admins SET fullname=?, email=?, phone=?, role=? WHERE admin_id=?
+    ");
     $stmtAdmin->execute([$fullname, $email, $phone, $role, $id]);
   }
   header("Location: admin.php?action=edited");
   exit;
 }
 
+// ✅ เปลี่ยนรหัสผ่าน
+if (isset($_POST['change_password'])) {
+  $id = $_POST['admin_id'];
+  $new = $_POST['new_password'];
+  $confirm = $_POST['confirm_password'];
+
+  if ($new === $confirm) {
+    $hashed = password_hash($new, PASSWORD_DEFAULT);
+    $stmt = $conn->prepare("UPDATE admins SET password=? WHERE admin_id=?");
+    $stmt->execute([$hashed, $id]);
+    header("Location: admin.php?action=password_changed");
+    exit;
+  } else {
+    header("Location: admin.php?action=password_mismatch");
+    exit;
+  }
+}
+
 // ✅ ดึงข้อมูลทั้งหมด
 $search = "";
 if (isset($_GET['search']) && $_GET['search'] !== "") {
   $search = trim($_GET['search']);
-  $stmtAdmin = $conn->prepare("SELECT * FROM admins 
-                               WHERE fullname LIKE ? 
-                               OR username LIKE ? 
-                               OR email LIKE ? 
-                               OR phone LIKE ? 
-                               ORDER BY admin_id DESC");
+  $stmtAdmin = $conn->prepare("
+    SELECT * FROM admins 
+    WHERE fullname LIKE ? OR username LIKE ? OR email LIKE ? OR phone LIKE ? 
+    ORDER BY admin_id DESC
+  ");
   $stmtAdmin->execute(["%$search%", "%$search%", "%$search%", "%$search%"]);
 } else {
   $stmtAdmin = $conn->query("SELECT * FROM admins ORDER BY admin_id DESC");
@@ -145,9 +169,8 @@ $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <?php include 'sidebar.php'; ?>
+  <?php include 'sidebar.php'; ?>
 
-  <!-- Main Content -->
   <main class="main">
     <nav class="navbar navbar-custom d-flex justify-content-between align-items-center mb-4">
       <h4 class="m-0 fw-bold">จัดการผู้ใช้ระบบ</h4>
@@ -176,8 +199,7 @@ $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
             </tr>
           </thead>
           <tbody>
-            <?php
-            if (empty($admins)): ?>
+            <?php if (empty($admins)): ?>
               <tr>
                 <td colspan="8" class="text-center text-muted py-3">ไม่พบข้อมูล</td>
               </tr>
@@ -196,12 +218,14 @@ $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
                   <td class="text-center">
                     <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
                       data-bs-target="#editModal<?= $ad['admin_id'] ?>"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-secondary" data-bs-toggle="modal"
+                      data-bs-target="#passwordModal<?= $ad['admin_id'] ?>"><i class="bi bi-lock"></i></button>
                     <a href="?delete=<?= $ad['admin_id'] ?>" class="btn btn-sm btn-danger delete-btn"><i
                         class="bi bi-trash"></i></a>
                   </td>
                 </tr>
 
-                <!-- 🟡 Modal แก้ไขผู้ใช้ -->
+                <!-- Modal แก้ไขข้อมูล -->
                 <div class="modal fade" id="editModal<?= $ad['admin_id'] ?>" tabindex="-1">
                   <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content border-0 shadow-lg">
@@ -227,7 +251,7 @@ $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
                               <input type="text" name="phone" value="<?= $ad['phone'] ?>" class="form-control">
                             </div>
                             <div class="col-md-6">
-                              <label class="form-label">สิทธิ์การใช้งาน</label>
+                              <label class="form-label">สิทธิ์</label>
                               <select name="role" class="form-select">
                                 <option value="Staff" <?= $ad['role'] == "Staff" ? "selected" : "" ?>>Staff</option>
                                 <option value="Manager" <?= $ad['role'] == "Manager" ? "selected" : "" ?>>Manager</option>
@@ -249,6 +273,35 @@ $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
                   </div>
                 </div>
 
+                <!-- Modal เปลี่ยนรหัสผ่าน -->
+                <div class="modal fade" id="passwordModal<?= $ad['admin_id'] ?>" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg">
+                      <form method="post">
+                        <div class="modal-header bg-secondary text-white">
+                          <h5 class="modal-title fw-bold"><i class="bi bi-lock-fill me-2"></i> เปลี่ยนรหัสผ่าน</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body px-4 py-3">
+                          <input type="hidden" name="admin_id" value="<?= $ad['admin_id'] ?>">
+                          <div class="mb-3">
+                            <label class="form-label">รหัสผ่านใหม่</label>
+                            <input type="password" name="new_password" class="form-control" required>
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
+                            <input type="password" name="confirm_password" class="form-control" required>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" name="change_password" class="btn btn-secondary"><i
+                              class="bi bi-check-circle me-1"></i> บันทึกรหัสผ่านใหม่</button>
+                          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               <?php endforeach; endif; ?>
           </tbody>
         </table>
@@ -256,16 +309,23 @@ $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </main>
 
-  <?php include 'modal_add_user.php'; // 👉 ใช้โค้ด modal เดิมที่คุณมีอยู่ ?>
+  <?php include 'modal_add_user.php'; ?>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const params = new URLSearchParams(window.location.search);
       const action = params.get("action");
 
-      if (action === "added") Swal.fire({ icon: "success", title: "เพิ่มผู้ใช้สำเร็จ!", text: "ข้อมูลถูกบันทึกเรียบร้อยแล้ว", confirmButtonColor: "#4ca771" });
-      if (action === "edited") Swal.fire({ icon: "success", title: "แก้ไขข้อมูลสำเร็จ!", text: "บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว", confirmButtonColor: "#4ca771" });
-      if (action === "deleted") Swal.fire({ icon: "success", title: "ลบข้อมูลสำเร็จ!", text: "ผู้ใช้ถูกลบออกจากระบบแล้ว", confirmButtonColor: "#4ca771" });
+      if (action === "added")
+        Swal.fire({ icon: "success", title: "เพิ่มผู้ใช้สำเร็จ!", text: "ข้อมูลถูกบันทึกเรียบร้อยแล้ว", confirmButtonColor: "#4ca771" });
+      if (action === "edited")
+        Swal.fire({ icon: "success", title: "แก้ไขข้อมูลสำเร็จ!", text: "บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว", confirmButtonColor: "#4ca771" });
+      if (action === "deleted")
+        Swal.fire({ icon: "success", title: "ลบข้อมูลสำเร็จ!", text: "ผู้ใช้ถูกลบออกจากระบบแล้ว", confirmButtonColor: "#4ca771" });
+      if (action === "password_changed")
+        Swal.fire({ icon: "success", title: "เปลี่ยนรหัสผ่านสำเร็จ!", text: "บันทึกรหัสผ่านใหม่เรียบร้อยแล้ว", confirmButtonColor: "#4ca771" });
+      if (action === "password_mismatch")
+        Swal.fire({ icon: "error", title: "รหัสผ่านไม่ตรงกัน!", text: "กรุณากรอกให้ตรงกันทั้งสองช่อง", confirmButtonColor: "#e74c3c" });
 
       document.querySelectorAll(".delete-btn").forEach(btn => {
         btn.addEventListener("click", e => {

@@ -24,20 +24,29 @@ $stmt1 = $conn->prepare("
   WHERE gb.user_id = ?
 ");
 
-// 🩺 2. ประวัตินัดหมายตรวจสุขภาพ
+// 🩺 2. ประวัตินัดหมายบริการสัตวแพทย์
 $stmt2 = $conn->prepare("
   SELECT 
-    'ตรวจสุขภาพ' AS service_type, 
+    a.service_type AS raw_service_type,
+    CASE 
+      WHEN a.service_type = 'health_check' THEN 'ตรวจสุขภาพ'
+      WHEN a.service_type = 'vaccination' THEN 'ฉีดวัคซีน'
+      WHEN a.service_type = 'sterilization' THEN 'ทำหมัน'
+      ELSE a.service_type
+    END AS service_type, 
     a.date AS booking_date, 
     a.time AS booking_time, 
-    v.fullname AS detail, 
+    v.vet_name AS detail, 
     NULL AS price,  
     a.status, 
     a.note
   FROM appointments a
-  LEFT JOIN veterinarians v ON a.vet_id = v.id
+  LEFT JOIN vets v ON a.vet_id = v.vet_id
   WHERE a.user_id = ?
+  ORDER BY a.date DESC, a.time DESC
 ");
+
+
 
 // 🏨 3. ประวัติการฝากเลี้ยง
 $stmt3 = $conn->prepare("

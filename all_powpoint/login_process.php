@@ -8,9 +8,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // ✅ ค้นหาผู้ใช้จากทั้ง username และ email
-        $stmt = $connextdb->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
-        $stmt->execute([$login, $login]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmtLoginPro = $conn->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+        $stmtLoginPro->execute([$login, $login]);
+        $user = $stmtLoginPro->fetch(PDO::FETCH_ASSOC);
 
         // ✅ ตรวจสอบชื่อผู้ใช้และรหัสผ่าน
         if ($user && password_verify($password, $user['password'])) {

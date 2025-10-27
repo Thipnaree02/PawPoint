@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['admin_id'])) {
+  header("Location: login.php");
+  exit;
+}
+include 'config/db.php';
+?>
+
+
 <!doctype html>
 <html lang="th">
 
@@ -34,12 +44,18 @@
         <ul class="nav flex-column gap-1">
           <li class="nav-item"><a class="nav-link active" href="#"><i class="bi bi-speedometer2 me-2"></i>แดชบอร์ด</a>
           </li>
-          <li class="nav-item"><a class="nav-link " href="admin.php"><i class="bi bi-people-fill me-2"></i>Admin</a></li>
-          <li class="nav-item"><a class="nav-link " href="vet_list.php"><i class="bi bi-people-fill me-2"></i>ตารางสัตวแพทย์</a></li>
-          <li class="nav-item"><a class="nav-link" href="customer_list.php"><i class="bi bi-people me-2"></i>ลูกค้า</a></li>
-          <li class="nav-item"><a class="nav-link" href="appointments.php"><i class="bi bi-calendar-week me-2"></i>ปฏิทินนัดหมาย</a> </li>
-          <li class="nav-item"><a class="nav-link" href="room_booking.php"><i class="bi bi-bandaid me-2"></i>บริการ & แพ็คเกจ</a></li>
-          <li class="nav-item"><a class="nav-link" href="grooming_packages.php"><i class="bi bi-clipboard2-check me-2"></i>บริการอาบน้ำตัดขน</a></li>
+          <li class="nav-item"><a class="nav-link " href="admin.php"><i class="bi bi-people-fill me-2"></i>Admin</a>
+          </li>
+          <li class="nav-item"><a class="nav-link " href="vet_list.php"><i
+                class="bi bi-people-fill me-2"></i>ตารางสัตวแพทย์</a></li>
+          <li class="nav-item"><a class="nav-link" href="customer_list.php"><i class="bi bi-people me-2"></i>ลูกค้า</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="appointments.php"><i
+                class="bi bi-calendar-week me-2"></i>ปฏิทินนัดหมาย</a> </li>
+          <li class="nav-item"><a class="nav-link" href="room_booking.php"><i class="bi bi-bandaid me-2"></i>บริการ &
+              แพ็คเกจ</a></li>
+          <li class="nav-item"><a class="nav-link" href="grooming_packages.php"><i
+                class="bi bi-clipboard2-check me-2"></i>บริการอาบน้ำตัดขน</a></li>
           <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-coin me-2"></i>รายงานการเงิน</a></li>
           <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear me-2"></i>ตั้งค่า</a></li>
         </ul>
@@ -85,15 +101,52 @@
                 <li>
                   <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item text-danger" href="#">ออกจากระบบ</a></li>
+                <li><a class="dropdown-item text-danger" href="logout.php">ออกจากระบบ</a>
+
               </ul>
             </div>
           </div>
         </div>
       </nav>
 
-      <!-- Content -->
       <div class="container-fluid p-4">
+        <?php
+        include 'config/db.php'; // ✅ เพิ่มตรงนี้ เพื่อให้ $conn ใช้งานได้
+        
+        // ✅ ดึงข้อมูลจากฐานข้อมูล
+        
+        $stmtIndex = $conn->query("
+  SELECT a.pet_name, a.service_type, a.date, a.status, v.vet_name, u.username AS owner_name
+  FROM appointments a
+  LEFT JOIN vets v ON a.vet_id = v.vet_id
+  LEFT JOIN users u ON a.user_id = u.user_id
+  ORDER BY a.app_id DESC
+  LIMIT 6
+");
+        $appointments = $stmtIndex->fetchAll(PDO::FETCH_ASSOC);
+
+        // 2️⃣ นับจำนวนคิววันนี้
+        $today = date('Y-m-d');
+        $stmtQueue = $conn->prepare("SELECT COUNT(*) FROM appointments WHERE date = ?");
+        $stmtQueue->execute([$today]);
+        $queueToday = $stmtQueue->fetchColumn();
+
+        // 3️⃣ นับจำนวนตามประเภทบริการ
+        $stmtService = $conn->query("
+    SELECT service_type, COUNT(*) AS count 
+    FROM appointments 
+    GROUP BY service_type
+  ");
+        $services = $stmtService->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        // จัด format ให้ตรงกับชื่อไทย
+        $serviceNames = [
+          'health_check' => 'ตรวจสุขภาพ',
+          'vaccination' => 'ฉีดวัคซีน',
+          'sterilization' => 'ผ่าตัด/ทำหมัน'
+        ];
+        ?>
+
         <!-- KPI Cards -->
         <div class="row g-3">
           <div class="col-12 col-sm-6 col-xl-3">
@@ -102,7 +155,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                   <div>
                     <div class="text-muted small">ลูกค้าใหม่</div>
-                    <div class="fs-4 fw-bold" id="kpiCustomers">8434</div>
+                    <div class="fs-4 fw-bold">8434</div>
                   </div>
                   <div class="kpi-badge bg-kpi-1"><i class="bi bi-person-plus"></i></div>
                 </div>
@@ -110,13 +163,14 @@
               </div>
             </div>
           </div>
+
           <div class="col-12 col-sm-6 col-xl-3">
             <div class="card kpi shadow-sm">
               <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                   <div>
                     <div class="text-muted small">คิววันนี้</div>
-                    <div class="fs-4 fw-bold" id="kpiQueue">38</div>
+                    <div class="fs-4 fw-bold"><?= $queueToday ?></div>
                   </div>
                   <div class="kpi-badge bg-kpi-2"><i class="bi bi-calendar2-check"></i></div>
                 </div>
@@ -124,6 +178,7 @@
               </div>
             </div>
           </div>
+
           <div class="col-12 col-sm-6 col-xl-3">
             <div class="card kpi shadow-sm">
               <div class="card-body">
@@ -138,6 +193,7 @@
               </div>
             </div>
           </div>
+
           <div class="col-12 col-sm-6 col-xl-3">
             <div class="card kpi shadow-sm">
               <div class="card-body">
@@ -178,7 +234,46 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <!-- แถวตัวอย่าง จะถูกแทนที่ด้วย JS หากเชื่อม API -->
+                    <?php if (empty($appointments)): ?>
+                      <tr>
+                        <td colspan="6" class="text-center text-muted">ไม่มีข้อมูลการนัดหมาย</td>
+                      </tr>
+                    <?php else: ?>
+                      <?php foreach ($appointments as $a): ?>
+                        <tr>
+                          <td><?= htmlspecialchars($a['pet_name']) ?></td>
+                          <td><?= htmlspecialchars($a['owner_name'] ?? '-') ?></td>
+                          <td>
+                            <?= $serviceNames[$a['service_type']] ?? 'อื่น ๆ' ?>
+                          </td>
+                          <td><?= htmlspecialchars($a['date']) ?></td>
+                          <td>
+                            <?php
+                            switch ($a['status']) {
+                              case 'completed':
+                                echo '<span class="badge text-bg-success">เสร็จสิ้น</span>';
+                                break;
+                              case 'confirmed':
+                                echo '<span class="badge text-bg-primary">กำลังดำเนินการ</span>';
+                                break;
+                              case 'pending':
+                                echo '<span class="badge text-bg-secondary">รอคิว</span>';
+                                break;
+                              case 'cancelled':
+                                echo '<span class="badge text-bg-danger">ยกเลิก</span>';
+                                break;
+                              default:
+                                echo '<span class="badge text-bg-light text-dark">ไม่ระบุ</span>';
+                            }
+                            ?>
+                          </td>
+                          <td class="text-end">
+                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                          </td>
+                        </tr>
+                      <?php endforeach; ?>
+                    <?php endif; ?>
                   </tbody>
                 </table>
               </div>
@@ -193,21 +288,19 @@
                 <canvas id="todayChart" height="220"></canvas>
               </div>
             </div>
+
             <div class="card shadow-sm">
               <div class="card-header bg-white fw-semibold">รายงานสั้น ๆ</div>
               <div class="card-body">
                 <ul class="list-group list-group-flush small">
                   <li class="list-group-item d-flex justify-content-between align-items-center">
-                    นัดตรวจวัคซีน <span class="badge text-bg-primary">12</span>
+                    นัดตรวจสุขภาพ <span class="badge text-bg-info"><?= $services['health_check'] ?? 0 ?></span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
-                    อาบน้ำตัดขน <span class="badge text-bg-success">9</span>
+                    ฉีดวัคซีน <span class="badge text-bg-primary"><?= $services['vaccination'] ?? 0 ?></span>
                   </li>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
-                    ผ่าตัด/ทำหมัน <span class="badge text-bg-warning">3</span>
-                  </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    เคสฉุกเฉิน <span class="badge text-bg-danger">2</span>
+                    ผ่าตัด/ทำหมัน <span class="badge text-bg-warning"><?= $services['sterilization'] ?? 0 ?></span>
                   </li>
                 </ul>
               </div>
@@ -215,12 +308,11 @@
           </div>
         </div>
       </div>
-    </main>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="assets/js/app.js"></script>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+      <script src="assets/js/app.js"></script>
 </body>
 
 </html>

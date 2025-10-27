@@ -24,3 +24,39 @@ body{background:#f7f9fb;}
   .sidebar{position:fixed; left:-320px; z-index:1040; transition:all .25s;}
   .sidebar.show{left:0;}
 }
+
+/* ✅ Layout หลัก */
+.sidebar {
+  width: 260px;
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid #e0e0e0;
+  z-index: 1000;
+}
+
+/* ✅ พื้นที่เนื้อหาหลัก (Main) */
+main.flex-grow-1 {
+  margin-left: 260px; /* ระยะเท่ากับความกว้างของ sidebar */
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+/* ✅ สำหรับจอเล็ก (มือถือ/แท็บเล็ต) */
+@media (max-width: 992px) {
+  .sidebar {
+    position: absolute;
+    left: -260px;
+    transition: left 0.3s;
+  }
+  .sidebar.active {
+    left: 0;
+  }
+  main.flex-grow-1 {
+    margin-left: 0;
+  }
+}
+

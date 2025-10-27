@@ -1,14 +1,14 @@
 <?php
 session_start();
 
-// ✅ ถ้ายังไม่ได้ล็อกอิน ให้เด้งกลับหน้า signin.php
+require_once '../myadmin/config/db.php'; // ✅ ตรวจให้ path ถูกต้อง
+
 if (!isset($_SESSION['user_id'])) {
   header("Location: signin.php");
   exit();
 }
 
-// ✅ เชื่อมต่อฐานข้อมูล
-require_once '../myadmin/config/db.php'; // ตรวจให้ path ถูก
+$popup = ""; // จะเก็บ script popup ไว้แสดงหลัง HTML
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $user_id = $_SESSION['user_id'];
@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       throw new Exception('Database connection ($conn) not found.');
     }
 
-    // ✅ ใช้ pet_name แทน pet_id
     $stmt = $conn->prepare("
       INSERT INTO appointments (user_id, pet_name, vet_id, service_type, date, time, status, note)
       VALUES (:user_id, :pet_name, :vet_id, :service_type, :date, :time, 'pending', :note)
@@ -40,22 +39,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       ':note' => $note
     ]);
 
-    echo "<script>
-      alert('✅ จองคิวสำเร็จแล้ว!');
-      window.location.href = 'index.php';
-    </script>";
-    exit();
+    // ✅ เตรียม SweetAlert2 popup หลังโหลดหน้า
+    $popup = "
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          Swal.fire({
+            icon: 'success',
+            title: 'จองคิวสำเร็จแล้ว!',
+            text: 'ระบบได้บันทึกข้อมูลเรียบร้อยแล้ว',
+            confirmButtonColor: '#3fb6a8',
+            confirmButtonText: 'ตกลง'
+          }).then(() => {
+            window.location.href = 'index.php';
+          });
+        });
+      </script>
+    ";
 
   } catch (Exception $e) {
-    echo "<script>
-      alert('❌ เกิดข้อผิดพลาด: " . addslashes($e->getMessage()) . "');
-      window.history.back();
-    </script>";
-    exit();
+    $popup = "
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          Swal.fire({
+            icon: 'error',
+            title: 'เกิดข้อผิดพลาด!',
+            text: '" . addslashes($e->getMessage()) . "',
+            confirmButtonColor: '#dc3545',
+            confirmButtonText: 'กลับไปแก้ไข'
+          }).then(() => {
+            window.history.back();
+          });
+        });
+      </script>
+    ";
   }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="th">
@@ -66,6 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>ฟอร์มจองคิวตรวจสุขภาพสัตว์เลี้ยง</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     body {
       background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
@@ -164,14 +185,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="header-line"></div>
 
     <form method="POST">
-
       <div class="mb-4">
         <label for="service_type" class="form-label">เลือกประเภทบริการ</label>
         <select id="service_type" name="service_type" class="form-select text-center" required>
           <option value="">-- กรุณาเลือกบริการ --</option>
-          <option value="health">ตรวจสุขภาพ</option>
-          <option value="vaccine">ฉีดวัคซีน</option>
-          <option value="surgery">ผ่าตัด / ทำหมัน</option>
+          <option value="health_check">ตรวจสุขภาพ</option>
+          <option value="vaccination">ฉีดวัคซีน</option>
+          <option value="sterilization">ทำหมัน</option>
         </select>
       </div>
 
@@ -180,7 +200,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" class="form-control" id="pet_name" name="pet_name"
           placeholder="เช่น หมาชื่อโบโบ้ / แมวชื่อมะลิ" required>
       </div>
-
 
       <div class="mb-3">
         <label for="date" class="form-label">วันที่จอง</label>
@@ -214,9 +233,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit" class="btn btn-confirm">ยืนยันการจอง</button>
         <a href="index.php" class="btn btn-cancel">ยกเลิก</a>
       </div>
-
     </form>
   </div>
+
+  <!-- ✅ แสดง popup หลัง HTML โหลด -->
+  <?= $popup ?>
 </body>
 
 </html>

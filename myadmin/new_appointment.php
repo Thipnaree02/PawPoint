@@ -3,9 +3,8 @@ include 'config/db.php';
 session_start(); // ✅ ใช้ session เพื่อดึง user_id ของผู้ใช้ที่ล็อกอินอยู่
 
 // ✅ ถ้ายังไม่มีระบบล็อกอิน ให้ใช้ user_id ชั่วคราวเพื่อทดสอบ
-// ถ้ามีระบบล็อกอินจริงให้ลบบรรทัดนี้ออก
 if (!isset($_SESSION['user_id'])) {
-    $_SESSION['user_id'] = 1; // ✅ ตั้งค่า user_id ทดสอบ (ต้องมี user_id=1 ในตาราง users)
+    $_SESSION['user_id'] = 1; // ⚙️ ต้องมี user_id=1 ในตาราง users สำหรับทดสอบ
 }
 
 // ✅ ดึงรายชื่อสัตวแพทย์จากฐานข้อมูล
@@ -14,15 +13,21 @@ $vets = $stmtVet->fetchAll(PDO::FETCH_ASSOC);
 
 // ✅ เมื่อผู้ใช้ส่งฟอร์ม
 if (isset($_POST['book_appointment'])) {
-    $user_id = $_SESSION['user_id']; // ✅ ดึงจาก session
-    $pet_name = $_POST['pet_name'];
+    $user_id = $_SESSION['user_id'];
+    $pet_name = trim($_POST['pet_name']);
     $vet_id = $_POST['vet_id'];
-    $service_type = $_POST['service_type']; // ✅ เพิ่มการรับค่าประเภทบริการ
+    $service_type = $_POST['service_type'];
     $date = $_POST['date'];
     $time = $_POST['time'];
     $status = "pending"; // เริ่มต้นเป็น "รอดำเนินการ"
 
-    // ✅ เพิ่มฟิลด์ user_id และ service_type ในคำสั่ง SQL
+    // 🧠 ตรวจสอบค่าที่เลือกว่าถูกต้องตาม ENUM ในฐานข้อมูล
+    $allowed_services = ['health_check', 'vaccination', 'sterilization'];
+    if (!in_array($service_type, $allowed_services)) {
+        die("⚠️ ประเภทบริการไม่ถูกต้อง — กรุณาเลือกใหม่อีกครั้ง");
+    }
+
+    // ✅ เพิ่มข้อมูลลงฐานข้อมูล
     $stmt = $conn->prepare("
         INSERT INTO appointments (user_id, pet_name, vet_id, service_type, date, time, status)
         VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -61,6 +66,15 @@ if (isset($_POST['book_appointment'])) {
             padding: 30px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 
@@ -88,16 +102,14 @@ if (isset($_POST['book_appointment'])) {
             </div>
 
             <div class="mb-3">
-                <label class="form-label">ประเภทบริการ</label>
+                <label class="form-label fw-semibold">ประเภทบริการ</label>
                 <select name="service_type" class="form-select" required>
+                    <option value="">-- กรุณาเลือกประเภทบริการ --</option>
                     <option value="health_check">ตรวจสุขภาพ</option>
                     <option value="vaccination">ฉีดวัคซีน</option>
-                    <option value="surgery">ผ่าตัด</option>
                     <option value="sterilization">ทำหมัน</option>
-                    <option value="other">อื่น ๆ</option>
                 </select>
             </div>
-
 
             <div class="mb-3">
                 <label class="form-label fw-semibold">วันที่นัดหมาย</label>
@@ -131,10 +143,8 @@ if (isset($_POST['book_appointment'])) {
                 text: 'ระบบได้บันทึกข้อมูลเรียบร้อยแล้ว',
                 confirmButtonColor: '#4ca771',
                 confirmButtonText: 'ตกลง'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'appointments.php'; // ✅ กลับมาหน้าเดิมหลังจากกด OK
-                }
+            }).then(() => {
+                window.location.href = 'appointments.php';
             });
         </script>
     <?php endif; ?>

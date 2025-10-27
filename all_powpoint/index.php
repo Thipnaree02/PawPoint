@@ -173,7 +173,7 @@ https://templatemo.com/tm-581-kind-heart-charity
                             <a href="header_hero.php" class="d-block">
                                 <img src="images/icons/sterile.png" class="featured-block-image img-fluid" alt="">
 
-                                <p class="featured-block-text">ผ่าตัด <strong>ทำหมัน</strong></p>
+                                <p class="featured-block-text">ทำ <strong>หมัน</strong></p>
                             </a>
                         </div>
                     </div>
