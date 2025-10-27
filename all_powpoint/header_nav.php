@@ -171,25 +171,25 @@ if (session_status() === PHP_SESSION_NONE) {
                                     </div>
                                     <div class="profile-actions">
                                         <a href="profile.php"><i class="bi bi-person-circle"></i> โปรไฟล์ของฉัน</a>
-                                        <a href="logout.php" class="logout"><i class="bi bi-box-arrow-right"></i>
-                                            ออกจากระบบ</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-
-                    <?php else: ?>
-                        <li class="nav-item ms-3">
-                            <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
-                        </li>
-
-                        <li class="nav-item ms-3">
-                            <a class="nav-link custom-btn custom-border-btn btn" href="signup.php">Sign Up</a>
-                        </li>
-                    <?php endif; ?>
-
-                </ul>
+                                    <a href="user_history.php"><i class="bi bi-clock-history"></i> ประวัติการใช้บริการ</a>                          
+                                    <a href="logout.php" class="logout"><i class="bi bi-box-arrow-right"></i>ออกจากระบบ</a>
+                </div>
             </div>
+            </div>
+            </li>
+
+        <?php else: ?>
+            <li class="nav-item ms-3">
+                <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
+            </li>
+
+            <li class="nav-item ms-3">
+                <a class="nav-link custom-btn custom-border-btn btn" href="signup.php">Sign Up</a>
+            </li>
+        <?php endif; ?>
+
+        </ul>
+        </div>
         </div>
     </nav>
 </header>

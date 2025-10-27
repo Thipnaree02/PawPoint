@@ -5,6 +5,9 @@ include '../myadmin/config/db.php';
 // ดึงข้อมูลห้องพักทั้งหมด
 $stmt = $conn->query("SELECT * FROM room_type ORDER BY id ASC");
 $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// ตรวจสอบสถานะล็อกอิน
+$isLoggedIn = isset($_SESSION['user_id']);
 ?>
 
 <!doctype html>
@@ -16,6 +19,8 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <title>PawPoint Condo | จองห้องพักสัตว์เลี้ยง</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     body {
       background-color: #f5f9fc;
@@ -75,8 +80,12 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
               <p><strong>฿<?php echo number_format($room['price_week'], 2); ?></strong> / สัปดาห์</p>
 
               <!-- ปุ่มเปิด Modal -->
-              <button class="btn btn-book w-100" data-bs-toggle="modal"
-                data-bs-target="#bookModal<?php echo $room['id']; ?>">
+              <button class="btn btn-book w-100"
+                <?php if ($isLoggedIn): ?>
+                  data-bs-toggle="modal" data-bs-target="#bookModal<?php echo $room['id']; ?>"
+                <?php else: ?>
+                  onclick="showLoginAlert()"
+                <?php endif; ?>>
                 <i class="bi bi-calendar-check"></i> จองห้องนี้
               </button>
             </div>
@@ -84,6 +93,7 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <!-- Modal จองห้อง -->
+        <?php if ($isLoggedIn): ?>
         <div class="modal fade" id="bookModal<?php echo $room['id']; ?>" tabindex="-1">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -130,14 +140,34 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
           </div>
         </div>
-
-
+        <?php endif; ?>
       <?php endforeach; ?>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+  <!-- SweetAlert Script -->
+  <script>
+    function showLoginAlert() {
+      Swal.fire({
+        title: 'ต้องเข้าสู่ระบบก่อน!',
+        text: 'กรุณาเข้าสู่ระบบก่อนทำการจองห้องพัก 🐶🐱',
+        icon: 'warning',
+        confirmButtonText: 'เข้าสู่ระบบ',
+        confirmButtonColor: '#4aa9d9',
+        showCancelButton: true,
+        cancelButtonText: 'ยกเลิก',
+        // backdrop: `rgba(0,0,0,0.4) url('https://media.giphy.com/media/l0MYGB3E3q4kN9x3u/giphy.gif') center left no-repeat`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "signin.php";
+        }
+      });
+    }
+  </script>
+
+  <?php if ($isLoggedIn): ?>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       <?php foreach ($rooms as $room): ?>
@@ -165,8 +195,7 @@ $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <?php endforeach; ?>
     });
   </script>
-
+  <?php endif; ?>
 
 </body>
-
 </html>

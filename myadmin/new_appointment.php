@@ -88,14 +88,16 @@ if (isset($_POST['book_appointment'])) {
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-semibold">ประเภทบริการ</label>
+                <label class="form-label">ประเภทบริการ</label>
                 <select name="service_type" class="form-select" required>
-                    <option value="">-- กรุณาเลือกประเภทบริการ --</option>
                     <option value="health_check">ตรวจสุขภาพ</option>
-                    <option value="sterilization">ฉีดวัคซีน</option>
-                    <option value="surgery">ผ่าตัด/ทำหมัน</option>
+                    <option value="vaccination">ฉีดวัคซีน</option>
+                    <option value="surgery">ผ่าตัด</option>
+                    <option value="sterilization">ทำหมัน</option>
+                    <option value="other">อื่น ๆ</option>
                 </select>
             </div>
+
 
             <div class="mb-3">
                 <label class="form-label fw-semibold">วันที่นัดหมาย</label>

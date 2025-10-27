@@ -24,7 +24,7 @@ if (isset($_GET['delete'])) {
   exit;
 }
 
-// ✅ แก้ไขนัดหมาย (แบบ modal เดิม)
+// ✅ แก้ไขนัดหมาย
 if (isset($_POST['edit_appointment'])) {
   $id = $_POST['app_id'];
   $pet_name = $_POST['pet_name'];
@@ -39,7 +39,7 @@ if (isset($_POST['edit_appointment'])) {
   exit;
 }
 
-// ✅ ดึงข้อมูล (พร้อมระบบค้นหา)
+// ✅ ดึงข้อมูล
 $search = "";
 if (isset($_GET['search']) && $_GET['search'] !== "") {
   $search = trim($_GET['search']);
@@ -91,10 +91,38 @@ $appointments = $stmtAppoint->fetchAll(PDO::FETCH_ASSOC);
       padding: 2rem;
     }
 
-    .badge-status {
-      cursor: pointer;
+    /* ✅ สีพื้นหลังสถานะ */
+    .status-select {
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
       padding: 6px 12px;
-      border-radius: 10px;
+      text-align: center;
+    }
+
+    .status-pending {
+      background-color: #ffc107 !important;
+      color: black !important;
+    }
+
+    .status-confirmed {
+      background-color: #0d6efd !important;
+      color: white !important;
+    }
+
+    .status-completed {
+      background-color: #198754 !important;
+      color: white !important;
+    }
+
+    .status-cancelled {
+      background-color: #dc3545 !important;
+      color: white !important;
+    }
+
+    select.status-select option {
+      color: black !important;
     }
   </style>
 </head>
@@ -145,21 +173,12 @@ $appointments = $stmtAppoint->fetchAll(PDO::FETCH_ASSOC);
                   <td><?= htmlspecialchars($app['date']) ?></td>
                   <td><?= htmlspecialchars($app['time']) ?></td>
                   <td class="text-center">
-                    <span class="badge-status 
-                    <?= $app['status'] == 'pending' ? 'bg-warning text-dark' : '' ?>
-                    <?= $app['status'] == 'confirmed' ? 'bg-primary' : '' ?>
-                    <?= $app['status'] == 'completed' ? 'bg-success' : '' ?>
-                    <?= $app['status'] == 'cancelled' ? 'bg-danger' : '' ?>" data-id="<?= $app['app_id'] ?>"
-                      data-status="<?= $app['status'] ?>">
-                      <?php if ($app['status'] == 'pending')
-                        echo 'รอดำเนินการ'; ?>
-                      <?php if ($app['status'] == 'confirmed')
-                        echo 'ยืนยันแล้ว'; ?>
-                      <?php if ($app['status'] == 'completed')
-                        echo 'เสร็จสิ้น'; ?>
-                      <?php if ($app['status'] == 'cancelled')
-                        echo 'ยกเลิก'; ?>
-                    </span>
+                    <select class="status-select status-<?= $app['status'] ?>" data-id="<?= $app['app_id'] ?>">
+                      <option value="pending" <?= $app['status'] == 'pending' ? 'selected' : '' ?>>รอดำเนินการ</option>
+                      <option value="confirmed" <?= $app['status'] == 'confirmed' ? 'selected' : '' ?>>ยืนยันแล้ว</option>
+                      <option value="completed" <?= $app['status'] == 'completed' ? 'selected' : '' ?>>เสร็จสิ้น</option>
+                      <option value="cancelled" <?= $app['status'] == 'cancelled' ? 'selected' : '' ?>>ยกเลิก</option>
+                    </select>
                   </td>
                   <td class="text-center">
                     <a href="?delete=<?= $app['app_id'] ?>" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
@@ -173,49 +192,43 @@ $appointments = $stmtAppoint->fetchAll(PDO::FETCH_ASSOC);
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // ✅ คลิกเพื่ออัปเดตสถานะ
-      document.querySelectorAll('.badge-status').forEach(badge => {
-        badge.addEventListener('click', () => {
-          const id = badge.dataset.id;
-          const current = badge.dataset.status;
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-          Swal.fire({
-            title: 'อัปเดตสถานะนัดหมาย',
-            input: 'select',
-            inputOptions: {
-              pending: '🕒 รอดำเนินการ',
-              confirmed: '✅ ยืนยันแล้ว',
-              completed: '🐾 เสร็จสิ้น',
-              cancelled: '❌ ยกเลิก'
-            },
-            inputValue: current,
-            showCancelButton: true,
-            confirmButtonText: 'บันทึก',
-            cancelButtonText: 'ยกเลิก'
-          }).then(result => {
-            if (result.isConfirmed) {
-              fetch('update_appointment_status.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `id=${id}&status=${result.value}`
-              })
-                .then(res => res.json())
-                .then(data => {
-                  if (data.success) {
-                    Swal.fire({ icon: 'success', title: 'อัปเดตสำเร็จ!', timer: 1000, showConfirmButton: false })
-                      .then(() => location.reload());
-                  } else {
-                    Swal.fire('เกิดข้อผิดพลาด', data.message, 'error');
-                  }
-                });
+  <script>
+    // ✅ เปลี่ยนสถานะจาก dropdown
+    document.querySelectorAll('.status-select').forEach(select => {
+      select.addEventListener('change', function () {
+        const id = this.dataset.id;
+        const status = this.value;
+
+        // เปลี่ยนสี dropdown ตามสถานะใหม่
+        this.className = 'status-select status-' + status;
+
+        // ✅ ส่งค่าไปอัปเดตไฟล์ update_appointment_status.php
+        fetch('update_appointment_status.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `id=${id}&status=${status}`
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire({
+                icon: 'success',
+                title: 'อัปเดตสำเร็จ',
+                text: 'สถานะนัดหมายถูกเปลี่ยนเรียบร้อยแล้ว',
+                timer: 1000,
+                showConfirmButton: false
+              });
+            } else {
+              Swal.fire('เกิดข้อผิดพลาด', data.message, 'error');
             }
-          });
-        });
+          })
+          .catch(() => Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'error'));
       });
     });
   </script>
+
 </body>
 
 </html>

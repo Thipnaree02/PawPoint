@@ -80,6 +80,57 @@ $customers = $stmtCustomerList->fetchAll(PDO::FETCH_ASSOC);
         .btn-danger:hover {
             background-color: #c82333;
         }
+
+        /* ✅ ปรับคอลัมน์ให้สวยขึ้น */
+        .table td,
+        .table th {
+            vertical-align: middle;
+            text-align: center;
+            word-wrap: break-word;
+            white-space: normal;
+            /* ให้ข้อความขึ้นบรรทัดใหม่ได้ */
+        }
+
+        /* ✅ กำหนดความกว้างเฉพาะคอลัมน์ */
+        .table th:nth-child(2),
+        .table td:nth-child(2) {
+            width: 15%;
+        }
+
+        .table th:nth-child(3),
+        .table td:nth-child(3) {
+            width: 20%;
+        }
+
+        .table th:nth-child(4),
+        .table td:nth-child(4) {
+            width: 15%;
+        }
+
+        .table th:nth-child(5),
+        .table td:nth-child(5) {
+            width: 30%;
+            /* ที่อยู่ กว้างขึ้น */
+            text-align: left;
+            /* ให้อ่านง่าย */
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .table th:nth-child(6),
+        .table td:nth-child(6) {
+            width: 10%;
+        }
+
+        .table td:nth-child(5) {
+            max-width: 300px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            /* แสดงสูงสุด 3 บรรทัด */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 
@@ -114,7 +165,7 @@ $customers = $stmtCustomerList->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?= htmlspecialchars($c['address'] ?? '-') ?></td>
                                 <td>
                                     <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= $c['user_id'] ?>)">
-                                        <i class='bi bi-trash'></i> ลบ
+                                        <i class='bi bi-trash'></i>
                                     </button>
                                 </td>
                             </tr>

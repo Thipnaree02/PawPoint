@@ -114,52 +114,25 @@ session_start();
 
             <!-- เลือกแพ็กเกจ -->
             <h4 class="mb-3">เลือกแพ็กเกจ</h4>
+            <?php
+            require_once '../myadmin/config/db.php';
+            $packages = $conn->query("SELECT * FROM grooming_packages WHERE is_active = 1 ORDER BY price ASC")->fetchAll();
+            ?>
+
             <div class="row justify-content-center mb-5">
-
-                <div class="col-md-3 mb-4">
-                    <div class="package-card p-4">
-                        <h5>แพ็กเกจเล็ก</h5>
-                        <p>สำหรับสัตว์เลี้ยงน้ำหนักไม่เกิน 5 กก.</p>
-                        <p><strong>ราคา:</strong> 250 บาท</p>
-                        <a href="booking.php?service=grooming&package=small" class="btn btn-outline-success btn-sm">
-                            เลือกแพ็กเกจนี้
-                        </a>
+                <?php foreach ($packages as $pkg): ?>
+                    <div class="col-md-3 mb-4">
+                        <div class="package-card p-4">
+                            <h5><?= htmlspecialchars($pkg['name_th']) ?></h5>
+                            <p><?= htmlspecialchars($pkg['description_th']) ?></p>
+                            <p><strong>ราคา:</strong> <?= number_format($pkg['price'], 2) ?> บาท</p>
+                            <a href="booking.php?service=grooming&package_id=<?= $pkg['id'] ?>"
+                                class="btn btn-outline-success btn-sm">
+                                เลือกแพ็กเกจนี้
+                            </a>
+                        </div>
                     </div>
-                </div>
-
-                <div class="col-md-3 mb-4">
-                    <div class="package-card p-4">
-                        <h5>แพ็กเกจกลาง</h5>
-                        <p>สำหรับสัตว์เลี้ยงน้ำหนัก 5–15 กก.</p>
-                        <p><strong>ราคา:</strong> 350 บาท</p>
-                        <a href="booking.php?service=grooming&package=medium" class="btn btn-outline-success btn-sm">
-                            เลือกแพ็กเกจนี้
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-4">
-                    <div class="package-card p-4">
-                        <h5>แพ็กเกจใหญ่</h5>
-                        <p>สำหรับสัตว์เลี้ยงน้ำหนัก 15–30 กก.</p>
-                        <p><strong>ราคา:</strong> 450 บาท</p>
-                        <a href="booking.php?service=grooming&package=large" class="btn btn-outline-success btn-sm">
-                            เลือกแพ็กเกจนี้
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-4">
-                    <div class="package-card p-4">
-                        <h5>แพ็กเกจสปาเพิ่ม</h5>
-                        <p>อาบน้ำ + สปาขน + กลิ่นหอมพิเศษ</p>
-                        <p><strong>ราคา:</strong> 600 บาท</p>
-                        <a href="booking.php?service=grooming&package=spa" class="btn btn-outline-success btn-sm">
-                            เลือกแพ็กเกจนี้
-                        </a>
-                    </div>
-                </div>
-
+                <?php endforeach; ?>
             </div>
 
             <!-- ตารางราคา -->
@@ -197,37 +170,8 @@ session_start();
                     </tbody>
                 </table>
             </div>
-
-            <!-- รีวิวลูกค้า -->
-            <h4 class="mb-3">⭐ รีวิวจากลูกค้า</h4>
-            <div class="row justify-content-center">
-                <div class="col-md-4">
-                    <div class="review-card">
-                        <p>“น้องหมาหอมมาก ขนฟูสุด ๆ พนักงานน่ารักมากค่ะ ❤️”</p>
-                        <small>- คุณแพรว</small>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="review-card">
-                        <p>“บริการดี มีรูปก่อนหลังให้ดูด้วย ประทับใจค่ะ 🐶”</p>
-                        <small>- คุณมายด์</small>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="review-card">
-                        <p>“ราคาคุ้มค่า ร้านสะอาด ขนไม่พันเลยครับ”</p>
-                        <small>- คุณบอล</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-5">
-                <h4>📸 รูปก่อน-หลังอาบน้ำ</h4>
-                <p class="text-muted">ระบบจะแสดงรูปก่อน-หลังอัตโนมัติเมื่ออัปโหลด</p>
-                <img src="images/grooming_before_after.png" alt="before-after" class="img-fluid rounded-3 shadow" style="max-width: 600px;">
-            </div>
-
-        </div>
+        </div> <!-- container -->
     </section>
 </body>
+
 </html>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../Admin/config/connextdb.php'; // ✅ เชื่อมฐานข้อมูลแบบ PDO
+include '../myadmin/config/db.php'; // ✅ เชื่อมฐานข้อมูลแบบ PDO
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = trim($_POST['username']); // ใช้รับได้ทั้งชื่อผู้ใช้หรืออีเมล
