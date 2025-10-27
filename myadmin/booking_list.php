@@ -9,18 +9,12 @@ function safe($value)
 
 // ดึงข้อมูลการจอง
 $stmt = $conn->query("
-  SELECT 
-      rb.*, 
-      u.username, 
-      rb.pet_name, 
-      rt.name AS room_name, 
-      rt.id AS room_id
+  SELECT rb.*, u.username, rt.name AS room_name, rt.id AS room_id
   FROM room_booking rb
   LEFT JOIN users u ON rb.user_id = u.user_id
   LEFT JOIN room_type rt ON rb.room_type_id = rt.id
   ORDER BY rb.id DESC
 ");
-
 $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // ดึงข้อมูลห้องพักทั้งหมด
@@ -183,57 +177,6 @@ $rooms = $stmtRooms->fetchAll(PDO::FETCH_ASSOC);
                                 </button>
                             </td>
                         </tr>
-
-                        <!-- 🔧 Modal แก้ไขข้อมูล (ยังคงไว้เผื่อแก้ข้อมูลอื่น) -->
-                        <div class="modal fade" id="editBooking<?= $b['id'] ?>" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form method="post" action="update_booking.php">
-                                        <div class="modal-header bg-warning">
-                                            <h5 class="modal-title">แก้ไขข้อมูลการจอง</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <input type="hidden" name="id" value="<?= $b['id'] ?>">
-
-                                            <div class="mb-3">
-                                                <label class="form-label">ชื่อสัตว์เลี้ยง</label>
-                                                <input type="text" name="pet_name" class="form-control"
-                                                    value="<?= safe($b['pet_name']) ?>">
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label class="form-label">เลือกห้องพัก</label>
-                                                <select name="room_type_id" class="form-select">
-                                                    <?php foreach ($rooms as $room): ?>
-                                                        <option value="<?= $room['id'] ?>" <?= $b['room_id'] == $room['id'] ? 'selected' : '' ?>>
-                                                            <?= safe($room['name']) ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label class="form-label">วันที่เช็คอิน</label>
-                                                <input type="date" name="checkin_date" class="form-control"
-                                                    value="<?= safe($b['checkin_date']) ?>">
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label class="form-label">วันที่เช็คเอาท์</label>
-                                                <input type="date" name="checkout_date" class="form-control"
-                                                    value="<?= safe($b['checkout_date']) ?>">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-success">บันทึก</button>
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">ปิด</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                     <?php endforeach; ?>
                 </tbody>
             </table>
@@ -281,7 +224,7 @@ $rooms = $stmtRooms->fetchAll(PDO::FETCH_ASSOC);
             });
         }
 
-        // ✅ คลิกที่สถานะเพื่ออัปเดต
+        // ✅ อัปเดตสถานะโดยไม่ต้อง reload หน้า
         document.querySelectorAll('.badge-status').forEach(el => {
             el.addEventListener('click', () => {
                 const id = el.dataset.id;
@@ -301,11 +244,9 @@ $rooms = $stmtRooms->fetchAll(PDO::FETCH_ASSOC);
                     confirmButtonText: 'บันทึก',
                     cancelButtonText: 'ยกเลิก',
                     inputValidator: (value) => {
-                        if (!value) {
-                            return 'กรุณาเลือกสถานะ';
-                        }
+                        if (!value) return 'กรุณาเลือกสถานะ';
                     }
-                }).then((result) => {
+                }).then(result => {
                     if (result.isConfirmed) {
                         fetch('update_booking_status.php', {
                             method: 'POST',
@@ -315,7 +256,16 @@ $rooms = $stmtRooms->fetchAll(PDO::FETCH_ASSOC);
                             .then(res => res.json())
                             .then(data => {
                                 if (data.success) {
-                                    Swal.fire('อัปเดตสำเร็จ!', '', 'success').then(() => location.reload());
+                                    const statusText = {
+                                        pending: '🕒 รอดำเนินการ',
+                                        confirmed: '✅ ยืนยันแล้ว',
+                                        completed: '🐾 เสร็จสิ้น',
+                                        cancelled: '❌ ยกเลิก'
+                                    };
+                                    el.textContent = statusText[result.value];
+                                    el.className = 'badge-status badge-' + result.value;
+                                    el.dataset.status = result.value;
+                                    Swal.fire('อัปเดตสำเร็จ!', '', 'success');
                                 } else {
                                     Swal.fire('เกิดข้อผิดพลาด', data.message, 'error');
                                 }

@@ -37,11 +37,9 @@
           <li class="nav-item"><a class="nav-link " href="admin.php"><i class="bi bi-people-fill me-2"></i>Admin</a></li>
           <li class="nav-item"><a class="nav-link " href="vet_list.php"><i class="bi bi-people-fill me-2"></i>ตารางสัตวแพทย์</a></li>
           <li class="nav-item"><a class="nav-link" href="customer_list.php"><i class="bi bi-people me-2"></i>ลูกค้า</a></li>
-          <li class="nav-item"><a class="nav-link" href="appointments.php"><i class="bi bi-calendar-week me-2"></i>ปฏิทินนัดหมาย</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="appointments.php"><i class="bi bi-calendar-week me-2"></i>ปฏิทินนัดหมาย</a> </li>
           <li class="nav-item"><a class="nav-link" href="room_booking.php"><i class="bi bi-bandaid me-2"></i>บริการ & แพ็คเกจ</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i
-                class="bi bi-clipboard2-check me-2"></i>คำขอ/คิววันนี้</a></li>
+          <li class="nav-item"><a class="nav-link" href="grooming_packages.php"><i class="bi bi-clipboard2-check me-2"></i>บริการอาบน้ำตัดขน</a></li>
           <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-coin me-2"></i>รายงานการเงิน</a></li>
           <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear me-2"></i>ตั้งค่า</a></li>
         </ul>
