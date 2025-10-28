@@ -13,7 +13,21 @@ if (isset($_POST['login'])) {
 
   if ($admin && password_verify($password, $admin['password'])) {
     $_SESSION['admin_id'] = $admin['admin_id'];
-    $_SESSION['admin_name'] = $admin['fullname'];
+    $_SESSION['admin_name'] = $admin['name'];
+    // ✅ ตรวจสอบว่าฐานข้อมูลเก็บ path หรือแค่ชื่อไฟล์
+    if (!empty($admin['profile_image'])) {
+      if (strpos($admin['profile_image'], 'uploads/') !== false) {
+        // ถ้ามี path อยู่แล้ว เช่น uploads/admins/xxx.jpg
+        $_SESSION['admin_image'] = $admin['profile_image'];
+      } else {
+        // ถ้ามีแค่ชื่อไฟล์ เช่น xxx.jpg
+        $_SESSION['admin_image'] = 'uploads/admins/' . basename($admin['profile_image']);
+      }
+    } else {
+      // ถ้าไม่มีรูป
+      $_SESSION['admin_image'] = 'assets/images/default_user.png';
+    }
+
     header("Location: index.php");
     exit;
   } else {

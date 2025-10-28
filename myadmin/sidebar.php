@@ -15,6 +15,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <i class="bi bi-person-gear me-2"></i>ผู้ดูแลระบบ
     </a>
 
+    <a href="vet_list.php" class="<?= $current_page == 'vet_list.php' ? 'active' : '' ?>">
+        <i class="bi bi-person-badge me-2"></i> ตารางสัตวแพทย์
+    </a>
+
     <a href="appointments.php" class="<?= $current_page == 'appointments.php' ? 'active' : '' ?>">
         <i class="bi bi-calendar-week me-2"></i> ตารางนัดหมาย
     </a>
@@ -23,9 +27,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <i class="bi bi-calendar-check me-2"></i> ตารางอาบน้ำตัดขน
     </a>
 
-    <a href="vet_list.php" class="<?= $current_page == 'vet_list.php' ? 'active' : '' ?>">
-        <i class="bi bi-person-badge me-2"></i> ตารางสัตวแพทย์
-    </a>
+    
 
     <a href="room_booking.php" class="<?= $current_page == 'room_booking.php' ? 'active' : '' ?>">
         <i class="bi bi-door-open me-2"></i> การจองห้องพัก
