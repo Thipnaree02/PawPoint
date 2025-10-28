@@ -46,15 +46,13 @@ $stmt2 = $conn->prepare("
   ORDER BY a.date DESC, a.time DESC
 ");
 
-
-
-// 🏨 3. ประวัติการฝากเลี้ยง
+// 🏢 3. ประวัติการจองคอนโดสัตว์เลี้ยง
 $stmt3 = $conn->prepare("
   SELECT 
-    'ฝากเลี้ยง' AS service_type, 
+    'จองคอนโดสัตว์เลี้ยง' AS service_type, 
     r.checkin_date AS booking_date, 
     r.checkout_date AS booking_time, 
-    rm.name AS detail, 
+    CONCAT(rm.name, ' - ', r.pet_name) AS detail, 
     r.total_price AS price, 
     r.status, 
     NULL AS note
@@ -168,15 +166,16 @@ usort($history, function ($a, $b) {
                             <tr>
                                 <th>#</th>
                                 <th>ประเภทบริการ</th>
-                                <th>วันที่</th>
-                                <th>เวลา / วันที่ออก</th>
+                                <th>วันที่เริ่ม</th>
+                                <th>เวลา / วันที่สิ้นสุด</th>
                                 <th>รายละเอียด</th>
                                 <th>ราคา</th>
                                 <th>สถานะ</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i = 1;
+                            <?php
+                            $i = 1;
                             foreach ($history as $h):
                                 $status = $h['status'] ?? 'pending';
                                 $map = [
@@ -185,10 +184,18 @@ usort($history, function ($a, $b) {
                                     'completed' => ['🐾 เสร็จสิ้น', 'completed'],
                                     'cancelled' => ['❌ ยกเลิก', 'cancelled']
                                 ];
+
+                                // เพิ่มไอคอนสำหรับแต่ละประเภท
+                                $icon = match ($h['service_type']) {
+                                    'อาบน้ำ / ตัดขน' => '🧼',
+                                    'ตรวจสุขภาพ', 'ฉีดวัคซีน', 'ทำหมัน' => '🩺',
+                                    'จองคอนโดสัตว์เลี้ยง' => '🏢',
+                                    default => '🐾'
+                                };
                                 ?>
                                 <tr>
                                     <td><?= $i++ ?></td>
-                                    <td><?= htmlspecialchars($h['service_type']) ?></td>
+                                    <td><?= $icon . ' ' . htmlspecialchars($h['service_type']) ?></td>
                                     <td><?= htmlspecialchars($h['booking_date']) ?></td>
                                     <td><?= htmlspecialchars($h['booking_time']) ?></td>
                                     <td><?= htmlspecialchars($h['detail']) ?></td>
