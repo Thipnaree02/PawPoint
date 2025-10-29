@@ -13,7 +13,7 @@ if (isset($_POST['login'])) {
 
   if ($admin && password_verify($password, $admin['password'])) {
     $_SESSION['admin_id'] = $admin['admin_id'];
-    $_SESSION['admin_name'] = $admin['name'];
+    $_SESSION['admin_name'] = $admin['fullname'];
     // ✅ ตรวจสอบว่าฐานข้อมูลเก็บ path หรือแค่ชื่อไฟล์
     if (!empty($admin['profile_image'])) {
       if (strpos($admin['profile_image'], 'uploads/') !== false) {
@@ -41,7 +41,7 @@ if (isset($_POST['login'])) {
 
 <head>
   <meta charset="utf-8">
-  <title>เข้าสู่ระบบ | PowPoint Admin</title>
+  <title>เข้าสู่ระบบ | PawPoint Admin</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <style>
@@ -153,7 +153,7 @@ if (isset($_POST['login'])) {
   <div class="login-card">
     <div class="login-header">
       <div class="paw-icon mb-2"><i class="bi bi-heart-fill"></i></div>
-      <h4>PowPoint Admin</h4>
+      <h4>PawPoint Admin</h4>
       <p class="m-0 small text-white-50">ระบบจัดการคลินิกสัตว์เลี้ยง</p>
     </div>
 

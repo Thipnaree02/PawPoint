@@ -10,7 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <div class="container">
             <a class="navbar-brand" href="index.php">
                 <img src="images/logo.png" class="logo img-fluid" alt="Logo">
-                <span>PowPoint</span>
+                <span>PawPoint</span>
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -171,25 +171,26 @@ if (session_status() === PHP_SESSION_NONE) {
                                     </div>
                                     <div class="profile-actions">
                                         <a href="profile.php"><i class="bi bi-person-circle"></i> โปรไฟล์ของฉัน</a>
-                                    <a href="user_history.php"><i class="bi bi-clock-history"></i> ประวัติการใช้บริการ</a>                          
-                                    <a href="logout.php" class="logout"><i class="bi bi-box-arrow-right"></i>ออกจากระบบ</a>
-                </div>
+                                        <a href="user_history.php"><i class="bi bi-clock-history"></i> ประวัติการใช้บริการ</a>
+                                        <a href="pet_list.php"><i class="bi bi-journal-text"></i> ประวัติสัตว์เลี้ยงของคุณ</a>
+                                        <a href="add_pet.php"><i class="bi bi-plus-circle"></i> เพิ่มสัตว์เลี้ยงของคุณ</a>                              
+                                        <a href="logout.php" class="logout"><i class="bi bi-box-arrow-right"></i>ออกจากระบบ</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                    <?php else: ?>
+                        <li class="nav-item ms-3">
+                            <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
+                        </li>
+
+                        <li class="nav-item ms-3">
+                            <a class="nav-link custom-btn custom-border-btn btn" href="signup.php">Sign Up</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
             </div>
-            </div>
-            </li>
-
-        <?php else: ?>
-            <li class="nav-item ms-3">
-                <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
-            </li>
-
-            <li class="nav-item ms-3">
-                <a class="nav-link custom-btn custom-border-btn btn" href="signup.php">Sign Up</a>
-            </li>
-        <?php endif; ?>
-
-        </ul>
-        </div>
         </div>
     </nav>
 </header>

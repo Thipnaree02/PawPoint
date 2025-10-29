@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>PowPoint</title>
+    <title>PawPoint</title>
 
     <!-- CSS FILES -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -215,7 +215,7 @@ https://templatemo.com/tm-581-kind-heart-charity
 
                     <div class="col-lg-6 col-12">
                         <div class="custom-text-box h-100">
-                            <h2 class="mb-2">PowPoint</h2>
+                            <h2 class="mb-2">PawPoint</h2>
 
                             <h5 class="mb-3">คลินิกจองคิวสัตว์เลี้ยงออนไลน์</h5>
 
@@ -292,7 +292,7 @@ https://templatemo.com/tm-581-kind-heart-charity
                 <div class="row justify-content-center align-items-center">
 
                     <div class="col-lg-12 col-12 text-center mb-4">
-                        <h2>PowPoint Condo</h2>
+                        <h2>PawPoint Condo</h2>
                     </div>
 
                     <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">

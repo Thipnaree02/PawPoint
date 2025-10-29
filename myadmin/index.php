@@ -149,10 +149,10 @@ $serviceNames = [
     <aside id="sidebar" class="sidebar border-end">
       <div class="p-3 d-flex align-items-center gap-2 brand">
         <div class="brand-badge">
-          <img src="../all_powpoint/images/logo.png" alt="PowPoint Logo" class="brand-logo">
+          <img src="../all_pawpoint/images/logo.png" alt="PawPoint Logo" class="brand-logo">
         </div>
         <div>
-          <div class="fw-bold">PowPoint</div>
+          <div class="fw-bold">PawPoint</div>
           <small class="text-muted">Pet Clinic Admin</small>
         </div>
         <button class="btn btn-light btn-sm ms-auto d-lg-none" id="btnCloseSidebar">
@@ -169,20 +169,30 @@ $serviceNames = [
         <ul class="nav flex-column gap-1">
           <li class="nav-item"><a class="nav-link active" href="#"><i class="bi bi-speedometer2 me-2"></i>แดชบอร์ด</a>
           </li>
+
           <li class="nav-item"><a class="nav-link" href="admin.php"><i class="bi bi-people-fill me-2"></i>Admin</a></li>
+
           <li class="nav-item"><a class="nav-link" href="vet_list.php"><i
                 class="bi bi-person-badge me-2"></i>ตารางสัตวแพทย์</a></li>
-          <li class="nav-item"><a class="nav-link" href="customer_list.php"><i class="bi bi-people me-2"></i>ลูกค้า</a>
-          </li>
+
+          <li class="nav-item"><a class="nav-link" href="customer_list.php"><i class="bi bi-people me-2"></i>ลูกค้า</a></li>
+
+          <li class="nav-item"><a class="nav-link" href="pets.php"><i class="bi bi-people me-2"></i>สัตว์เลี้ยงทั้งหมด</a></li>
+
           <li class="nav-item"><a class="nav-link" href="appointments.php"><i
                 class="bi bi-calendar-week me-2"></i>ปฏิทินนัดหมาย</a></li>
+
           <li class="nav-item"><a class="nav-link" href="grooming_bookings.php"><i
                 class="bi bi-scissors me-2"></i>ปฏิทินอาบน้ำตัดขน</a></li>
+
           <li class="nav-item"><a class="nav-link" href="room_booking.php"><i
                 class="bi bi-house-heart me-2"></i>จองคอนโดสัตว์เลี้ยง</a></li>
+
           <li class="nav-item"><a class="nav-link" href="grooming_packages.php"><i
                 class="bi bi-scissors me-2"></i>บริการอาบน้ำตัดขน</a></li>
+
           <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-coin me-2"></i>รายงานการเงิน</a></li>
+
         </ul>
       </div>
     </aside>

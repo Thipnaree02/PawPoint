@@ -18,6 +18,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <a href="vet_list.php" class="<?= $current_page == 'vet_list.php' ? 'active' : '' ?>">
         <i class="bi bi-person-badge me-2"></i> ตารางสัตวแพทย์
     </a>
+    
+    <a href="customer_list.php" class="<?= $current_page == 'customer_list.php' ? 'active' : '' ?>">
+        <i class="bi bi-person-gear me-2"></i>ลูกค้า
+    </a>
+
+    <a href="pets.php" class="<?= $current_page == 'pets.php' ? 'active' : '' ?>">
+        <i class="bi bi-person-gear me-2"></i>สัตว์เลี้ยง
+    </a>
 
     <a href="appointments.php" class="<?= $current_page == 'appointments.php' ? 'active' : '' ?>">
         <i class="bi bi-calendar-week me-2"></i> ตารางนัดหมาย

@@ -147,7 +147,7 @@
     <div class="signup-box">
       <div class="text-center mb-4">
         <img src="images/logo.png" alt="PawPoint Logo" class="img-fluid" style="width: 80px;">
-        <h3 class="mt-3">Create PowPoint Account</h3>
+        <h3 class="mt-3">Create PawPoint Account</h3>
         <p class="text-muted">สมัครสมาชิกเพื่อใช้บริการคลินิกสัตวแพทย์ออนไลน์</p>
       </div>
 

@@ -19,10 +19,10 @@ if (isset($_GET['delete_id'])) {
 $stmtCustomerList = $conn->query("
     SELECT user_id, username, email, phone, address 
     FROM users 
-    WHERE (role = 'user' OR role IS NULL OR role = '') 
-    AND (status = 'active' OR status IS NULL)
+    WHERE (status = 'active' OR status IS NULL)
     ORDER BY user_id ASC
 ");
+
 $customers = $stmtCustomerList->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

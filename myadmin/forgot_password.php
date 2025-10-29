@@ -12,7 +12,7 @@ if (isset($_POST['reset_request'])) {
     $token = bin2hex(random_bytes(16));
     $stmtForgotPass = $conn->prepare("UPDATE admins SET reset_token=?, reset_expires=DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE email=?");
     $stmtForgotPass->execute([$token, $email]);
-    $resetLink = "http://localhost/PowPoint/myadmin/reset_password.php?token=" . $token;
+    $resetLink = "http://localhost/PawPoint/myadmin/reset_password.php?token=" . $token;
     $message = "✅ ลิงก์รีเซ็ตรหัสผ่านของคุณคือ:<br><a href='$resetLink'>$resetLink</a>";
   } else {
     $message = "❌ ไม่พบอีเมลนี้ในระบบ";

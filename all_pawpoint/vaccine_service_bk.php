@@ -7,7 +7,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>PowPoint</title>
+        <title>PawPoint</title>
 
         <!-- CSS FILES -->        
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -72,8 +72,50 @@ https://templatemo.com/tm-581-kind-heart-charity
         </div>
     </header>
 
-    <?php include 'header_nav.php'; ?>
+        <nav class="navbar navbar-expand-lg bg-light shadow-lg">
+            <div class="container">
+                <a class="navbar-brand" href="index.php">
+                    <img src="images/logo.png" class="logo img-fluid" alt="">
+                    <span>PawPoint</span>
+                </a>
 
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.php#section_1">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link smoothscroll" href="index.php#section_2">About</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.php#section_3">Causes</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.php#section_4">แพ็กเกจ</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link click-scroll" href="index.php#section_5">สัตวแพทย์</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="index.php#section_6">ติดต่อ</a>
+                        </li>
+
+                        <li class="nav-item ms-3">
+                            <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
         <main>
 
@@ -99,7 +141,7 @@ https://templatemo.com/tm-581-kind-heart-charity
                         <div class="featured-block d-flex flex-column justify-content-center align-items-center p-4 shadow rounded-4">
                             <a href="booking_process.php" class="d-block text-decoration-none">
                                 <img src="images/icons/check.png" class="featured-block-image img-fluid mb-3" alt="">
-                                <p class="featured-block-text">จองคิว</p>
+                                <p class="featured-block-text">จองคิวตรวจสุขภาพ</p>
                             </a>
                         </div>
                     </div>
