@@ -1,4 +1,13 @@
 <?php
+
+session_start();
+
+// ถ้ายังไม่มี session แสดงว่ายังไม่ล็อกอิน
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 include 'config/db.php';
 $token = $_GET['token'] ?? '';
 $stmtResetPass = $conn->prepare("SELECT * FROM admins WHERE reset_token=? AND reset_expires > NOW()");

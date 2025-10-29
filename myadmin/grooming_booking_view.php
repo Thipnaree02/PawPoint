@@ -1,6 +1,15 @@
 <?php
+
+session_start();
+
+// ถ้ายังไม่มี session แสดงว่ายังไม่ล็อกอิน
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 require_once '../config/db.php';
-require_once './_auth.php';
+// require_once './_auth.php';
 
 $id = (int) ($_GET['id'] ?? 0);
 $stmt = $conn->prepare("SELECT gb.*, gp.name_th AS package_name, gp.price

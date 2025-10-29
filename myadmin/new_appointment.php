@@ -1,4 +1,13 @@
 <?php
+
+session_start();
+
+// ถ้ายังไม่มี session แสดงว่ายังไม่ล็อกอิน
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 include 'config/db.php';
 session_start(); // ✅ ใช้ session เพื่อดึง user_id ของผู้ใช้ที่ล็อกอินอยู่
 

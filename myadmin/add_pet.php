@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+// ถ้ายังไม่มี session แสดงว่ายังไม่ล็อกอิน
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 include '../myadmin/config/db.php';
 
 // ดึงรายชื่อลูกค้าทั้งหมด

@@ -1,4 +1,12 @@
 <?php
+
+session_start();
+
+// ถ้ายังไม่มี session แสดงว่ายังไม่ล็อกอิน
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: login.php");
+    exit;
+}
 include 'config/db.php';
 
 // ✅ ฟังก์ชันลบข้อมูล

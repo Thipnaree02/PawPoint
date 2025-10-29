@@ -1,4 +1,13 @@
 <?php
+
+session_start();
+
+// ถ้ายังไม่มี session แสดงว่ายังไม่ล็อกอิน
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 header('Content-Type: application/json');
 include 'config/db.php'; // ✅ ตรวจสอบ path ให้ตรงกับที่ใช้ในหลังบ้าน
 

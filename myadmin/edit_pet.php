@@ -1,6 +1,13 @@
 <?php
 session_start();
-include '../myadmin/config/db.php';
+
+// ถ้ายังไม่มี session แสดงว่ายังไม่ล็อกอิน
+if (!isset($_SESSION['admin_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
+include '/config/db.php';
 
 // ตรวจสอบการล็อกอิน
 if (!isset($_SESSION['admin_id'])) {
