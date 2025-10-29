@@ -4,7 +4,6 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 ?>
 
-
 <header>
     <nav class="navbar navbar-expand-lg bg-light shadow-lg fixed-top">
         <div class="container">
@@ -27,7 +26,6 @@ if (session_status() === PHP_SESSION_NONE) {
                     <li class="nav-item"><a class="nav-link" href="index.php#section_6">ติดต่อ</a></li>
 
                     <?php if (isset($_SESSION['user_id'])): ?>
-
                         <style>
                             .profile-wrapper {
                                 position: relative;
@@ -38,70 +36,58 @@ if (session_status() === PHP_SESSION_NONE) {
                                 display: flex;
                                 align-items: center;
                                 cursor: pointer;
+                                gap: 8px;
                             }
 
-                            .profile-toggle img {
-                                width: 35px;
-                                height: 35px;
-                                border-radius: 50%;
-                                object-fit: cover;
-                                margin-right: 8px;
+                            .profile-toggle i {
+                                font-size: 1.8rem;
+                                color: #2980b9;
                             }
 
                             .profile-dropdown {
                                 position: absolute;
                                 top: 55px;
                                 right: 0;
-                                width: 320px;
+                                width: 300px;
                                 background: linear-gradient(180deg, #6dd5fa, #2980b9);
-                                border-radius: 25px;
+                                border-radius: 20px;
                                 box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
                                 overflow: hidden;
-                                transition: all 0.3s ease, opacity 0.3s ease;
-                                z-index: 1000;
                                 opacity: 0;
                                 visibility: hidden;
+                                transition: all 0.3s ease;
+                                z-index: 1000;
                             }
 
                             .profile-wrapper:hover .profile-dropdown {
                                 opacity: 1;
                                 visibility: visible;
-                                transform: translateY(6px);
+                                transform: translateY(5px);
                             }
 
                             .profile-info {
                                 text-align: center;
-                                padding: 25px 25px 20px 25px;
+                                padding: 20px;
+                                color: #fff;
                             }
 
-                            .profile-info img {
-                                width: 110px;
-                                height: 110px;
-                                border-radius: 50%;
-                                border: 4px solid #fff;
-                                object-fit: cover;
-                                margin-bottom: 12px;
-                                background-color: #fff;
+                            .profile-info i {
+                                font-size: 60px;
+                                color: #fff;
+                                margin-bottom: 8px;
                             }
 
                             .profile-info h3 {
-                                font-weight: 700;
+                                font-size: 18px;
+                                margin: 5px 0;
                                 color: #000;
-                                font-size: 19px;
-                                margin-bottom: 5px;
-                            }
-
-                            .profile-info p {
-                                color: #fff;
-                                font-size: 14px;
-                                margin: 0;
+                                font-weight: 700;
                             }
 
                             .profile-actions {
                                 background: #fff;
-                                padding: 15px 25px;
+                                padding: 15px 20px;
                                 border-top: 1px solid #eee;
-                                border-radius: 0 0 25px 25px;
                             }
 
                             .profile-actions a {
@@ -112,7 +98,7 @@ if (session_status() === PHP_SESSION_NONE) {
                                 text-decoration: none;
                                 font-size: 15px;
                                 margin: 8px 0;
-                                transition: color 0.2s ease;
+                                transition: color 0.2s;
                             }
 
                             .profile-actions a:hover {
@@ -126,55 +112,27 @@ if (session_status() === PHP_SESSION_NONE) {
                             .profile-actions a.logout:hover {
                                 color: #c0392b;
                             }
-
-                            @media (min-width: 992px) {
-                                .profile-dropdown {
-                                    width: 360px;
-                                    border-radius: 28px;
-                                }
-
-                                .profile-info img {
-                                    width: 120px;
-                                    height: 120px;
-                                }
-
-                                .profile-info h3 {
-                                    font-size: 20px;
-                                }
-                            }
                         </style>
 
-                        <!-- ✅ เมนูโปรไฟล์ -->
                         <li class="nav-item">
                             <div class="profile-wrapper">
-                                <?php
-                                // ✅ ใช้ avatar จาก session ที่อัปเดตล่าสุด
-                                $defaultImg = "images/avatar/users.png";
-                                if (!empty($_SESSION['avatar']) && file_exists(__DIR__ . '/' . $_SESSION['avatar'])) {
-                                    $profileImg = $_SESSION['avatar'];
-                                } else {
-                                    $profileImg = $defaultImg;
-                                }
-                                ?>
-
                                 <div class="profile-toggle">
-                                    <img src="<?php echo htmlspecialchars($profileImg); ?>" alt="Profile Picture">
-                                    <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                                    <i class="bi bi-person-circle"></i>
+                                    <span><?php echo htmlspecialchars($_SESSION['username'] ?? 'ไม่ระบุชื่อ'); ?></span>
                                     <i class="bi bi-caret-down-fill ms-1"></i>
                                 </div>
 
                                 <div class="profile-dropdown">
                                     <div class="profile-info">
-                                        <img src="<?php echo htmlspecialchars($profileImg); ?>" alt="Profile Picture">
-                                        <h3><?php echo htmlspecialchars($_SESSION['username']); ?></h3>
-                                        <p><?php echo htmlspecialchars($_SESSION['email']); ?></p>
+                                        <i class="bi bi-person-circle"></i>
+                                        <h3><?php echo htmlspecialchars($_SESSION['username'] ?? 'ไม่ระบุชื่อ'); ?></h3>
                                     </div>
                                     <div class="profile-actions">
-                                        <a href="profile.php"><i class="bi bi-person-circle"></i> โปรไฟล์ของฉัน</a>
+                                        <a href="profile.php"><i class="bi bi-person"></i> โปรไฟล์ของฉัน</a>
                                         <a href="user_history.php"><i class="bi bi-clock-history"></i> ประวัติการใช้บริการ</a>
                                         <a href="pet_list.php"><i class="bi bi-journal-text"></i> ประวัติสัตว์เลี้ยงของคุณ</a>
-                                        <a href="add_pet.php"><i class="bi bi-plus-circle"></i> เพิ่มสัตว์เลี้ยงของคุณ</a>                              
-                                        <a href="logout.php" class="logout"><i class="bi bi-box-arrow-right"></i>ออกจากระบบ</a>
+                                        <a href="add_pet.php"><i class="bi bi-plus-circle"></i> เพิ่มสัตว์เลี้ยงของคุณ</a>
+                                        <a href="logout.php" class="logout"><i class="bi bi-box-arrow-right"></i> ออกจากระบบ</a>
                                     </div>
                                 </div>
                             </div>
@@ -184,7 +142,6 @@ if (session_status() === PHP_SESSION_NONE) {
                         <li class="nav-item ms-3">
                             <a class="nav-link custom-btn custom-border-btn btn" href="signin.php">Sign In</a>
                         </li>
-
                         <li class="nav-item ms-3">
                             <a class="nav-link custom-btn custom-border-btn btn" href="signup.php">Sign Up</a>
                         </li>

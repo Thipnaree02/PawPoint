@@ -3,7 +3,6 @@ session_start();
 include '../myadmin/config/db.php'; // ✅ เชื่อมฐานข้อมูลแบบ PDO
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // ✅ รับค่าจากฟอร์ม และล้างช่องว่าง
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
@@ -52,10 +51,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // ✅ เข้ารหัสรหัสผ่าน (เพื่อความปลอดภัย)
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // ✅ บันทึกข้อมูลลูกค้า (ไม่มี avatar, เก็บ role เป็น 'user')
+        // ✅ บันทึกข้อมูลลูกค้า (ตารางไม่มี role แล้ว)
         $stmt = $conn->prepare("
-            INSERT INTO users (username, password, email, role, created_at)
-            VALUES (?, ?, ?, 'user', NOW())
+            INSERT INTO users (username, password, email, created_at)
+            VALUES (?, ?, ?, NOW())
         ");
 
         if ($stmt->execute([$username, $hashedPassword, $email])) {
@@ -75,7 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo "<script>alert('เกิดข้อผิดพลาดจากระบบฐานข้อมูล: " . $e->getMessage() . "');</script>";
     }
 } else {
-    // ถ้าไม่ใช่การส่งแบบ POST กลับไปหน้าสมัคร
     header("Location: signup.php");
     exit();
 }
