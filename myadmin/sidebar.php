@@ -2,10 +2,19 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
-<aside class="sidebar">
-    <div class="brand">
-        <i class="bi bi-hospital"></i> Elivet
+<aside id="sidebar" class="sidebar border-end">
+  <div class="p-3 d-flex align-items-center gap-2 brand">
+    <div class="brand-badge">
+      <img src="../all_pawpoint/images/logo.png" alt="PowPoint Logo" class="brand-logo" style="width: 45px; height: 45px; border-radius: 10px;">
     </div>
+    <div>
+      <div class="fw-bold">PawPoint</div>
+    </div>
+    <button class="btn btn-light btn-sm ms-auto d-lg-none" id="btnCloseSidebar">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
 
     <a href="index.php" class="<?= $current_page == 'index.php' ? 'active' : '' ?>">
         <i class="bi bi-house-door me-2"></i> กลับสู่หน้าหลัก

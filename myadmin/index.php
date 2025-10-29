@@ -162,9 +162,7 @@ $serviceNames = [
 
 
       <div class="px-3 pb-3">
-        <a class="btn btn-success w-100 mb-3" href="appointments_add.php">
-          <i class="bi bi-plus-circle me-2"></i>เพิ่มการนัดหมาย
-        </a>
+        
         <div class="menu small fw-medium text-uppercase mb-2 text-muted">เมนู</div>
         <ul class="nav flex-column gap-1">
           <li class="nav-item"><a class="nav-link active" href="#"><i class="bi bi-speedometer2 me-2"></i>แดชบอร์ด</a>
@@ -191,7 +189,7 @@ $serviceNames = [
           <li class="nav-item"><a class="nav-link" href="grooming_packages.php"><i
                 class="bi bi-scissors me-2"></i>บริการอาบน้ำตัดขน</a></li>
 
-          <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-coin me-2"></i>รายงานการเงิน</a></li>
+          <!-- <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-coin me-2"></i>รายงานการเงิน</a></li> -->
 
         </ul>
       </div>

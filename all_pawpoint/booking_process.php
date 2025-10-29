@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="logo-box">
       <img src="images/logo.png" alt="โลโก้ร้าน" id="clinicLogo">
     </div>
-    <h3 class="text-center">จองคิวตรวจสุขภาพสัตว์เลี้ยง</h3>
+    <h3 class="text-center">จองคิวสัตว์เลี้ยง</h3>
     <div class="header-line"></div>
 
     <form method="POST">

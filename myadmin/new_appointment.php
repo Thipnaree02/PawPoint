@@ -9,7 +9,7 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 include 'config/db.php';
-session_start(); // ✅ ใช้ session เพื่อดึง user_id ของผู้ใช้ที่ล็อกอินอยู่
+
 
 // ✅ ถ้ายังไม่มีระบบล็อกอิน ให้ใช้ user_id ชั่วคราวเพื่อทดสอบ
 if (!isset($_SESSION['user_id'])) {
