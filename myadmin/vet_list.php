@@ -1,8 +1,7 @@
 <?php
-
 session_start();
 
-// ถ้ายังไม่มี session แสดงว่ายังไม่ล็อกอิน
+// ตรวจสอบการล็อกอิน
 if (!isset($_SESSION['admin_id'])) {
     header("Location: login.php");
     exit;
@@ -16,10 +15,10 @@ $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 // ดึงข้อมูลสัตวแพทย์
 if ($search != '') {
     $stmt = $conn->prepare("SELECT * FROM veterinarians 
-                          WHERE fullname LIKE :s 
-                          OR phone LIKE :s 
-                          OR email LIKE :s 
-                          ORDER BY id DESC");
+                            WHERE fullname LIKE :s 
+                            OR phone LIKE :s 
+                            OR email LIKE :s 
+                            ORDER BY id DESC");
     $stmt->execute(['s' => "%$search%"]);
 } else {
     $stmt = $conn->query("SELECT * FROM veterinarians ORDER BY id DESC");
@@ -29,124 +28,30 @@ $vets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <title>จัดการสัตวแพทย์ | Elivet Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
-        * {
-            font-family: 'Noto Sans Thai', sans-serif;
-        }
-
-        body {
-            background: #f7f9fb;
-        }
-
-        .sidebar {
-            width: 260px;
-            background: #fff;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            border-right: 1px solid #eaeaea;
-            padding: 1rem;
-        }
-
-        .sidebar .brand {
-            display: flex;
-            align-items: center;
-            font-weight: 600;
-            font-size: 20px;
-            color: #2c7a3d;
-            margin-bottom: 2rem;
-        }
-
-        .sidebar .brand i {
-            background: #8bdc65;
-            padding: 8px;
-            border-radius: 10px;
-            color: #1c461a;
-            margin-right: 8px;
-        }
-
-        .sidebar a {
-            display: block;
-            color: #444;
-            text-decoration: none;
-            padding: .6rem .9rem;
-            border-radius: 8px;
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
-
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: #e9f8ea;
-            color: #1d5e28;
-        }
-
-        .main {
-            margin-left: 260px;
-            padding: 2rem;
-        }
-
-        .navbar-custom {
-            background: #fff;
-            border-bottom: 1px solid #eee;
-            padding: .8rem 1.2rem;
-        }
-
-        .card {
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
-
-        .btn-success {
-            border-radius: 8px;
-        }
-
-        .table th {
-            background-color: #198754 !important;
-            color: white;
-            text-align: center;
-        }
-
-        .table td {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .rounded-img {
-            border-radius: 50%;
-            object-fit: cover;
-            width: 50px;
-            height: 50px;
-        }
-
-        .sidebar a.active {
-            background-color: #d1f3d1;
-            /* เขียวอ่อน */
-            color: #1c6e2a;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .sidebar a:hover {
-            background-color: #e8f9e8;
-            color: #155d27;
-        }
+        * { font-family: 'Noto Sans Thai', sans-serif; }
+        body { background: #f7f9fb; }
+        .main { margin-left: 260px; padding: 2rem; }
+        .navbar-custom { background: #fff; border-bottom: 1px solid #eee; padding: .8rem 1.2rem; }
+        .card { border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); background-color: #fff; }
+        .btn-success { border-radius: 8px; }
+        .table th { background-color: #198754 !important; color: white; text-align: center; }
+        .table td { text-align: center; vertical-align: middle; }
+        .rounded-img { border-radius: 50%; object-fit: cover; width: 50px; height: 50px; }
     </style>
 </head>
 
 <body>
     <?php include 'sidebar.php'; ?>
-
 
     <!-- Main Content -->
     <main class="main">
@@ -185,7 +90,8 @@ $vets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         foreach ($vets as $row) { ?>
                             <tr>
                                 <td><?= $no++; ?></td>
-                                <td><img src="uploads/vets/<?= htmlspecialchars($row['photo']); ?>" class="rounded-img border">
+                                <td>
+                                    <img src="uploads/vets/<?= htmlspecialchars($row['photo']); ?>" class="rounded-img border">
                                 </td>
                                 <td><?= htmlspecialchars($row['fullname']); ?></td>
                                 <td><?= htmlspecialchars($row['specialization']); ?></td>
@@ -196,10 +102,9 @@ $vets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <a href="edit_vet.php?id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
-                                    <a href="delete_vet.php?id=<?= $row['id']; ?>" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('ลบข้อมูลนี้หรือไม่?')">
+                                    <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= $row['id']; ?>)">
                                         <i class="bi bi-trash3-fill"></i>
-                                    </a>
+                                    </button>
                                 </td>
                             </tr>
                         <?php }
@@ -212,6 +117,58 @@ $vets = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </table>
         </div>
     </main>
-</body>
 
+    <!-- สคริปต์ SweetAlert2 -->
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: "คุณแน่ใจหรือไม่?",
+                text: "หากลบแล้วจะไม่สามารถกู้คืนข้อมูลนี้ได้!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: "ใช่, ลบเลย!",
+                cancelButtonText: "ยกเลิก",
+                reverseButtons: true,
+                showClass: {
+                    popup: "animate__animated animate__fadeInDown"
+                },
+                hideClass: {
+                    popup: "animate__animated animate__fadeOutUp"
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // ✅ ถ้าผู้ใช้กดยืนยัน → ลบจริง
+                    fetch(`delete_vet.php?id=${id}`)
+                        .then(() => {
+                            Swal.fire({
+                                icon: "success",
+                                title: "ลบข้อมูลสำเร็จ!",
+                                text: "ข้อมูลสัตวแพทย์ถูกลบเรียบร้อยแล้ว",
+                                confirmButtonColor: "#198754",
+                                confirmButtonText: "ตกลง",
+                                showClass: {
+                                    popup: "animate__animated animate__fadeInDown"
+                                },
+                                hideClass: {
+                                    popup: "animate__animated animate__fadeOutUp"
+                                }
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        })
+                        .catch(() => {
+                            Swal.fire({
+                                icon: "error",
+                                title: "เกิดข้อผิดพลาด!",
+                                text: "ไม่สามารถลบข้อมูลได้",
+                                confirmButtonColor: "#dc3545"
+                            });
+                        });
+                }
+            });
+        }
+    </script>
+</body>
 </html>
