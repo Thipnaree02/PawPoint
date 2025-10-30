@@ -60,11 +60,17 @@ $isLoggedIn = isset($_SESSION['user_id']);
 
 <body>
 
-  <div class="container py-5">
-    <div class="text-center mb-5">
-      <h1 class="fw-bold text-success">🏡 PawPoint Condo</h1>
-      <p class="text-muted">เลือกห้องพักสำหรับเพื่อนสี่ขาของคุณ 🐾</p>
-    </div>
+    <div class="container py-5">
+      <div class="text-center mb-5">
+    <h1 class="fw-bold text-success">PawPoint Condo</h1>
+    <p class="text-muted">เลือกห้องพักสำหรับเพื่อนสี่ขาของคุณ 🐾</p>
+
+    <!-- ปุ่มกลับไปหน้าแรก -->
+    <a href="index.php#section_4" class="btn btn-outline-success mt-3 px-4">
+      <i class="bi bi-arrow-left-circle"></i> กลับไปหน้าแรก
+    </a>
+  </div>
+
 
     <div class="row g-4">
       <?php foreach ($rooms as $room): ?>

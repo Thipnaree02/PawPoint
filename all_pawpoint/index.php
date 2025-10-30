@@ -401,131 +401,47 @@ https://templatemo.com/tm-581-kind-heart-charity
             </div>
         </section>
 
-
-        <section class="testimonial-section section-padding section-bg" style="background-color: white;">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-8 col-12 mx-auto">
-                        <h2 class="mb-lg-3">Happy Customers</h2>
-
-                        <div id="testimonial-carousel" class="carousel carousel-fade slide" data-bs-ride="carousel">
-
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <div class="carousel-caption">
-                                        <h4 class="carousel-title">Lorem Ipsum dolor sit amet, consectetur adipsicing
-                                            kengan omeg kohm tokito charity theme</h4>
-
-                                        <small class="carousel-name"><span class="carousel-name-title">Maria</span>,
-                                            Boss</small>
-                                    </div>
-                                </div>
-
-                                <div class="carousel-item">
-                                    <div class="carousel-caption">
-                                        <h4 class="carousel-title">Sed leo nisl, posuere at molestie ac, suscipit auctor
-                                            mauris quis metus tempor orci</h4>
-
-                                        <small class="carousel-name"><span class="carousel-name-title">Thomas</span>,
-                                            Partner</small>
-                                    </div>
-                                </div>
-
-                                <div class="carousel-item">
-                                    <div class="carousel-caption">
-                                        <h4 class="carousel-title">Lorem Ipsum dolor sit amet, consectetur adipsicing
-                                            kengan omeg kohm tokito charity theme</h4>
-
-                                        <small class="carousel-name"><span class="carousel-name-title">Jane</span>,
-                                            Advisor</small>
-                                    </div>
-                                </div>
-
-                                <div class="carousel-item">
-                                    <div class="carousel-caption">
-                                        <h4 class="carousel-title">Sed leo nisl, posuere at molestie ac, suscipit auctor
-                                            mauris quis metus tempor orci</h4>
-
-                                        <small class="carousel-name"><span class="carousel-name-title">Bob</span>,
-                                            Entreprenuer</small>
-                                    </div>
-                                </div>
-
-                                <ol class="carousel-indicators">
-                                    <li data-bs-target="#testimonial-carousel" data-bs-slide-to="0" class="active">
-                                        <img src="images/avatar/portrait-beautiful-young-woman-standing-grey-wall.jpg"
-                                            class="img-fluid rounded-circle avatar-image" alt="avatar">
-                                    </li>
-
-                                    <li data-bs-target="#testimonial-carousel" data-bs-slide-to="1" class="">
-                                        <img src="images/avatar/portrait-young-redhead-bearded-male.jpg"
-                                            class="img-fluid rounded-circle avatar-image" alt="avatar">
-                                    </li>
-
-                                    <li data-bs-target="#testimonial-carousel" data-bs-slide-to="2" class="">
-                                        <img src="images/avatar/pretty-blonde-woman-wearing-white-t-shirt.jpg"
-                                            class="img-fluid rounded-circle avatar-image" alt="avatar">
-                                    </li>
-
-                                    <li data-bs-target="#testimonial-carousel" data-bs-slide-to="3" class="">
-                                        <img src="images/avatar/studio-portrait-emotional-happy-funny.jpg"
-                                            class="img-fluid rounded-circle avatar-image" alt="avatar">
-                                    </li>
-                                </ol>
-
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-
         <section class="testimonial-section section-padding section-bg" id="section_6">
             <div class="container">
                 <div class="row">
 
                     <div class="col-lg-4 col-12 ms-auto mb-5 mb-lg-0">
                         <div class="contact-info-wrap">
-                            <h2>Get in touch</h2>
-
-                            <div class="contact-image-wrap d-flex flex-wrap">
-                                <img src="images/avatar/pretty-blonde-woman-wearing-white-t-shirt.jpg"
-                                    class="img-fluid avatar-image" alt="">
-
-                                <div class="d-flex flex-column justify-content-center ms-3">
-                                    <p class="mb-0">Clara Barton</p>
-                                    <p class="mb-0"><strong>HR & Office Manager</strong></p>
-                                </div>
-                            </div>
+                            <h2>Get in PawPoint</h2>
 
                             <div class="contact-info">
                                 <h5 class="mb-3">Contact Infomation</h5>
 
                                 <p class="d-flex mb-2">
                                     <i class="bi-geo-alt me-2"></i>
-                                    Akershusstranda 20, 0150 Oslo, Norway
+                                    มหาวิทยาลัยมหาสารคาม
                                 </p>
 
                                 <p class="d-flex mb-2">
                                     <i class="bi-telephone me-2"></i>
 
-                                    <a href="tel: 120-240-9600">
-                                        120-240-9600
+                                    <a href="tel: 065-296-1246">
+                                        062-296-1246
                                     </a>
                                 </p>
 
                                 <p class="d-flex">
                                     <i class="bi-envelope me-2"></i>
 
-                                    <a href="mailto:info@yourgmail.com">
-                                        donate@charity.org
+                                    <a href="mailto:65010914602@msu.ac.th">
+                                        65010914602@msu.ac.th
                                     </a>
                                 </p>
 
-                                <a href="#" class="custom-btn btn mt-3">Get Direction</a>
+                                <div class="mt-4">
+                                    <iframe
+                                        src="https://www.google.com/maps?q=16.245227,103.251232&hl=th&z=16&output=embed"
+                                        width="100%" height="350"
+                                        style="border:0; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);"
+                                        allowfullscreen="" loading="lazy">
+                                    </iframe>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -535,22 +451,22 @@ https://templatemo.com/tm-581-kind-heart-charity
                             <h2>Contact form</h2>
 
                             <p class="mb-4">Or, you can just send an email:
-                                <a href="#">info@charity.org</a>
+                                <a href="#">65010914602@msu.ac.th</a>
                             </p>
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <input type="text" name="first-name" id="first-name" class="form-control"
-                                        placeholder="Jack" required>
+                                        placeholder="Thipnaree" required>
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <input type="text" name="last-name" id="last-name" class="form-control"
-                                        placeholder="Doe" required>
+                                        placeholder="Petasen" required>
                                 </div>
                             </div>
 
                             <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" class="form-control"
-                                placeholder="Jackdoe@gmail.com" required>
+                                placeholder="65010914602@msu.ac.th" required>
 
                             <textarea name="message" rows="5" class="form-control" id="message"
                                 placeholder="What can we help you?"></textarea>
@@ -563,96 +479,6 @@ https://templatemo.com/tm-581-kind-heart-charity
             </div>
         </section>
     </main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-12 mb-4">
-                    <img src="images/logo.png" class="logo img-fluid" alt="">
-                </div>
-
-                <div class="col-lg-4 col-md-6 col-12 mb-4">
-                    <h5 class="site-footer-title mb-3">Quick Links</h5>
-
-                    <ul class="footer-menu">
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Our Story</a></li>
-
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Newsroom</a></li>
-
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Causes</a></li>
-
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Become a volunteer</a></li>
-
-                        <li class="footer-menu-item"><a href="#" class="footer-menu-link">Partner with us</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-4 col-md-6 col-12 mx-auto">
-                    <h5 class="site-footer-title mb-3">Contact Infomation</h5>
-
-                    <p class="text-white d-flex mb-2">
-                        <i class="bi-telephone me-2"></i>
-
-                        <a href="tel: 120-240-9600" class="site-footer-link">
-                            120-240-9600
-                        </a>
-                    </p>
-
-                    <p class="text-white d-flex">
-                        <i class="bi-envelope me-2"></i>
-
-                        <a href="mailto:info@yourgmail.com" class="site-footer-link">
-                            donate@charity.org
-                        </a>
-                    </p>
-
-                    <p class="text-white d-flex mt-3">
-                        <i class="bi-geo-alt me-2"></i>
-                        Akershusstranda 20, 0150 Oslo, Norway
-                    </p>
-
-                    <a href="#" class="custom-btn btn mt-3">Get Direction</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="site-footer-bottom">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-6 col-md-7 col-12">
-                        <p class="copyright-text mb-0">Copyright © 2036 <a href="#">Kind Heart</a> Charity Org.
-                            Design: <a href="https://templatemo.com" target="_blank">TemplateMo</a></p>
-                    </div>
-
-                    <div class="col-lg-6 col-md-5 col-12 d-flex justify-content-center align-items-center mx-auto">
-                        <ul class="social-icon">
-                            <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-twitter"></a>
-                            </li>
-
-                            <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-facebook"></a>
-                            </li>
-
-                            <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-instagram"></a>
-                            </li>
-
-                            <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-linkedin"></a>
-                            </li>
-
-                            <li class="social-icon-item">
-                                <a href="https://youtube.com/templatemo" class="social-icon-link bi-youtube"></a>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <!-- JAVASCRIPT FILES -->
     <script src="js/jquery.min.js"></script>

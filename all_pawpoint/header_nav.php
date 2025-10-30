@@ -27,6 +27,11 @@ if (session_status() === PHP_SESSION_NONE) {
 
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <style>
+                            <style>
+
+                            /* ------------------------------ */
+                            /* Profile Dropdown - Premium Look */
+                            /* ------------------------------ */
                             .profile-wrapper {
                                 position: relative;
                                 display: inline-block;
@@ -37,24 +42,42 @@ if (session_status() === PHP_SESSION_NONE) {
                                 align-items: center;
                                 cursor: pointer;
                                 gap: 8px;
+                                background: rgba(255, 255, 255, 0.9);
+                                padding: 6px 12px;
+                                border-radius: 20px;
+                                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                                transition: all 0.25s ease;
+                            }
+
+                            .profile-toggle:hover {
+                                background: linear-gradient(90deg, #4aa9d9, #6dd5fa);
+                                color: white;
+                                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
                             }
 
                             .profile-toggle i {
-                                font-size: 1.8rem;
+                                font-size: 1.7rem;
                                 color: #2980b9;
+                                transition: color 0.25s ease;
+                            }
+
+                            .profile-toggle:hover i {
+                                color: white;
                             }
 
                             .profile-dropdown {
                                 position: absolute;
-                                top: 55px;
+                                top: 60px;
                                 right: 0;
-                                width: 300px;
-                                background: linear-gradient(180deg, #6dd5fa, #2980b9);
-                                border-radius: 20px;
-                                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+                                width: 280px;
+                                background: rgba(255, 255, 255, 0.9);
+                                backdrop-filter: blur(8px);
+                                border-radius: 18px;
+                                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
                                 overflow: hidden;
                                 opacity: 0;
                                 visibility: hidden;
+                                transform: translateY(-10px);
                                 transition: all 0.3s ease;
                                 z-index: 1000;
                             }
@@ -68,26 +91,23 @@ if (session_status() === PHP_SESSION_NONE) {
                             .profile-info {
                                 text-align: center;
                                 padding: 20px;
-                                color: #fff;
+                                background: linear-gradient(180deg, #6dd5fa, #4aa9d9);
+                                color: white;
                             }
 
                             .profile-info i {
                                 font-size: 60px;
-                                color: #fff;
-                                margin-bottom: 8px;
+                                margin-bottom: 10px;
                             }
 
                             .profile-info h3 {
                                 font-size: 18px;
-                                margin: 5px 0;
-                                color: #000;
-                                font-weight: 700;
+                                font-weight: 600;
                             }
 
                             .profile-actions {
                                 background: #fff;
-                                padding: 15px 20px;
-                                border-top: 1px solid #eee;
+                                padding: 15px 18px;
                             }
 
                             .profile-actions a {
@@ -97,21 +117,40 @@ if (session_status() === PHP_SESSION_NONE) {
                                 color: #333;
                                 text-decoration: none;
                                 font-size: 15px;
-                                margin: 8px 0;
-                                transition: color 0.2s;
+                                padding: 10px 8px;
+                                border-radius: 10px;
+                                transition: all 0.25s ease;
+                            }
+
+                            .profile-actions a i {
+                                color: #4aa9d9;
+                                font-size: 18px;
+                                transition: color 0.25s ease;
                             }
 
                             .profile-actions a:hover {
-                                color: #2980b9;
+                                background: linear-gradient(90deg, #4aa9d9, #6dd5fa);
+                                color: white;
+                                transform: translateX(5px);
+                            }
+
+                            .profile-actions a:hover i {
+                                color: white;
                             }
 
                             .profile-actions a.logout {
                                 color: #e74c3c;
+                                border-top: 1px solid #eee;
+                                margin-top: 8px;
+                                padding-top: 12px;
                             }
 
                             .profile-actions a.logout:hover {
-                                color: #c0392b;
+                                background: linear-gradient(90deg, #ff6b6b, #e74c3c);
+                                color: white;
                             }
+                        </style>
+
                         </style>
 
                         <li class="nav-item">
@@ -129,10 +168,13 @@ if (session_status() === PHP_SESSION_NONE) {
                                     </div>
                                     <div class="profile-actions">
                                         <a href="profile.php"><i class="bi bi-person"></i> โปรไฟล์ของฉัน</a>
-                                        <a href="user_history.php"><i class="bi bi-clock-history"></i> ประวัติการใช้บริการ</a>
-                                        <a href="pet_list.php"><i class="bi bi-journal-text"></i> ประวัติสัตว์เลี้ยงของคุณ</a>
+                                        <a href="user_history.php"><i class="bi bi-clock-history"></i>
+                                            ประวัติการใช้บริการ</a>
+                                        <a href="pet_list.php"><i class="bi bi-journal-text"></i>
+                                            ประวัติสัตว์เลี้ยงของคุณ</a>
                                         <a href="add_pet.php"><i class="bi bi-plus-circle"></i> เพิ่มสัตว์เลี้ยงของคุณ</a>
-                                        <a href="logout.php" class="logout"><i class="bi bi-box-arrow-right"></i> ออกจากระบบ</a>
+                                        <a href="logout.php" class="logout"><i class="bi bi-box-arrow-right"></i>
+                                            ออกจากระบบ</a>
                                     </div>
                                 </div>
                             </div>

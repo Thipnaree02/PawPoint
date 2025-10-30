@@ -202,7 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="checkbox" id="remember" name="remember">
                                 <label for="remember" class="small">จดจำฉันไว้</label>
                             </div>
-                            <a href="#" class="small text-primary">ลืมรหัสผ่าน?</a>
+                            <a href="reset_password.php" class="small text-primary">ลืมรหัสผ่าน?</a>
                         </div>
 
                         <button type="submit" class="btn btn-orange w-100 py-2 mb-3">เข้าสู่ระบบ</button>
