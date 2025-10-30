@@ -7,7 +7,7 @@ if (!isset($_SESSION['admin_id'])) {
     exit;
 }
 
-include '/config/db.php';
+include 'config/db.php';
 
 // ตรวจสอบการล็อกอิน
 if (!isset($_SESSION['admin_id'])) {
