@@ -4,8 +4,8 @@ session_start();
 
 // ถ้ายังไม่มี session แสดงว่ายังไม่ล็อกอิน
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: login.php");
-    exit;
+  header("Location: login.php");
+  exit;
 }
 include 'config/db.php';
 
@@ -57,29 +57,49 @@ $search = "";
 if (isset($_GET['search']) && $_GET['search'] !== "") {
   $search = trim($_GET['search']);
   $stmtAppoint = $conn->prepare("
-    SELECT a.app_id, a.pet_name, a.vet_id, v.vet_name, 
-           a.service_type, a.date, a.time, a.status
+    SELECT 
+        a.app_id, 
+        u.username AS user_name,
+        a.pet_name, 
+        a.vet_id, 
+        v.vet_name, 
+        a.service_type, 
+        a.date, 
+        a.time, 
+        a.status
     FROM appointments a
     LEFT JOIN vets v ON a.vet_id = v.vet_id
+    LEFT JOIN users u ON a.user_id = u.user_id
     WHERE a.pet_name LIKE ? 
        OR v.vet_name LIKE ? 
+       OR u.username LIKE ? 
        OR a.date LIKE ? 
        OR a.time LIKE ? 
        OR a.status LIKE ?
     ORDER BY a.app_id DESC
   ");
-  $stmtAppoint->execute(["%$search%", "%$search%", "%$search%", "%$search%", "%$search%"]);
+  $stmtAppoint->execute(["%$search%", "%$search%", "%$search%", "%$search%", "%$search%", "%$search%"]);
 } else {
   $stmtAppoint = $conn->query("
-    SELECT a.app_id, a.pet_name, a.vet_id, v.vet_name, 
-           a.service_type, a.date, a.time, a.status
+    SELECT 
+        a.app_id, 
+        u.username AS user_name,
+        a.pet_name, 
+        a.vet_id, 
+        v.vet_name, 
+        a.service_type, 
+        a.date, 
+        a.time, 
+        a.status
     FROM appointments a
     LEFT JOIN vets v ON a.vet_id = v.vet_id
+    LEFT JOIN users u ON a.user_id = u.user_id
     ORDER BY a.app_id DESC
   ");
 }
 
 $appointments = $stmtAppoint->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!doctype html>
@@ -192,6 +212,7 @@ $appointments = $stmtAppoint->fetchAll(PDO::FETCH_ASSOC);
           <thead class="table-success text-center">
             <tr>
               <th>ลำดับ</th>
+              <th>ชื่อลูกค้า</th> 
               <th>ชื่อสัตว์เลี้ยง</th>
               <th>สัตวแพทย์</th>
               <th>บริการ</th>
@@ -204,13 +225,14 @@ $appointments = $stmtAppoint->fetchAll(PDO::FETCH_ASSOC);
           <tbody>
             <?php if (empty($appointments)): ?>
               <tr>
-                <td colspan="8" class="text-center text-muted py-3">ไม่พบข้อมูล</td>
+                <td colspan="9" class="text-center text-muted py-3">ไม่พบข้อมูล</td>
               </tr>
             <?php else:
               $i = 1;
               foreach ($appointments as $app): ?>
                 <tr>
                   <td class="text-center"><?= $i++ ?></td>
+                  <td><?= htmlspecialchars($app['user_name'] ?? '-') ?></td>
                   <td><?= htmlspecialchars($app['pet_name'] ?? '-') ?></td>
                   <td><?= htmlspecialchars($app['vet_name'] ?? '-') ?></td>
 

@@ -189,7 +189,7 @@ $serviceNames = [
           <li class="nav-item"><a class="nav-link" href="grooming_packages.php"><i
                 class="bi bi-scissors me-2"></i>บริการอาบน้ำตัดขน</a></li>
 
-          <!-- <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-coin me-2"></i>รายงานการเงิน</a></li> -->
+          <li class="nav-item"><a class="nav-link" href="report_customer_usage.php"><i class="bi bi-cash-coin me-2"></i>รายงานแสดงจำนวนลูกค้า</a></li>
 
         </ul>
       </div>
