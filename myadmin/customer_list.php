@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 // ถ้ายังไม่มี session แสดงว่ายังไม่ล็อกอิน
@@ -10,12 +9,11 @@ if (!isset($_SESSION['admin_id'])) {
 
 include '../myadmin/config/db.php';
 
-// ✅ ถ้ามีการกดลบ (Soft Delete)
+// ถ้ามีการกดลบ (Soft Delete)
 if (isset($_GET['delete_id'])) {
     $delete_id = $_GET['delete_id'];
     $stmtCustomerList = $conn->prepare("DELETE FROM users WHERE user_id = ?");
     $stmtCustomerList->execute([$delete_id]);
-
 
     echo "<script>
         alert('ลบข้อมูลลูกค้าสำเร็จแล้ว!');
@@ -24,7 +22,7 @@ if (isset($_GET['delete_id'])) {
     exit();
 }
 
-// ✅ ดึงข้อมูลลูกค้าที่ status = active เท่านั้น
+// ดึงข้อมูลลูกค้าที่ status = active เท่านั้น
 $stmtCustomerList = $conn->query("
     SELECT user_id, username, email, phone, address 
     FROM users 
@@ -43,7 +41,7 @@ $customers = $stmtCustomerList->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ข้อมูลลูกค้า | Elivet Admin</title>
 
-    <!-- ✅ Bootstrap -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -90,17 +88,16 @@ $customers = $stmtCustomerList->fetchAll(PDO::FETCH_ASSOC);
             background-color: #c82333;
         }
 
-        /* ✅ ปรับคอลัมน์ให้สวยขึ้น */
+        /* ปรับคอลัมน์ให้สวยขึ้น */
         .table td,
         .table th {
             vertical-align: middle;
             text-align: center;
             word-wrap: break-word;
             white-space: normal;
-            /* ให้ข้อความขึ้นบรรทัดใหม่ได้ */
         }
 
-        /* ✅ กำหนดความกว้างเฉพาะคอลัมน์ */
+        /* กำหนดความกว้างเฉพาะคอลัมน์ */
         .table th:nth-child(2),
         .table td:nth-child(2) {
             width: 15%;
@@ -119,26 +116,20 @@ $customers = $stmtCustomerList->fetchAll(PDO::FETCH_ASSOC);
         .table th:nth-child(5),
         .table td:nth-child(5) {
             width: 30%;
-            /* ที่อยู่ กว้างขึ้น */
             text-align: left;
-            /* ให้อ่านง่าย */
             padding-left: 10px;
             padding-right: 10px;
+
+            /* ✅ ปรับให้แสดงที่อยู่ครบ ไม่ตัดข้อความ */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 400px;
         }
 
         .table th:nth-child(6),
         .table td:nth-child(6) {
             width: 10%;
-        }
-
-        .table td:nth-child(5) {
-            max-width: 300px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            /* แสดงสูงสุด 3 บรรทัด */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
     </style>
 </head>
@@ -146,7 +137,7 @@ $customers = $stmtCustomerList->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <?php include 'sidebar.php'; ?>
 
-    <!-- ✅ Main content -->
+    <!-- Main content -->
     <div class="main-content">
         <h3 class="mb-3">ข้อมูลลูกค้า</h3>
 
@@ -171,7 +162,7 @@ $customers = $stmtCustomerList->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?= htmlspecialchars($c['username'] ?? '-') ?></td>
                                 <td><?= htmlspecialchars($c['email'] ?? '-') ?></td>
                                 <td><?= htmlspecialchars($c['phone'] ?? '-') ?></td>
-                                <td><?= htmlspecialchars($c['address'] ?? '-') ?></td>
+                                <td><?= nl2br(htmlspecialchars($c['address'] ?? '-')) ?></td>
                                 <td>
                                     <button class="btn btn-danger btn-sm" onclick="confirmDelete(<?= $c['user_id'] ?>)">
                                         <i class='bi bi-trash'></i>
@@ -189,7 +180,7 @@ $customers = $stmtCustomerList->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <!-- ✅ สคริปต์ยืนยันก่อนลบ -->
+    <!-- สคริปต์ยืนยันก่อนลบ -->
     <script>
         function confirmDelete(userId) {
             Swal.fire({
