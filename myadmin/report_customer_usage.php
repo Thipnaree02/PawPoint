@@ -21,7 +21,7 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>รายงานลูกค้าที่ใช้บริการน้อยที่สุด</title>
+    <title>รายงานลูกค้าที่ใช้บริการมากที่สุด</title>
 
     <!-- ✅ ใช้ Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -73,7 +73,7 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3><i class="bi bi-bar-chart-fill me-2"></i>รายงานลูกค้าที่ใช้บริการน้อยที่สุด</h3>
+            <h3><i class="bi bi-bar-chart-fill me-2"></i>รายงานลูกค้าที่ใช้บริการมากที่สุด</h3>
             <a href="index.php" class="btn btn-back"><i class="bi bi-house-door-fill me-1"></i> กลับหน้าหลัก</a>
         </div>
 
